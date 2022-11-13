@@ -8,6 +8,7 @@ dotenv.config();
 const asistenciaRoutes = require('./routes/asistenciaRoutes');
 const asambleaRoutes = require('./routes/asambleaRoutes');
 const userRoutes = require('./routes/userRoutes');
+const fileRoutes = require('./routes/fileRoutes');
 
 
 app.use(cors());
@@ -17,6 +18,7 @@ app.options('*', cors());
 app.use('/api', asistenciaRoutes);
 app.use('/api', asambleaRoutes);
 app.use('/api', userRoutes);
+app.use('/api', fileRoutes);
 
 
 
