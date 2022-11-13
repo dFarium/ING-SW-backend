@@ -29,7 +29,7 @@ const getAsistencias = (req, res) => {
 
 const updateAsistencia = (req, res) => {
     const { id } = req.params
-    Asistencia.findbyIdAndUpdate(id, req.body, (error, asistencia) => {
+    Asistencia.findOneAndUpdate(id, req.body, (error, asistencia) => {
         if (error) {
             return res.status(400).send({ message: "No se pudo actualizar la asistencia" })
         }

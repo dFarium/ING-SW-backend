@@ -1,9 +1,10 @@
 const Asamblea = require('../models/asamblea');
 
 const createAsamblea = (req, res) => {
-    const { name } = req.body
+    const { name, tipo } = req.body
     const newAsamblea = new Asamblea({
-        name
+        name,
+        tipo
     })
     newAsamblea.save((error, asamblea) => {
         if (error) {

@@ -21,6 +21,7 @@ const login = async (req, res) => {
         if (!user) {
             return res.status(404).send({ message: 'No se encontró el usuario' });
         }
+        return res.status(200).send(user);
     })
 }
 const getUsers = async (req, res) => {

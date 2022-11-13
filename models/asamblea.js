@@ -6,6 +6,11 @@ const asambleaSchema = new Schema({
         required: true,
         minLength: 1,
         maxLength: 100
+    },
+    tipo:{
+        type: String,
+        required: true,
+        enum: ['Ordinaria','Extrarordinaria']
     }
 })
 
