@@ -1,23 +1,19 @@
 {
-    "asistencias":{
-        "name": {
-            "type": "String",
-            "required": true,
-            "minLength": 1,
-            "maxLength": 100
-        },
-        "asistencia": {
-            "type": "String",
-            "required": true,
-            "enum": [
-                "Presente",
-                "Ausente"
-            ]
-        },
-        "asambleas":{
+    "asistencia":{
+        "asamblea":{
             "type": "Schema.ObjectId",
-            "ref": "Asamblea",
+            "ref": "asamblea",
             "required": true
+        },
+        "user":{
+            "type": "Schema.Types.ObjectId",
+            "ref": "user",
+            "required": true
+        },
+        "asistencia":{
+            "type": "String",
+            "required": true,
+            "enum": ["Presente","Ausente"]
         }
     },
     "asamblea":{
@@ -27,9 +23,26 @@
             "minLength": 1,
             "maxLength": 100
         },
-        "date": {
-            "type": "Date",
-            "required": false
+        "tipo":{
+            "type": "String",
+            "required": true,
+            "enum": ["Ordinaria","Extraordinaria"]
+        }
+    },
+    "user":{
+        "name":{
+            "type": "String",
+            "required": true
+        },
+        "email":{
+            "type": "String",
+            "required": true,
+            "unique": true
+        },
+        "role":{
+            "type": "String",
+            "required": true,
+            "enum": ["admin","user"]
         }
     }
 }

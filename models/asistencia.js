@@ -3,11 +3,13 @@ const Schema = mongoose.Schema;
 const asistenciaSchema = new Schema({
     asamblea: [{
         type: Schema.Types.ObjectId,
-        ref: 'asamblea'
+        ref: 'asamblea',
+        required: true
     }],
     user:{
         type: Schema.Types.ObjectId,
-        ref: 'user'
+        ref: 'user',
+        required: true
     },
     asistencia:{
         type: String,
