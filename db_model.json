@@ -1,0 +1,35 @@
+{
+    "asistencias":{
+        "name": {
+            "type": "String",
+            "required": true,
+            "minLength": 1,
+            "maxLength": 100
+        },
+        "asistencia": {
+            "type": "String",
+            "required": true,
+            "enum": [
+                "Presente",
+                "Ausente"
+            ]
+        },
+        "asambleas":{
+            "type": "Schema.ObjectId",
+            "ref": "Asamblea",
+            "required": true
+        }
+    },
+    "asamblea":{
+        "name": {
+            "type": "String",
+            "required": true,
+            "minLength": 1,
+            "maxLength": 100
+        },
+        "date": {
+            "type": "Date",
+            "required": false
+        }
+    }
+}
