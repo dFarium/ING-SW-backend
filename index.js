@@ -9,7 +9,7 @@ const asistenciaRoutes = require('./routes/asistenciaRoutes');
 const asambleaRoutes = require('./routes/asambleaRoutes');
 const userRoutes = require('./routes/userRoutes');
 const fileRoutes = require('./routes/fileRoutes');
-
+const comentarioRoutes = require('./routes/comentarioRoutes');
 
 app.use(cors());
 app.use(express.json());
@@ -19,7 +19,7 @@ app.use('/api', asistenciaRoutes);
 app.use('/api', asambleaRoutes);
 app.use('/api', userRoutes);
 app.use('/api', fileRoutes);
-
+app.use('/api', comentarioRoutes);
 
 
 mongoose.set('useNewUrlParser', true);
