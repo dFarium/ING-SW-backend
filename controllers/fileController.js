@@ -41,8 +41,22 @@ const getSpecificFile = (req, res)=> {
     })
 }
 
+const deleteFile = (req, res) => {
+    const {id} = req.params
+    fileModel.findByIdAndDelete(id, (err, file)=>{
+        if(err){
+            return res.status(400).send({ message: "No se ha podido eleminar el archivo"})
+        }
+        if(!file){
+            return res.status(404).send({ message: "No se ha podido encontrar el archivo"})
+        }
+        return res.status(200).send({message: "Se ha eliminado el archivo de forma correcta"})
+    })
+}
+
 module.exports = {
     uploadNewFile,
     getFiles,
-    getSpecificFile
+    getSpecificFile,
+    deleteFile
 }
