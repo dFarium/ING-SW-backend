@@ -3,7 +3,7 @@ const Asamblea = require('../models/asamblea');
 const createAsamblea = (req, res) => {
 
 
-    const { name, tipo, fecha, usuario } = req.body
+    const { name, tipo, fecha, rolUsuario } = req.body
     const newAsamblea = new Asamblea({
         name,
         tipo,
@@ -11,11 +11,10 @@ const createAsamblea = (req, res) => {
     })
 
     newAsamblea.save((error, asamblea) => {
-        if (usuario === "admin"){
+        if (rolUsuario === "admin"){
             if (error) {
                 return res.status(400).send({ message: "No se ha podido crear la asamblea" })
             }
-            console.log(usuario);
             return res.status(201).send(asamblea)
         }
         else{
@@ -39,7 +38,7 @@ const getAsambleas = (req, res) => {
 const updateAsamblea = (req, res) => {
     const { id } = req.params
     Asamblea.findByIdAndUpdate(id, req.body, (error, asamblea) => {
-        if(usuario === "admin"){
+        if(rolUsuario === "admin"){
             if (error) {
                 return res.status(400).send({ message: "No se pudo actualizar la asamblea" })
             }
@@ -57,14 +56,17 @@ const updateAsamblea = (req, res) => {
 const deleteAsamblea = (req, res) => {
     const { id } = req.params
     Asamblea.findByIdAndDelete(id, (error, asamblea) => {
-        if (usuario === "admin"){
-        if (error) {
-            return res.status(400).send({ message: "No se ha podido eliminar la asamblea" })
+        if (rolUsuario === "admin"){
+            if (error) {
+                return res.status(400).send({ message: "No se ha podido eliminar la asamblea" })
+            }
+            if (!asamblea) {
+                return res.status(404).send({ message: "No se ha podido encontrar la asamblea" })
+            }
+            return res.status(200).send({ message: "Se ha eliminado la asamblea de forma correcta" })
         }
-        if (!asamblea) {
-            return res.status(404).send({ message: "No se ha podido encontrar la asamblea" })
-        }
-        return res.status(200).send({ message: "Se ha eliminado la asamblea de forma correcta" })
+        else{
+            return res.status(401).send({ message: "Tiene que ser administrador para modificar asamblea" })
         }
     })
 }
