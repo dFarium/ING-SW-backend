@@ -13,7 +13,8 @@ const asambleaSchema = new Schema({
         enum: ['Ordinaria','Extraordinaria']
     },
     fecha:{
-        type: Date
+        type: Date,
+        required: true
     }
 })
 
