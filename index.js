@@ -10,7 +10,7 @@ const asambleaRoutes = require('./routes/asambleaRoutes');
 const userRoutes = require('./routes/userRoutes');
 const fileRoutes = require('./routes/fileRoutes');
 const comentarioRoutes = require('./routes/comentarioRoutes');
-const mailerRoutes = require('./routes/mailerRoutes');const comentarioRoutes = require('./routes/comentarioRoutes');
+const mailerRoutes = require('./routes/mailerRoutes');
 
 app.use(cors());
 app.use(express.json());
@@ -21,7 +21,7 @@ app.use('/api', asambleaRoutes);
 app.use('/api', userRoutes);
 app.use('/api', fileRoutes);
 app.use('/api', comentarioRoutes);
-app.use('/api', mailerRoutes);app.use('/api', comentarioRoutes);
+app.use('/api', mailerRoutes);
 
 
 mongoose.set('useNewUrlParser', true);
