@@ -66,10 +66,24 @@ const getAsistencia = (req, res) => {
     })
 }
 
+const asistenciaPorAsamblea = (req, res) => {
+    const { asamblea } = req.params
+    Asistencia.find(asamblea).populate({ path: 'asamblea user' }).exec((error,asistencia) =>{
+        if(error){
+            return res.status(400).send({ message: "No se ha podido encontrar una asistencia" })
+        }
+        if(!asistencia){
+            return res.status(404).send({ message: "No se ha podido encontrar una asistencia" })
+        }
+        return res.status(200).send(asistencia)
+    })
+}
+
 module.exports = {
     createAsistencia,
     getAsistencias,
     updateAsistencia,
     deleteAsistencia,
-    getAsistencia
+    getAsistencia,
+    asistenciaPorAsamblea
 }
