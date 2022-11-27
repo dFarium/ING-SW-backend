@@ -1,3 +1,4 @@
+const asamblea = require('../models/asamblea');
 const Asamblea = require('../models/asamblea');
 
 const createAsamblea = (req, res) => {
@@ -86,10 +87,46 @@ const getAsamblea = (req, res) => {
     })
 }
 
+const filtrado = (req,res) =>{
+    let filtro = {}, fechas={},tipos={}
+    const {tipo, inicio, fin} = req.body
+
+    if (inicio || fin){
+        if (inicio && fin) {
+            fechas = { fecha: { $lte: new Date(fin), $gte: new Date(inicio) } }
+        } else if (inicio) {
+            fechas = { fecha: { $lte: new Date(3000, 1, 1), $gte: new Date(inicio) } }
+        } else if (fin) {
+            fechas = { fecha: { $lte: new Date(), $gte: new Date(2010, 1, 1) } }
+        }
+        filtro = { ...fechas }
+    }
+
+    if(tipo){
+        if (tipo == "Ordinaria") {
+            tipos = { tipo: "Ordinaria" }
+        } else {
+            tipos = { tipo: "Extraordinaria" }
+        }
+    }
+    filtro = { ...filtro, ...tipos }
+
+    Asamblea.find(filtro,(err,asambleaFiltrada)=>{
+        if(err){
+            return res.status(400).send({ message: "Error en la busqueda" })
+        }
+        if(!asambleaFiltrada){
+            return res.status(404).send({ message: "No existen asambleas con estos criterios" })
+        }
+        return res.status(200).send(asambleaFiltrada)
+    })
+}
+
 module.exports = {
     createAsamblea,
     getAsambleas,
     updateAsamblea,
     deleteAsamblea,
-    getAsamblea
+    getAsamblea,
+    filtrado
 }

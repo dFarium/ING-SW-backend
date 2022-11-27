@@ -7,5 +7,6 @@ api.post('/asamblea', asambleaController.createAsamblea);
 api.put('/asamblea/update/:id', asambleaController.updateAsamblea);
 api.delete('/asamblea/delete/:id', asambleaController.deleteAsamblea);
 api.get('/asamblea/search/:id', asambleaController.getAsamblea);
+api.get('/asamblea/filter',asambleaController.filtrado);
 
 module.exports = api;
