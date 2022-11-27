@@ -7,5 +7,7 @@ api.get('/asistencias', asistenciaController.getAsistencias);
 api.put('/asistencia/update/:id', asistenciaController.updateAsistencia);
 api.delete('/asistencia/delete/:id', asistenciaController.deleteAsistencia);
 api.get('/asistencia/search/:id', asistenciaController.getAsistencia);
+api.get('/asistenciaAsamblea/search/:id', asistenciaController.asistenciaPorAsamblea);
+
 
 module.exports = api;

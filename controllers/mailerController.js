@@ -15,7 +15,7 @@ const sendmail = (req, res) => {
         port: 465,
         secure: true,
         auth: {
-            user: 'felipe.vasquez1902@alumnos.ubiobio.cl',
+            user: 'correos.tgf@gmail.com',
             pass: token
         }
     })
