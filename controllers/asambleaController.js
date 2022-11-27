@@ -1,17 +1,26 @@
 const Asamblea = require('../models/asamblea');
 
 const createAsamblea = (req, res) => {
-    const { name, tipo } = req.body
+
+
+    const { name, tipo, fecha, rolUsuario } = req.body
     const newAsamblea = new Asamblea({
         name,
-        tipo
+        tipo,
+        fecha
     })
-    newAsamblea.save((error, asamblea) => {
-        if (error) {
-            return res.status(400).send({ message: "No se ha podido crear la asamblea" })
-        }
-        return res.status(201).send(asamblea)
-    })
+
+    if (rolUsuario === "admin"){
+        newAsamblea.save((error, asamblea) => {
+            if (error) {
+                return res.status(400).send({ message: "No se ha podido crear la asamblea" })
+            }
+            return res.status(201).send(asamblea)
+        })
+    }
+    else{
+        return res.status(401).send({ message: "Debe ser administrador para crear asamblea" })
+    }
 }
 
 const getAsambleas = (req, res) => {
@@ -28,28 +37,40 @@ const getAsambleas = (req, res) => {
 
 const updateAsamblea = (req, res) => {
     const { id } = req.params
-    Asamblea.findByIdAndUpdate(id, req.body, (error, asamblea) => {
-        if (error) {
-            return res.status(400).send({ message: "No se pudo actualizar la asamblea" })
-        }
-        if (!asamblea) {
-            return res.status(404).send({ message: "No se encontro el la asamblea" })
-        }
-        return res.status(200).send({ message: "Asamblea modificada" })
-    })
+    const {rolUsuario} = req.body
+    if(rolUsuario === "admin"){
+        Asamblea.findByIdAndUpdate(id, req.body, (error, asamblea) => {
+                if (error) {
+                    return res.status(400).send({ message: "No se pudo actualizar la asamblea" })
+                }
+                if (!asamblea) {
+                    return res.status(404).send({ message: "No se encontro el la asamblea" })
+                }
+                return res.status(200).send({ message: "Asamblea modificada" })
+        })
+    }
+    else{
+        return res.status(401).send({ message: "Tiene que ser administrador para modificar asamblea" })
+    }
 }
 
 const deleteAsamblea = (req, res) => {
     const { id } = req.params
-    Asamblea.findByIdAndDelete(id, (error, asamblea) => {
-        if (error) {
-            return res.status(400).send({ message: "No se ha podido eliminar la asamblea" })
-        }
-        if (!asamblea) {
-            return res.status(404).send({ message: "No se ha podido encontrar la asamblea" })
-        }
-        return res.status(200).send({ message: "Se ha eliminado la asamblea de forma correcta" })
-    })
+    const {rolUsuario} = req.body
+    if(rolUsuario === "admin"){
+        Asamblea.findByIdAndDelete(id, (error, asamblea) => {
+                if (error) {
+                    return res.status(400).send({ message: "No se ha podido eliminar la asamblea" })
+                }
+                if (!asamblea) {
+                    return res.status(404).send({ message: "No se ha podido encontrar la asamblea" })
+                }
+                return res.status(200).send({ message: "Se ha eliminado la asamblea de forma correcta" })
+        })
+    }
+    else{
+        return res.status(401).send({ message: "Tiene que ser administrador para modificar asamblea" })
+    }
 }
 
 const getAsamblea = (req, res) => {
