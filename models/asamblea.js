@@ -13,17 +13,14 @@ const asambleaSchema = new Schema({
         enum: ['Ordinaria','Extraordinaria']
     },
     fecha:{
-<<<<<<< HEAD
-        type: Date
+        type: Date,
+        required: true
     },
     archivos: [{
         type: Schema.Types.ObjectId,
         ref: 'archivo',
         default: []
     }]
-        type: Date,
-        required: true
-    }
 })
 
 module.exports = mongoose.model('asamblea', asambleaSchema);
