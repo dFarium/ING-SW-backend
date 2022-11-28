@@ -21,11 +21,9 @@ const asambleaSchema = new Schema({
         ref: 'archivo',
         default: []
     }]
-=======
         type: Date,
         required: true
     }
->>>>>>> ba6fcf4f275f26ddf8b770cbc97ea8607245ef34
 })
 
 module.exports = mongoose.model('asamblea', asambleaSchema);
