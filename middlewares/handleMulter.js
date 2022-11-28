@@ -12,25 +12,25 @@ const storage = multer.diskStorage({
     },
 
     filename: function (req, file, cb){
-        let fecha = new Date();
-        fecha = fecha.getFullYear()+ '_' + (fecha.getMonth()+1) + '_' + fecha.getDate() + '_' + fecha.getHours() + '_' + fecha.getMinutes() 
-        const nameFile = fecha+' '+file.originalname
-        cb(null, nameFile)
+
+        cb(null, file.originalname)
     }
 })
 
 const upload = multer({
     storage: storage,
-    fileFilter: function(req,file,cb){
-        if(file.mimetype == 'Document/doc'){
-            console.log("El archivo es un doc o pdf")
+    fileFilter: (req,file,cb) => {
+        if(file.mimetype == 'application/pdf' || file.mimetype == 'application/msword' || file.mimetype == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'){
+            console.log("El archivo es .doc, .docx o .pdf")
+            req.params.fileValido = true
         } else {
             console.log("El archivo tiene otra extension")
+            req.params.fileValido = false
         }
-        cb(null, true)
+        cb(null, req.params.fileValido)
     },
     limits:{
-        fileSize: 1024 * 1024 * 100
+        fileSize: 1024 * 1024 * 15
     }
 })
 
