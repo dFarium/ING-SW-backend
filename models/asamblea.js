@@ -14,7 +14,12 @@ const asambleaSchema = new Schema({
     },
     fecha:{
         type: Date
-    }
+    },
+    archivos: [{
+        type: Schema.Types.ObjectId,
+        ref: 'archivo',
+        default: []
+    }]
 })
 
 module.exports = mongoose.model('asamblea', asambleaSchema);
