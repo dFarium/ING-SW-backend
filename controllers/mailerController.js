@@ -1,12 +1,12 @@
 const nodemailer = require('nodemailer');
 const dotenv = require('dotenv');
-const User = require("../controllers/userController")
+const User = require('../models/user');
 dotenv.config();
 
 const sendmail = (req, res) => {
-    const { message } = req.body
+    const { from, asunto, texto} = req.body
+    //const emailUser = new User({ name, email, role });
     const token = process.env.PW
-    //const mail = 'felipe.vasquez1902@alumnos.ubiobio.cl'
     if (!token) {
         return res.status(400).send({ message: "No se ha entregado la contraseña de aplicación para el correo" })
     }
@@ -19,21 +19,33 @@ const sendmail = (req, res) => {
             pass: token
         }
     })
-    let directory =[
-        'alejandro.torres1901@alumnos.ubiobio.cl',
-        'jose.rodriguez1901@alumnos.ubiobio.cl',
-        'moises.salgado1901@alumnos.ubiobio.cl',
-        'felipe.vasquez1902@alumnos.ubiobio.cl'
-    ]
+
+    const emails = User.find({}, (error, user) => {
+        if (error) {
+            return res.status(400).send({ message: 'Error al obtener los emails de los usuarios' });
+        }
+        return user
+    })
+    const correos = emails.map(email => emails.email);
+
+    console.log(correos);
+
+    // let directory =[
+    //     'alejandro.torres1901@alumnos.ubiobio.cl',
+    //     'jose.rodriguez1901@alumnos.ubiobio.cl',
+    //     'moises.salgado1901@alumnos.ubiobio.cl',
+    //     'felipe.vasquez1902@alumnos.ubiobio.cl'
+    // ]
+
     const mailOptions = {
-        from: `Grupo 12`,
-        to: directory,
-        subject: 'Prueba de correos',
-        text: `La junta de vecinos tiene el siguiente mensaje: ${message}`,
-        //html: `
-        //    <h1>Felicitaciones, has enviado un correo</h1>
-        //    <p>${message}</p>
-        //    `
+        from: `Enviado por ${from}`,
+        to: correos,
+        subject: `${asunto}`,
+        text: 'La junta de vecinos tiene un aviso:',
+        html: `
+            <h1>Tu mensaje es: </h1>
+            <p>${texto}</p>
+            `
     }
     transporter.sendMail(mailOptions, (err, info) => {
         if (err) {
