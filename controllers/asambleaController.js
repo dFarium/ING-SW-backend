@@ -1,4 +1,3 @@
-const asamblea = require('../models/asamblea');
 const Asamblea = require('../models/asamblea');
 
 const createAsamblea = (req, res) => {
