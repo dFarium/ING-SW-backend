@@ -1,18 +1,23 @@
 const Asistencia = require('../models/asistencia');
 
 const createAsistencia = (req, res) => {
-    const { asamblea, user, asistencia } = req.body
+    const { asamblea, user, asistencia, rolUsuario } = req.body
     const newAsistencia = new Asistencia({
         asamblea,
         user,
         asistencia
     })
-    newAsistencia.save((error, asistencia) => {
-        if (error) {
-            return res.status(400).send({ message: "No se ha podido crear el producto" })
-        }
-        return res.status(201).send(asistencia)
-    })
+    if (rolUsuario === "admin"){
+        newAsistencia.save((error, asistencia) => {
+            if (error) {
+                return res.status(400).send({ message: "No se ha podido crear el producto" })
+            }
+            return res.status(201).send(asistencia)
+        })
+    }
+    else{
+        return res.status(401).send({ message: "Debe ser administrador para registrar la asistencia" })
+    }
 }
 
 const getAsistencias = (req, res) => {
@@ -29,28 +34,40 @@ const getAsistencias = (req, res) => {
 
 const updateAsistencia = (req, res) => {
     const { id } = req.params
-    Asistencia.findOneAndUpdate(id, req.body, (error, asistencia) => {
-        if (error) {
-            return res.status(400).send({ message: "No se pudo actualizar la asistencia" })
-        }
-        if (!asistencia) {
-            return res.status(404).send({ message: "No se encontro la asistencia" })
-        }
-        return res.status(200).send({ message: "Asistencia modificada" })
-    })
+    const { rolUsuario } = req.body
+    if (rolUsuario === "admin"){
+        Asistencia.findOneAndUpdate(id, req.body, (error, asistencia) => {
+            if (error) {
+                return res.status(400).send({ message: "No se pudo actualizar la asistencia" })
+            }
+            if (!asistencia) {
+                return res.status(404).send({ message: "No se encontro la asistencia" })
+            }
+            return res.status(200).send({ message: "Asistencia modificada" })
+        })
+    }
+    else{
+        return res.status(401).send({ message: "Debe ser administrador para modificar la asistencia" })
+    }
 }
 
 const deleteAsistencia = (req, res) => {
     const { id } = req.params
-    Asistencia.findByIdAndDelete(id, (error, asistencia) => {
-        if (error) {
-            return res.status(400).send({ message: "No se ha podido eliminar la asistencia" })
-        }
-        if (!asistencia) {
-            return res.status(404).send({ message: "No se ha podido encontrar una asistencia" })
-        }
-        return res.status(200).send({ message: "Se ha eliminado la assitencia de forma correcta" })
-    })
+    const { rolUsuario } = req.body
+    if (rolUsuario === "admin"){
+        Asistencia.findByIdAndDelete(id, (error, asistencia) => {
+            if (error) {
+                return res.status(400).send({ message: "No se ha podido eliminar la asistencia" })
+            }
+            if (!asistencia) {
+                return res.status(404).send({ message: "No se ha podido encontrar una asistencia" })
+            }
+            return res.status(200).send({ message: "Se ha eliminado la assitencia de forma correcta" })
+        })
+    }
+    else{
+        return res.status(401).send({ message: "Debe ser administrador para eliminar la asistencia" })
+    }
 }
 
 const getAsistencia = (req, res) => {
