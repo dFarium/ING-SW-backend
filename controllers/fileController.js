@@ -9,6 +9,17 @@ const uploadNewFile = (req, res) => {
     if (files.length === 0) {
         return res.status(400).send({ message: 'No se ha seleccionado ningun archivo' })
     }
+    let flag=0
+    asamblea.findById({_id: req.params.id}, (err, asamblea)=> {
+        if(err){
+            flag = 1
+            return res.status(400).send({ message: 'Error al encontrar la asamblea'})
+        }
+        if(!asamblea){
+            flag = 1
+            return res.status(404).send({ message: 'No se ha encontrado la asamblea'})
+        }
+    })
     let aux = files.map((file)=>{
         const newFile = new fileModel({
             url: file.path,
@@ -19,19 +30,20 @@ const uploadNewFile = (req, res) => {
             if (err) {
                 return res.status(400).send({message: 'Error al subir el archivo'})
             }
-            asamblea.findOneAndUpdate({_id: req.params.id} ,{ $push: {archivos: aux} } ,(err, asamblea) =>{
-                if(err){
-                    return res.status(400).send({message: 'Error al subir el archivo'})
-                }
-                if(!asamblea){
-                    return res.status(404).send({message: 'No existe la asamblea'})
+            asamblea.findOneAndUpdate({_id: req.params.id} ,{ $push: {archivos: fileSaved.id}}, (err)=>{
+                if(flag === 0){
+                    flag = 1
+                    if(err){
+                        return res.status(400).send({ message: 'Error al subir el archivo'})
+                    }
+                    return res.status(201).send(aux)
                 }
             })
         })
         return newFile
     })
-    return res.status(201).send(aux)
 }
+
 
 const getFiles = (req, res)=> {
 
@@ -47,6 +59,7 @@ const getFiles = (req, res)=> {
         }
         return res.status(200).send(files)
     })
+    
 }
 
 const downloadFile = (req, res)=> {
