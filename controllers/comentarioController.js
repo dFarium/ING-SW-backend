@@ -1,10 +1,9 @@
 const Comentario = require('../models/comentario');
 
 const ingresarComentario = (req,res) =>{
-    const {apartado, user, asamblea} = req.body
-    const newComentario = new Comentario({apartado, user, asamblea})
+    const {apartado, fecha, user, asamblea} = req.body
+    const newComentario = new Comentario({apartado, fecha, user, asamblea})
 
-    //crear, leer, modificar, eliminar
     newComentario.save((error,comentario)=>{
         if(error){
             return res.status(400).send({message: "Error al comentar"})
@@ -13,61 +12,69 @@ const ingresarComentario = (req,res) =>{
     })
 }
 
-const getComentarios = (req, res) => {
-    Comentario.find({}).populate({ path: 'user asamblea' }).exec((error, comentario) => {
+const obtenerComentarios = (req, res) => {
+     Comentario.find({}).populate({ path: 'User' }).exec((error, comentario) => {
         if (error) {
             return res.status(400).send({ message: "No se pudo realizar la busqueda" })
         }
         if (comentario.length === 0) {
-            return res.status(404).send({ message: "No se encontraron asistencias" })
-        }
-        return res.status(200).send(comentario)
-    })
+            return res.status(404).send({ message: "No se encontraron" })
+        }return res.status(200).send(comentario)
+        })
 }
 
-const updateComentario = (req, res) => {
+const actualizarComentario = (req, res) => {
     const { id } = req.params
-    Comentario.findOneAndUpdate(id, req.body, (error, comentario) => {
-        if (error) {
-            return res.status(400).send({ message: "No se pudo actualizar la asistencia" })
-        }
-        if (!comentario) {
-            return res.status(404).send({ message: "No se encontro la asistencia" })
-        }
-        return res.status(200).send({ message: "Asistencia modificada" })
-    })
+    const {rolUsuario} = req.body
+    if (rolUsuario === 'admin'){
+        Comentario.findOneAndUpdate(id, req.body, (error, comentario) => {
+            if (error) {
+                return res.status(400).send({ message: "No se pudo actualizar el comentario" })
+            }
+            if (!comentario) {
+                return res.status(404).send({ message: "No se encontró el comentario" })
+            }
+            return res.status(200).send({ message: "comentario modificado" })
+        })
+    }else{
+        return res.status(401).send({message: "No está autorizado para modificar el comentario"})
+    }
 }
 
-const deleteComentario = (req, res) => {
+const borrarComentario = (req, res) => {
     const { id } = req.params
-    Comentario.findByIdAndDelete(id, (error, comentario) => {
-        if (error) {
-            return res.status(400).send({ message: "No se ha podido eliminar la asistencia" })
-        }
-        if (!comentario) {
-            return res.status(404).send({ message: "No se ha podido encontrar una asistencia" })
-        }
-        return res.status(200).send({ message: "Se ha eliminado la assitencia de forma correcta" })
-    })
+    if(rolUsuario === 'admin'){
+        Comentario.findByIdAndDelete(id, (error, comentario) => {
+            if (error) {
+                return res.status(400).send({ message: "No se ha podido eliminar el comentario" })
+            }
+            if (!comentario) {
+                return res.status(404).send({ message: "No se ha podido encontrar el comentario" })
+            }
+            return res.status(200).send({ message: "Se ha eliminado el comentario de forma correcta" })
+        })
+    }else{
+        return res.status(401).send({message: "No está autorizado para eliminar el comentario"})
+    }
 }
 
-const getComentario = (req, res) => {
+const obtenerComentario = (req, res) => {
     const { id } = req.params
     Comentario.findById(id, (error, comentario) => {
         if (error) {
-            return res.status(400).send({ message: "No se ha podido modificar la asistencia" })
+            return res.status(400).send({ message: "No se ha podido modificar el comentario" })
         }
         if (!comentario) {
-            return res.status(404).send({ message: "No se ha podido encontrar una asistencia" })
+            return res.status(404).send({ message: "No se ha podido encontrar un comentario" })
         }
         return res.status(200).send(comentario)
-    })
+        })
 }
 
 module.exports = {
     ingresarComentario,
-    getComentarios,
-    updateComentario,
-    deleteComentario,
-    getComentario
+    obtenerComentarios,
+    actualizarComentario,
+    borrarComentario,
+    obtenerComentario
 }

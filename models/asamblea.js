@@ -10,8 +10,17 @@ const asambleaSchema = new Schema({
     tipo:{
         type: String,
         required: true,
-        enum: ['Ordinaria','Extrarordinaria']
-    }
+        enum: ['Ordinaria','Extraordinaria']
+    },
+    fecha:{
+        type: Date,
+        required: true
+    },
+    archivos: [{
+        type: Schema.Types.ObjectId,
+        ref: 'archivo',
+        default: []
+    }]
 })
 
 module.exports = mongoose.model('asamblea', asambleaSchema);

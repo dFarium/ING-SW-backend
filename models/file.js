@@ -12,6 +12,10 @@ const fileSchema = new Schema({
     mimeType: {
         type: String,
         required: true,
+    },
+    fecha: {
+        type: Date,
+        default: Date.now
     }
 })
 
