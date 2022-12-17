@@ -36,7 +36,7 @@ const updateAsistencia = (req, res) => {
     const { id } = req.params
     const { rolUsuario } = req.body
     if (rolUsuario === "admin"){
-        Asistencia.findOneAndUpdate(id, req.body, (error, asistencia) => {
+        Asistencia.findByIdAndUpdate(id, req.body, (error, asistencia) => {
             if (error) {
                 return res.status(400).send({ message: "No se pudo actualizar la asistencia" })
             }
@@ -84,8 +84,10 @@ const getAsistencia = (req, res) => {
 }
 
 const asistenciaPorAsamblea = (req, res) => {
-    const { asamblea } = req.params
-    Asistencia.find(asamblea).populate({ path: 'asamblea user' }).exec((error,asistencia) =>{
+    const asambleaId = req.params['id']
+    let filtro = {asamblea: `${asambleaId}`}
+    
+    Asistencia.find(filtro).populate({ path: 'asamblea user' }).exec((error,asistencia) =>{
         if(error){
             return res.status(400).send({ message: "No se ha podido encontrar una asistencia" })
         }
