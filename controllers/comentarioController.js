@@ -42,7 +42,7 @@ const actualizarComentario = (req, res) => {
                 ...req.body,
                 fecha: new Date()
             }
-            Comentario.findByIdAndUpdate(id, body, (error, comentario2) => {
+            Comentario.findByIdAndUpdate(id, body, (error) => {
                 if (error) {
                     return res.status(400).send({ message: "No se pudo actualizar el comentario" })
                 }
