@@ -82,9 +82,9 @@ const deleteFile = (req, res) => {
         if(!asamblea){
             return res.status(404).send({ message: 'No se ha encontrado la asamblea'})
         }
+        //CREAR VECTOR
         let vector1 = asamblea.archivos
         const vector2 = vector1.filter(puma => puma!= req.params.archivo)
-        //CREAR VECTOR
         Asamblea.findByIdAndUpdate(id, {archivos: vector2} , (error) => {
             if(error){
                 return res.status(400).send({ message: 'Error al eliminar el archivo'})
