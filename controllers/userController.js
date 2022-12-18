@@ -57,7 +57,7 @@ const updateUser = async (req, res) => {
     const { name, email, password, rolUsuario } = req.body;
     const { id } = req.params;
     if(rolUsuario === "admin"){
-        User.findOneAndUpdate(id, { name, email, password }, (err, user) => {
+        User.findByIdAndUpdate(id, { name, email, password }, (err, user) => {
             if (err) {
                 return res.status(400).send({ message: 'Error al actualizar el usuario' });
             }
@@ -76,7 +76,7 @@ const deleteUser = async (req, res) => {
     const { id } = req.params;
     const {rolUsuario} = req.body;
     if(rolUsuario === "admin"){
-        User.findOneAndDelete(id, (err, user) => {
+        User.findByIdAndDelete(id, (err, user) => {
             if (err) {
                 return res.status(400).send({ message: 'Error al eliminar el usuario' });
             }

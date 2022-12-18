@@ -27,7 +27,7 @@ const actualizarComentario = (req, res) => {
     const { id } = req.params
     const {rolUsuario} = req.body
     if (rolUsuario === 'admin'){
-        Comentario.findOneAndUpdate(id, req.body, (error, comentario) => {
+        Comentario.findByIdAndUpdate(id, req.body, (error, comentario) => {
             if (error) {
                 return res.status(400).send({ message: "No se pudo actualizar el comentario" })
             }
