@@ -1,5 +1,5 @@
 const fileModel = require("../models/file")
-const asamblea = require("../models/asamblea")
+const Asamblea = require("../models/asamblea")
 
 const uploadNewFile = (req, res) => {
     const { files } = req
@@ -10,7 +10,7 @@ const uploadNewFile = (req, res) => {
         return res.status(400).send({ message: 'No se ha seleccionado ningun archivo' })
     }
     let flag=0
-    asamblea.findById({_id: req.params.id}, (err, asamblea)=> {
+    Asamblea.findById({_id: req.params.id}, (err, asamblea)=> {
         if(err){
             flag = 1
             return res.status(400).send({ message: 'Error al encontrar la asamblea'})
@@ -30,13 +30,14 @@ const uploadNewFile = (req, res) => {
             if (err) {
                 return res.status(400).send({message: 'Error al subir el archivo'})
             }
-            asamblea.findOneAndUpdate({_id: req.params.id} ,{ $push: {archivos: fileSaved.id}}, (err)=>{
+            Asamblea.findOneAndUpdate({_id: req.params.id} ,{ $push: {archivos: fileSaved.id}}, (err)=>{
                 if(flag === 0){
                     flag = 1
                     if(err){
                         return res.status(400).send({ message: 'Error al subir el archivo'})
+                    }else{
+                        return res.status(201).send(aux)
                     }
-                    return res.status(201).send(aux)
                 }
             })
         })
@@ -59,7 +60,6 @@ const getFiles = (req, res)=> {
         }
         return res.status(200).send(files)
     })
-    
 }
 
 const downloadFile = (req, res)=> {
@@ -76,15 +76,30 @@ const downloadFile = (req, res)=> {
 }
 
 const deleteFile = (req, res) => {
-    const {id} = req.params
-    fileModel.findByIdAndDelete(id, (err, file)=>{
-        if(err){
-            return res.status(400).send({ message: 'No se ha podido eliminar el archivo'})
+    const id = req.params.id
+    const archivo = req.params.archivo
+    Asamblea.findById(id).then((asamblea)=>{
+        if(!asamblea){
+            return res.status(404).send({ message: 'No se ha encontrado la asamblea'})
         }
-        if(!file){
-            return res.status(404).send({ message: 'No se ha podido encontrar el archivo'})
-        }
-        return res.status(200).send({message: 'Se ha eliminado el archivo de forma correcta'})
+        let vector1 = asamblea.archivos
+        const vector2 = vector1.filter(puma => puma!= req.params.archivo)
+        //CREAR VECTOR
+        Asamblea.findByIdAndUpdate(id, {archivos: vector2} , (error) => {
+            if(error){
+                return res.status(400).send({ message: 'Error al eliminar el archivo'})
+            }else{
+                fileModel.findByIdAndDelete(archivo, (err, file)=>{
+                    if(err){
+                        return res.status(400).send({ message: 'No se ha podido eliminar el archivo'})
+                    }
+                    if(!file){
+                        return res.status(404).send({ message: 'No se ha podido encontrar el archivo'})
+                    }
+                    return res.status(200).send({message: 'Se ha eliminado el archivo de forma correcta'})
+                })
+            }
+        })
     })
 }
 
