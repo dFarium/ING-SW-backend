@@ -23,14 +23,15 @@ const archivos= () => {
                 <Tr key={archivos._id}>
                     <Td>{archivos.name}</Td>
                     <Td>{archivos.fecha}</Td>
-                    <Td><Button onClick={()=>router.push(`/archivos/${archivos.asamblea}`)}>Ver mas</Button></Td>
+                    <Td><Button onClick={()=>router.push(`/archivos/${archivos._id}`)}>Ver mas</Button></Td>
                 </Tr>
             )
         })
     }
     return (
-        <Container maxW="container.xl" centerContent>
+        <Container maxW="container.xl">
         <Heading textAlign={"center"} my={10}>Archivos</Heading>
+        <Button colorScheme={"teal"} float={'right'} onClick={()=>router.push('/')} >Volver</Button>
         <Table variant="simple">
             <Thead>
                 <Tr>

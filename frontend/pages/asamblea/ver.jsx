@@ -35,6 +35,7 @@ const asamblea = () => {
         <Container maxW="container.xl"  >
             <Heading textAlign={"center"} my={15} paddingBottom={15}>Asambleas</Heading>
             <Button colorScheme={"teal"} float={"right"} onClick={()=>router.push('/asamblea/crear')} >Crear Asamblea</Button>
+            <Button colorScheme={"teal"} float={"left"} onClick={()=>router.push('/')} >Volver</Button>
             <Table variant="simple" my={15}>
                 <Thead>
                     <Tr>

@@ -1,3 +1,4 @@
+import React from 'react'
 import {useEffect, useState} from 'react'
 import {useRouter} from 'next/router'
 import axios from 'axios'
@@ -5,22 +6,22 @@ import axios from 'axios'
 const verArchivos = () => {
 
     const router = useRouter()
-    const {arch} = router.query
+    const {archivos} = router.query
+    console.log(archivos)
+    //const [files, setArchivos] = useState()
 
-    const [files, setArchivos] = useState()
+    // const getFiles = async () => {
+    //     const response = await axios.get(`${process.env.API_URL}/archivos/${archivos}`)
+    //     setArchivos(response.data)
+    // }
 
-    const getFiles = async () => {
-        const response = await axios.get(`${process.env.API_URL}/archivos/${arch}`)
-        setArchivos(response.data)
-    }
-
-    useEffect(()=>{
-        getFiles()
-        console.log(files)
-    }, [files])
+    // useEffect(()=>{
+    //     getFiles()
+    //     console.log(files)
+    // }, [files])
 
     return (
-        <h1>La pagina es {arch} </h1>
+        <h1>La pagina es {archivos} </h1>
     )
 }
 
