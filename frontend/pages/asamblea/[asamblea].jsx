@@ -41,9 +41,8 @@ const asamblea = (data) => {
     //      }
     // },[asamblea])
 
-    
     return (
-        <Heading>Esta es la pag de {asamblea}</Heading>        
+        <Heading>Esta es la pag de {asamblea}</Heading>       
     )
 }
 

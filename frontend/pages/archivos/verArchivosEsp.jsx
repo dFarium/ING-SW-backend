@@ -1,29 +1,31 @@
 import { useState, useEffect } from 'react'
-import { Button, Container, HStack, Table, Thead, Tbody, Tfoot, Tr, Th, Td, Heading, } from '@chakra-ui/react'
+import { Button, Container, Input, Stack, Text, HStack, Table, Thead, Tbody, Tfoot, Tr, Th, Td, Heading, } from '@chakra-ui/react'
 import axios from 'axios'
 import { useRouter } from 'next/router'
 
-const archivos= () => {
+export default function Home() {
+
 
     const [archivos, setArchivos] = useState([])
     const router = useRouter()
 
-    const getArchivos = async () => {
+    const getFiles = async () => {
         const response = await axios.get(`${process.env.API_URL}/files`)
+        //return response
         setArchivos(response.data)
     }
 
     useEffect(()=>{
-        getArchivos()
+        getFiles()
     }, [])
 
-    const showArchivos = () =>{
-        return archivos.map(archivos =>{
+    const showFiles = () =>{
+        return archivos.map(files =>{
             return(
-                <Tr key={archivos._id}>
-                    <Td>{archivos.name}</Td>
-                    <Td>{archivos.fecha}</Td>
-                    <Td><Button onClick={()=>router.push(`/archivos/${archivos.asamblea}`)}>Ver mas</Button></Td>
+                <Tr key={files._id}>
+                    <Td>{files.name}</Td>
+                    <Td>{files.fecha}</Td>
+                    <Td><Button onClick={()=>router.push(`/archivos/${files.asamblea}`)}>Ver mas</Button></Td>
                 </Tr>
             )
         })
@@ -39,11 +41,9 @@ const archivos= () => {
                 </Tr>
             </Thead>
             <Tbody>
-                {showArchivos()}
+                {showFiles()}
             </Tbody>
         </Table>
         </Container>
     )
     }
-
-export default archivos
