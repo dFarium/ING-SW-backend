@@ -85,7 +85,6 @@ const asamblea = () => {
             <HStack justifyContent={"space-between"}>
                 <Button colorScheme={"teal"} type="submit" my={5} onClick={onSubmit}>Crear Asamblea</Button>
                 <Button colorScheme={"teal"} onClick={()=>router.push('/asamblea/ver')}>Volver</Button>
-
             </HStack>
         </Container>
     )
