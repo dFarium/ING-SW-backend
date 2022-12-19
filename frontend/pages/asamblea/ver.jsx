@@ -25,7 +25,7 @@ const asamblea = () => {
                     <Td>{asamblea.tipo}</Td>
                     <Td>{asamblea.fecha}</Td>
                     <Link href>
-                    <Button my={2} onClick={()=>router.push(`/asamblea/${asamblea._id}`)}>Ver mas</Button>
+                    <Button my={2} onClick={()=>router.push(`/asamblea/ver/${asamblea._id}`)}>Ver mas</Button>
                     </Link>
                 </Tr>
             )
