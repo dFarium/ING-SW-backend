@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react'
-import { Container, Table, Thead, Tbody, Tr, Td, Heading } from '@chakra-ui/react'
+import { Container, Table, Thead, Tbody, Tr, Td, Heading, Button, Link } from '@chakra-ui/react'
 import axios from 'axios'
+import { useRouter } from 'next/router'
 
 
-export default function Home() {
-
+const asamblea = () => {
+    const router = useRouter()
     const [asambleas, setAsambleas] = useState([])
 
     const getAsambleas = async () => {
@@ -23,27 +24,33 @@ export default function Home() {
                     <Td>{asamblea.name}</Td>
                     <Td>{asamblea.tipo}</Td>
                     <Td>{asamblea.fecha}</Td>
-                    <Td>{asamblea.archivos}</Td>
+                    <Td>
+                        <Button onClick={()=>router.push(`/asamblea/ver/${asamblea._id}`)}>Ver mas</Button>
+                    </Td>
                 </Tr>
             )
         })
     }
     return (
-        <Container maxW="container.xl" centerContent>
-        <Heading textAlign={"center"} my={10}>Asambleas</Heading>
-        <Table variant="simple">
-            <Thead>
-                <Tr>
-                    <Td>Nombre</Td>
-                    <Td>Tipo</Td>
-                    <Td>Fecha</Td>
-                    <Td>Arhivos</Td>
-                </Tr>
-            </Thead>
-            <Tbody>
-                {showAsambleas()}
-            </Tbody>
-        </Table>
-        </Container>
+        <Container maxW="container.xl">
+            <Heading textAlign={"center"} my={15}>Asambleas</Heading>
+            <Button colorScheme={"teal"} float={"right"} onClick={()=>router.push('/asamblea/crear')} >Crear Asamblea</Button>
+            <Button colorScheme={"teal"} float={"left"} onClick={()=>router.push('/')} >Volver</Button>
+            <Table variant="simple" my={15}>
+                <Thead>
+                    <Tr>
+                        <Td>Nombre</Td>
+                        <Td>Tipo</Td>
+                        <Td>Fecha</Td>
+                        <Td>Detalles</Td>
+                    </Tr>
+                </Thead>
+                <Tbody>
+                    {showAsambleas()}
+                </Tbody>
+            </Table>
+            </Container>
     )
     }
+
+export default asamblea

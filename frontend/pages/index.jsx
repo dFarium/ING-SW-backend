@@ -1,49 +1,20 @@
-import { useState, useEffect } from 'react'
-import { Container, Table, Thead, Tbody, Tr, Td, Heading } from '@chakra-ui/react'
-import axios from 'axios'
+import { Container,Heading,  Button, HStack} from '@chakra-ui/react'
+import React from 'react'
+import { useRouter } from 'next/router'
 
+export const index = () => {
 
-export default function Home() {
-
-    const [asambleas, setAsambleas] = useState([])
-
-    const getAsambleas = async () => {
-        const response =await axios.get(`${process.env.API_URL}/asambleas`)
-        setAsambleas(response.data)
-    }
-
-    useEffect(()=>{
-        getAsambleas()
-    }, [])
-
-    const showAsambleas = () =>{
-        return asambleas.map(asamblea =>{
-            return(
-                <Tr key={asamblea._id}>
-                    <Td>{asamblea.name}</Td>
-                    <Td>{asamblea.tipo}</Td>
-                    <Td>{asamblea.fecha}</Td>
-                    <Td>{asamblea.archivos}</Td>
-                </Tr>
-            )
-        })
-    }
+    const router = useRouter()
     return (
         <Container maxW="container.xl" centerContent>
-        <Heading textAlign={"center"} my={10}>Asambleas</Heading>
-        <Table variant="simple">
-            <Thead>
-                <Tr>
-                    <Td>Nombre</Td>
-                    <Td>Tipo</Td>
-                    <Td>Fecha</Td>
-                    <Td>Arhivos</Td>
-                </Tr>
-            </Thead>
-            <Tbody>
-                {showAsambleas()}
-            </Tbody>
-        </Table>
+            <Heading textAlign={"center"} my={10}>Bienvenido</Heading>
+            <HStack w={"full"} py={'28'}>
+                <Button w={"full"} colorScheme={"teal"} float={"right"} onClick={()=>router.push('/asamblea/ver')} >Asambleas</Button>
+                <Button w={"full"} colorScheme={"teal"} float={"right"} onClick={()=>router.push('/archivos/verArchivos')} >Historial de Actas</Button>
+                <Button w={"full"} colorScheme={"teal"} float={"right"} onClick={()=>router.push('/asamblea/ver')} >Mandar Avisos</Button>
+            </HStack>
         </Container>
     )
-    }
+}
+
+export default index

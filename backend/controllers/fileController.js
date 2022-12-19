@@ -1,5 +1,6 @@
 const fileModel = require("../models/file")
 const Asamblea = require("../models/asamblea")
+const asamblea = require("../models/asamblea")
 
 const uploadNewFile = (req, res) => {
     const { files } = req
@@ -19,29 +20,30 @@ const uploadNewFile = (req, res) => {
             flag = 1
             return res.status(404).send({ message: 'No se ha encontrado la asamblea'})
         }
-    })
-    let aux = files.map((file)=>{
-        const newFile = new fileModel({
-            url: file.path,
-            name: file.originalname,
-            mimeType: file.mimetype
-        })
-        newFile.save((err, fileSaved)=>{
-            if (err) {
-                return res.status(400).send({message: 'Error al subir el archivo'})
-            }
-            Asamblea.findOneAndUpdate({_id: req.params.id} ,{ $push: {archivos: fileSaved.id}}, (err)=>{
-                if(flag === 0){
-                    flag = 1
-                    if(err){
-                        return res.status(400).send({ message: 'Error al subir el archivo'})
-                    }else{
-                        return res.status(201).send(aux)
-                    }
-                }
+        let aux = files.map((file)=>{
+            const newFile = new fileModel({
+                url: file.path,
+                name: file.originalname,
+                mimeType: file.mimetype,
+                asamblea: req.params.id
             })
+            newFile.save((err, fileSaved)=>{
+                if (err) {
+                    return res.status(400).send({message: 'Error al subir el archivo'})
+                }
+                Asamblea.findOneAndUpdate({_id: req.params.id} ,{ $push: {archivos: fileSaved.id}}, (err)=>{
+                    if(flag === 0){
+                        flag = 1
+                        if(err){
+                            return res.status(400).send({ message: 'Error al subir el archivo'})
+                        }else{
+                            return res.status(201).send(aux)
+                        }
+                    }
+                })
+            })
+            return newFile
         })
-        return newFile
     })
 }
 
@@ -103,16 +105,26 @@ const deleteFile = (req, res) => {
     })
 }
 
-const viewFile = (req, res)=> {
-    const {id} = req.params
-    fileModel.findById(id, (err, file)=>{
-        if(!file){
-            return res.status(404).send({ message: 'El archivo no existe'})
+const viewFile = (req, res)=>{
+
+    Asamblea.findById(req.params.id, (error, asamblea) => {
+        if (error) {
+            return res.status(400).send({ message: "Error al obtener los archivo" })
         }
-        if(err){
-            return res.status(400).send({ message: 'Error al buscar el archivo'})
+        if (!asamblea) {
+            return res.status(404).send({ message: "La asamblea no existe" })
         }
-        res.send(file)
+
+        fileModel.find({asamblea: req.params.id},(error,files)=>{
+            if(error){
+                return res.status(400).send({ message: 'Error al obtener los archivo'})
+            }
+            if(files.length === 0){
+                return res.status(404).send({ message: 'No existen archivos'})
+            }else{
+                return res.status(201).send(files)
+            }
+        })
     })
 }
 
