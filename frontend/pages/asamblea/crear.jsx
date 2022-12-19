@@ -1,10 +1,14 @@
-import {useState,useEffect} from 'react'
-import { Button,Container, Input, Stack,Text,HStack,Heading,FormControl,FormLabel,Radio,RadioGroup } from '@chakra-ui/react'
+import { useState } from 'react'
+import { Button,Container, Input, Stack,HStack,Heading,FormControl,FormLabel,Radio,RadioGroup,Link } from '@chakra-ui/react'
 import axios from 'axios'
+import Swal from 'sweetalert2'
+import { useRouter } from 'next/router'
 
 
 
 const asamblea = () => {
+
+    const router = useRouter()
 
     const[values, setValues] = useState({
         name: '',
@@ -14,10 +18,30 @@ const asamblea = () => {
     })
 
     const onSubmit = async (e) =>{
-        e.preventDefault()
-        console.log(values)
-        const response = await axios.post(`${process.env.API_URL}/asamblea`,values)
-        console.log(response)
+        //e.preventDefault()
+        try {
+            const response = await axios.post(`${process.env.API_URL}/asamblea`,values)
+            console.log(response)
+            if (response.status === 201){
+                Swal.fire({
+                    title: 'Asamblea creada',
+                    text: 'La asamblea se ha creado con exito',
+                    icon: 'success',
+                    confirmButtonText: 'Ok'
+                }).then((result)=>{
+                    if (result.isConfirmed){
+                        router.push("/asamblea/ver")
+                    }
+                })
+            }
+        } catch (error) {
+            Swal.fire({
+                title: 'Error',
+                text: `La asamblea no se ha podido crear ${error}`,
+                icon: 'error',
+                confirmButtonText: 'Ok'
+            })
+        }
     }
 
     const onChange = async (e) =>{
@@ -58,7 +82,11 @@ const asamblea = () => {
                         </RadioGroup>
                 </FormControl>
             </Stack>
-            <Button colorScheme={"teal"} type="submit" my={5} onClick={onSubmit}>Crear Asamblea</Button>
+            <HStack justifyContent={"space-between"}>
+                <Button colorScheme={"teal"} type="submit" my={5} onClick={onSubmit}>Crear Asamblea</Button>
+                <Button colorScheme={"teal"} onClick={()=>router.push('/asamblea/ver')}>Volver</Button>
+
+            </HStack>
         </Container>
     )
 }
