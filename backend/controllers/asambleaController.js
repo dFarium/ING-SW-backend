@@ -1,8 +1,6 @@
 const Asamblea = require('../models/asamblea');
 
 const createAsamblea = (req, res) => {
-
-
     const { name, tipo, fecha, rolUsuario } = req.body
     const newAsamblea = new Asamblea({
         name,
@@ -57,6 +55,7 @@ const updateAsamblea = (req, res) => {
 const deleteAsamblea = (req, res) => {
     const { id } = req.params
     const {rolUsuario} = req.body
+    console.log(req.body)
     if(rolUsuario === "admin"){
         Asamblea.findByIdAndDelete(id, (error, asamblea) => {
                 if (error) {
