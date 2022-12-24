@@ -40,8 +40,9 @@ const asamblea = (data) => {
 
 
     const eliminarAsamblea = async () =>{
+        console.log(values)
         try {
-            const response = await axios.delete(`${process.env.API_URL}/asamblea/delete/${asambleas.asambleaId._id}`,values)//revisar
+            const response = await axios.delete(`${process.env.API_URL}/asamblea/delete/${asambleas.asambleaId._id}`,{data: values })//revisar
             if (response.status === 200){
                 Swal.fire({
                     title: 'Asamblea eliminada',
