@@ -6,7 +6,7 @@ import ShowInfo from '../../../components/ShowInfo'
 import Swal from 'sweetalert2'
 
 export async function getServerSideProps(context){
-    console.log(context.params.asamblea)
+    //console.log(context.params.asamblea)
     try {
         const response = await axios.get(`${process.env.API_URL}/asamblea/search/${context.params.asamblea}`)
         return{
@@ -71,7 +71,7 @@ const asamblea = (data) => {
             <Stack w={"full"}>
                 <ShowInfo tag="Nombre" data={asambleas.asambleaId.name} />
                 <ShowInfo tag="Tipo" data={asambleas.asambleaId.tipo} />
-                <ShowInfo tag="Archivos" data={asambleas.asambleaId.archivos}/>
+                <ShowInfo tag="Archivos " data={asambleas.asambleaId.archivos}/>
             </Stack>
             <RadioGroup >
                 <HStack spacing='24px'>
