@@ -51,7 +51,6 @@ const uploadNewFile = (req, res) => {
 const getFiles = (req, res)=> {
 
     fileModel.find({}).populate({ path: 'asamblea' }).exec((error, files) => {
-        console.log(files.Asamblea)
         if (error) {
             return res.status(400).send({ message: 'Error al obtener los archivo' })
         }
