@@ -36,7 +36,7 @@ const archivos= () => {
         <Box>
             <Arriba/>
             <Container maxW="container.xl">
-            <Heading textAlign={"center"} my={10}>Archivos</Heading>
+            <Heading textAlign={"center"} my={15}>Archivos</Heading>
             <Button colorScheme={"teal"} float={'right'} onClick={()=>router.push('/')} >Volver</Button>
             <Table variant="simple">
                 <Thead>
