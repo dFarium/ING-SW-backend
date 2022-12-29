@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import axios from 'axios'
-import { Container, Heading, Tbody,Stack,HStack,Button,RadioGroup,Radio, Box } from '@chakra-ui/react'
+import { Container, Heading, Tbody,Stack,HStack,Button,RadioGroup,Radio, Box,Divider } from '@chakra-ui/react'
 import ShowInfo from '../../../components/ShowInfo'
 import Swal from 'sweetalert2'
 import Arriba from '../../../components/Arriba'
+import VerAsistencias from '../../../components/VerAsistencias'
+
 
 
 export async function getServerSideProps(context){
@@ -67,6 +69,7 @@ const asamblea = (data) => {
         }
     }
 
+
     return (
         <Box>
             <Arriba/>
@@ -77,7 +80,8 @@ const asamblea = (data) => {
                         <Button w={"full"} colorScheme={"teal"} onClick={() => eliminarAsamblea()}>Eliminar</Button>
                         <Button w={"full"} colorScheme={"teal"} onClick={() => router.push("/asamblea/ver")}>Volver</Button>
                     </HStack>
-                <Stack w={"full"}>
+                <Divider/>
+                <Stack w={"full"} py={10}>
                     <ShowInfo tag="Nombre" data={asambleas.asambleaId.name} />
                     <ShowInfo tag="Tipo" data={asambleas.asambleaId.tipo} />
                     <ShowInfo tag="Archivos" data={asambleas.asambleaId.archivos}/>
@@ -89,6 +93,7 @@ const asamblea = (data) => {
                     </HStack>
                 </RadioGroup>
             </Container>
+            <VerAsistencias id={asambleas.asambleaId._id}></VerAsistencias>
         </Box>
     )
 }

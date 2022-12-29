@@ -31,6 +31,8 @@ const asamblea = () => {
             )
         })
     }
+
+    
     return (
         <Box>
             <Arriba/>
