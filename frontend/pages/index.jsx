@@ -12,6 +12,7 @@ export const index = () => {
                 <Button w={"full"} colorScheme={"teal"} float={"right"} onClick={()=>router.push('/asamblea/ver')} >Asambleas</Button>
                 <Button w={"full"} colorScheme={"teal"} float={"right"} onClick={()=>router.push('/archivos/verArchivos')} >Historial de Actas</Button>
                 <Button w={"full"} colorScheme={"teal"} float={"right"} onClick={()=>router.push('/enviar_email/email')} >Mandar Avisos</Button>
+                <Button w={"full"} colorScheme={"teal"} float={"right"} onClick={()=>router.push('/usuarios/crear_usuario')} >Ingresar Usuario</Button>
             </HStack>
         </Container>
     )
