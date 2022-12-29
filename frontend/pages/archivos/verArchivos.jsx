@@ -3,6 +3,7 @@ import { Button, Container, HStack, Table, Thead, Tbody, Tfoot, Tr, Th, Td, Head
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import Arriba from '../../components/Arriba'
+import Swal from 'sweetalert2'
 //import { DownloadIcon } from '@chakra-ui/icons'
 
 const archivos= () => {
@@ -13,6 +14,31 @@ const archivos= () => {
     const getArchivos = async () => {
         const response = await axios.get(`${process.env.API_URL}/files`)
         setArchivos(response.data)
+    }
+
+    const eliminarArchivos = async (id_archivo, id_asamblea) =>{
+        try {
+            const response = await axios.delete(`${process.env.API_URL}/file/delete/${id_archivo}/${id_asamblea}`)
+            if (response.status === 200){
+                Swal.fire({
+                    title: 'Archivo eliminado',
+                    text: 'El archivo se ha eliminado con exito',
+                    icon: 'success',
+                    confirmButtonText: 'Ok'
+                }).then((result)=>{
+                    if (result.isConfirmed){
+                        router.reload()
+                    }
+                })
+            }
+            }catch (error) {
+            Swal.fire({
+                title: 'Error',
+                text: `El archivo no se ha podido eliminar`,
+                icon: 'error',
+                confirmButtonText: 'Ok'
+            })
+        }
     }
 
     useEffect(()=>{
@@ -30,7 +56,7 @@ const archivos= () => {
                     <Td>{archivos.fecha}</Td>
                     <Td><Button onClick={()=>router.push(`${process.env.API_URL}/file/download/${archivos._id}`)}>Download</Button></Td>
                     {/* <Td><DownloadIcon /></Td> */}
-                    <Td><Button onClick={()=>router.push(`${process.env.API_URL}/file/download/${archivos._id}`)}>Download</Button></Td>
+                    <Td><Button onClick={()=>eliminarArchivos(archivos._id, archivos.asamblea._id)}>Eliminar</Button></Td>
                 </Tr>
             )
         })
