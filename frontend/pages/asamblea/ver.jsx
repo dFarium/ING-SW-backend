@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
-import { Container, Table, Thead, Tbody, Tr, Td, Heading, Button, Link } from '@chakra-ui/react'
+import { Container, Table, Thead, Tbody, Tr, Td, Heading, Button,Box } from '@chakra-ui/react'
 import axios from 'axios'
 import { useRouter } from 'next/router'
-
+import Arriba from '../../components/Arriba'
 
 const asamblea = () => {
     const router = useRouter()
@@ -32,24 +32,27 @@ const asamblea = () => {
         })
     }
     return (
-        <Container maxW="container.xl">
-            <Heading textAlign={"center"} my={15}>Asambleas</Heading>
-            <Button colorScheme={"teal"} float={"right"} onClick={()=>router.push('/asamblea/crear')} >Crear Asamblea</Button>
-            <Button colorScheme={"teal"} float={"left"} onClick={()=>router.push('/')} >Volver</Button>
-            <Table variant="simple" my={15}>
-                <Thead>
-                    <Tr>
-                        <Td>Nombre</Td>
-                        <Td>Tipo</Td>
-                        <Td>Fecha</Td>
-                        <Td>Detalles</Td>
-                    </Tr>
-                </Thead>
-                <Tbody>
-                    {showAsambleas()}
-                </Tbody>
-            </Table>
+        <Box>
+            <Arriba/>
+            <Container maxW="container.xl">
+                <Heading textAlign={"center"} my={15}>Asambleas</Heading>
+                <Button colorScheme={"teal"} float={"right"} onClick={()=>router.push('/asamblea/crear')} >Crear Asamblea</Button>
+                <Button colorScheme={"teal"} float={"left"} onClick={()=>router.push('/')} >Volver</Button>
+                <Table variant="simple" my={15}>
+                    <Thead>
+                        <Tr>
+                            <Td>Nombre</Td>
+                            <Td>Tipo</Td>
+                            <Td>Fecha</Td>
+                            <Td>Detalles</Td>
+                        </Tr>
+                    </Thead>
+                    <Tbody>
+                        {showAsambleas()}
+                    </Tbody>
+                </Table>
             </Container>
+        </Box>
     )
     }
 

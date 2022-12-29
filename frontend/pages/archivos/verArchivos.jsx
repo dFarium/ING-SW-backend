@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
-import { Button, Container, HStack, Table, Thead, Tbody, Tfoot, Tr, Th, Td, Heading, } from '@chakra-ui/react'
+import { Button, Container, HStack, Table, Thead, Tbody, Tfoot, Tr, Th, Td, Heading,Box, AccordionIcon } from '@chakra-ui/react'
 import axios from 'axios'
 import { useRouter } from 'next/router'
+import Arriba from '../../components/Arriba'
 
 const archivos= () => {
 
@@ -29,21 +30,24 @@ const archivos= () => {
         })
     }
     return (
-        <Container maxW="container.xl">
-        <Heading textAlign={"center"} my={10}>Archivos</Heading>
-        <Button colorScheme={"teal"} float={'right'} onClick={()=>router.push('/')} >Volver</Button>
-        <Table variant="simple">
-            <Thead>
-                <Tr>
-                    <Td>Nombre</Td>
-                    <Td>Fecha</Td>
-                </Tr>
-            </Thead>
-            <Tbody>
-                {showArchivos()}
-            </Tbody>
-        </Table>
-        </Container>
+        <Box>
+            <Arriba/>
+            <Container maxW="container.xl">
+            <Heading textAlign={"center"} my={15}>Archivos</Heading>
+            <Button colorScheme={"teal"} float={'right'} onClick={()=>router.push('/')} >Volver</Button>
+            <Table variant="simple">
+                <Thead>
+                    <Tr>
+                        <Td>Nombre</Td>
+                        <Td>Fecha</Td>
+                    </Tr>
+                </Thead>
+                <Tbody>
+                    {showArchivos()}
+                </Tbody>
+            </Table>
+            </Container>
+        </Box>
     )
     }
 
