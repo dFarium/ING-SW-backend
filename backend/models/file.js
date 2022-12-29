@@ -16,6 +16,12 @@ const fileSchema = new Schema({
     fecha: {
         type: Date,
         default: Date.now
+    },
+    asamblea: {
+        type:Schema.Types.ObjectId,
+        ref: 'asamblea',
+        required: true,
+        default: null
     }
 })
 
