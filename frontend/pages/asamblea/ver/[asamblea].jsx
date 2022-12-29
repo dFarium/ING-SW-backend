@@ -8,7 +8,6 @@ import Arriba from '../../../components/Arriba'
 
 
 export async function getServerSideProps(context){
-    console.log(context.params.asamblea)
     try {
         const response = await axios.get(`${process.env.API_URL}/asamblea/search/${context.params.asamblea}`)
         return{
@@ -17,7 +16,6 @@ export async function getServerSideProps(context){
             }
         }
     } catch (error) {
-        console.log("ERROR",error)
         return{
             redirect:{
                 destination: '/asamblea/ver',
@@ -42,7 +40,6 @@ const asamblea = (data) => {
 
 
     const eliminarAsamblea = async () =>{
-        console.log(values)
         try {
             const response = await axios.delete(`${process.env.API_URL}/asamblea/delete/${asambleas.asambleaId._id}`,{data: values })
             if (response.status === 200){
