@@ -8,6 +8,7 @@ export const index = () => {
 
     const router = useRouter()
     return (
+
         <Box>
         <Arriba/>
             <Container maxW="container.xl">
