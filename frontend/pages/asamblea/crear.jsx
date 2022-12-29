@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import { Button,Container, Input, Stack,HStack,Heading,FormControl,FormLabel,Radio,RadioGroup} from '@chakra-ui/react'
+import { Button,Container, Input, Stack,HStack,Heading,FormControl,FormLabel,Radio,RadioGroup,Box } from '@chakra-ui/react'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 import { useRouter } from 'next/router'
+import Arriba from '../../components/Arriba'
 
 
 
@@ -25,7 +26,6 @@ const asamblea = () => {
     }
     
     const onSubmit = async (e) =>{
-        //e.preventDefault()
         try {
             const response = await axios.post(`${process.env.API_URL}/asamblea`,values)
             console.log(response)
@@ -51,44 +51,47 @@ const asamblea = () => {
         }
     }
 
-    
+
 
     return(
-        <Container>
-            <Heading textAlign={"center"} my={10}>Crear Asamblea</Heading>
-            <Stack>
-                <FormControl isRequired="true">
-                    <FormLabel>Nombre asamblea</FormLabel>
-                    <Input placeholder="Asamblea X" type={"text"} maxLength={100} onChange={onChange} name={"name"}/>
-                </FormControl>
-                <FormControl isRequired="true">
-                    <FormLabel >Tipo asamblea</FormLabel>
-                        <RadioGroup >
-                            <HStack spacing='24px'>
-                                <Radio value='Ordinaria' onChange={onChange} name={"tipo"}>Ordinaria</Radio>
-                                <Radio value='Extraordinaria' onChange={onChange} name={"tipo"}>Extraordinaria</Radio>
-                            </HStack>
-                        </RadioGroup>
-                </FormControl>
-                <FormControl isRequired="true">
-                    <FormLabel>Fecha</FormLabel>
-                    <Input placeholder="Select Date and Time" size="xl" type="datetime-local" onChange={onChange} name={"fecha"}/>
-                </FormControl>
-                <FormControl isRequired="true">
-                    <FormLabel >rolUsuario</FormLabel>
-                        <RadioGroup >
-                            <HStack spacing='24px'>
-                                <Radio value='user' onChange={onChange} name={"rolUsuario"}>user</Radio>
-                                <Radio value='admin' onChange={onChange} name={"rolUsuario"}>admin</Radio>
-                            </HStack>
-                        </RadioGroup>
-                </FormControl>
-            </Stack>
-            <HStack justifyContent={"space-between"}>
-                <Button colorScheme={"teal"} type="submit" my={5} onClick={onSubmit}>Crear Asamblea</Button>
-                <Button colorScheme={"teal"} onClick={()=>router.push('/asamblea/ver')}>Volver</Button>
-            </HStack>
-        </Container>
+        <Box>
+            <Arriba/>
+            <Container>
+                <Heading textAlign={"center"} my={15}>Crear Asamblea</Heading>
+                <Stack>
+                    <FormControl isRequired="true">
+                        <FormLabel>Nombre asamblea</FormLabel>
+                        <Input placeholder="Asamblea X" type={"text"} maxLength={100} onChange={onChange} name={"name"}/>
+                    </FormControl>
+                    <FormControl isRequired="true">
+                        <FormLabel >Tipo asamblea</FormLabel>
+                            <RadioGroup >
+                                <HStack spacing='24px'>
+                                    <Radio value='Ordinaria' onChange={onChange} name={"tipo"}>Ordinaria</Radio>
+                                    <Radio value='Extraordinaria' onChange={onChange} name={"tipo"}>Extraordinaria</Radio>
+                                </HStack>
+                            </RadioGroup>
+                    </FormControl>
+                    <FormControl isRequired="true">
+                        <FormLabel>Fecha</FormLabel>
+                        <Input placeholder="Select Date and Time" size="xl" type="datetime-local" onChange={onChange} name={"fecha"}/>
+                    </FormControl>
+                    <FormControl isRequired="true">
+                        <FormLabel >rolUsuario</FormLabel>
+                            <RadioGroup >
+                                <HStack spacing='24px'>
+                                    <Radio value='user' onChange={onChange} name={"rolUsuario"}>user</Radio>
+                                    <Radio value='admin' onChange={onChange} name={"rolUsuario"}>admin</Radio>
+                                </HStack>
+                            </RadioGroup>
+                    </FormControl>
+                </Stack>
+                <HStack justifyContent={"space-between"}>
+                    <Button colorScheme={"teal"} type="submit" my={5} onClick={onSubmit}>Crear Asamblea</Button>
+                    <Button colorScheme={"teal"} onClick={()=>router.push('/asamblea/ver')}>Volver</Button>
+                </HStack>
+            </Container>
+        </Box>
     )
 }
 

@@ -1,8 +1,10 @@
-import { Container,Heading,  Button, HStack} from '@chakra-ui/react'
+import { Container,Heading,  Button, HStack,Link,Box} from '@chakra-ui/react'
 import React from 'react'
 import { useRouter } from 'next/router'
+import Arriba from '../components/Arriba'
 
 export const index = () => {
+
 
     const router = useRouter()
     return (
