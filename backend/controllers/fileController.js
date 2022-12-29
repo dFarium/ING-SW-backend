@@ -50,15 +50,12 @@ const uploadNewFile = (req, res) => {
 
 const getFiles = (req, res)=> {
 
-    const consulta = fileModel.find({});
-
-    consulta.sort('-date').exec ((err, files) => {
-
-        if(err){
-            return res.status(400).send({ message: 'Error al obtener los archivo'})
+    fileModel.find({}).populate({ path: 'asamblea' }).exec((error, files) => {
+        if (error) {
+            return res.status(400).send({ message: 'Error al obtener los archivo' })
         }
-        if(files.length === 0){
-            return res.status(404).send({ message: 'No existen archivos'})
+        if (files.length === 0) {
+            return res.status(404).send({ message: "No existen archivos" })
         }
         return res.status(200).send(files)
     })

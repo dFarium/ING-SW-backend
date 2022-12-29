@@ -23,12 +23,15 @@ const archivos= () => {
             return(
                 <Tr key={archivos._id}>
                     <Td>{archivos.name}</Td>
+                    <Td>{archivos.asamblea.name}</Td>
                     <Td>{archivos.fecha}</Td>
-                    <Td><Button onClick={()=>router.push(`/archivos/${archivos._id}`)}>Ver mas</Button></Td>
+                    <Td><Button onClick={()=>router.push(`${process.env.API_URL}/file/download/${archivos._id}`)}>Download</Button></Td>
+                    <Td><Button onClick={()=>router.push(`/asamblea/ver/${archivos.asamblea._id}`)}>Detalles</Button></Td>
                 </Tr>
             )
         })
     }
+
     return (
         <Box>
             <Arriba/>
@@ -39,7 +42,9 @@ const archivos= () => {
                 <Thead>
                     <Tr>
                         <Td>Nombre</Td>
+                        <Td>Asamblea</Td>
                         <Td>Fecha</Td>
+                        <Td>Descarga</Td>
                     </Tr>
                 </Thead>
                 <Tbody>
