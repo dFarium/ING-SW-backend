@@ -9,10 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@chakra-ui/icons": "^2.0.15",
     "@chakra-ui/react": "^2.4.4",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
-    "axios": "^1.2.0",
+    "axios": "^1.2.1",
     "eslint": "8.27.0",
     "eslint-config-next": "13.0.3",
     "formik": "^2.2.9",
@@ -22,7 +23,8 @@
     "next": "12.3.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "sweetalert2": "^11.6.13",
+    "sweetalert2": "^11.6.16",
+    "url": "^0.11.0",
     "yup": "^0.32.11"
   }
 }
