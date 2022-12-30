@@ -7,10 +7,10 @@ const uploadNewFile = (req, res) => {
     
     const { files } = req
     if (req.params.fileValido === false){
-        return res.status(400).send({ message: 'Solo se aceptan archivos con extensión .pdf, .doc y .docx' })
+        return res.status(415).send({ message: 'Solo se aceptan archivos con extensión .pdf, .doc y .docx' })
     }
     if (files.length === 0) {
-        return res.status(400).send({ message: 'No se ha seleccionado ningun archivo' })
+        return res.status(404).send({ message: 'No se ha seleccionado ningun archivo' })
     }
     let flag=0
     Asamblea.findById({_id: req.params.id}, (err, asamblea)=> {
