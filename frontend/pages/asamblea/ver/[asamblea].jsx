@@ -74,12 +74,6 @@ const asamblea = (data) => {
             const response = await axios.get(`${process.env.API_URL}/file/${id_asamblea}`)
             setArchivos(response.data)
         } catch (error) {
-            Swal.fire({
-                title: 'Sin Archivos',
-                text: `No existe ningun archivo asociado por el momento`,
-                icon: 'warning',
-                confirmButtonText: 'Ok'
-            })
         }
     }
 
@@ -117,13 +111,66 @@ const asamblea = (data) => {
         return archivos.map(archivos =>{
             return(
                 <Tr key={archivos._id}>
-                    <Td><Link color='blue.500' href={`${process.env.API_URL}/file/download/${archivos._id}`}>{archivos.name}</Link></Td>
-                    <Td>{archivos.fecha}</Td>
-                    <Td><Button onClick={()=>eliminarArchivos(archivos._id, asambleas.asambleaId._id)}>Eliminar</Button></Td>
+                    <Td ><Link color='blue.500' href={`${process.env.API_URL}/file/download/${archivos._id}`}>{archivos.name}</Link></Td>
+                    <Td >{archivos.fecha}</Td>
+                    <Td ><Button colorScheme={"red"} onClick={()=>eliminarArchivos(archivos._id, asambleas.asambleaId._id)}>Eliminar</Button></Td>
                 </Tr>
             )
         })
     }
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    const subirArchivos = async (id_asamblea) => {
+
+        const { value: file } = await Swal.fire({
+        title: 'Seleccionar Archivo',
+        input: 'file',
+        })
+        if (file){
+            try {
+                const formData = new FormData();
+                formData.append("archivos", file)
+                const response = await axios.post(`${process.env.API_URL}/file/carpeta/${id_asamblea}`, formData, {headers:{"Content-Type": "multi/form-data"}} )
+
+                if (response.status == 201){
+                    Swal.fire({
+                        title: 'Archivo Subido',
+                        text: 'El archivo se ha subido con exito',
+                        icon: 'success',
+                        confirmButtonText: 'Ok'
+                    }).then((result)=>{
+                        if (result.isConfirmed){
+                            router.reload()
+                        }
+                    })
+                }
+                }catch (error) {
+                if(error.response.status == 415){
+                    Swal.fire({
+                        title: 'Error',
+                        text: `El tipo de archivo es invalido`,
+                        icon: 'error',
+                        confirmButtonText: 'Ok'
+                    })
+                }else{
+                    Swal.fire({
+                        title: 'Error',
+                        text: `El archivo no se ha subido`,
+                        icon: 'error',
+                        confirmButtonText: 'Ok'
+                    })
+                }
+            }
+        }else{
+            Swal.fire({
+                title: 'Seleccione un archivo',
+                text: `No ha seleccionado ningún archivo`,
+                icon: 'error',
+                confirmButtonText: 'Ok'
+            })
+        }
+    }
+
 
 //----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -148,10 +195,10 @@ const asamblea = (data) => {
                 <Stack w={"full"} py={10}>
                     <ShowInfo tag="Nombre" data={asambleas.asambleaId.name} />
                     <ShowInfo tag="Tipo" data={asambleas.asambleaId.tipo} />
-                    <Accordion allowMultiple>
+                    <Accordion allowMultiple w={"full"}>
                         <AccordionItem my={'15'}>
                             <h2>
-                                <AccordionButton>
+                                <AccordionButton bg='gray.200'  _expanded={{  bg: 'teal.400', color: 'white' }}>
                                     <Box as="span" flex='1' textAlign='left'>
                                     Archivos Adjuntos
                                     </Box>
@@ -159,10 +206,10 @@ const asamblea = (data) => {
                                 </AccordionButton>
                             </h2>
                             <AccordionPanel pb={'4'}>
-                                <Table my={15} variant="simple">
+                                <Table size='sm' variant='striped' colorScheme='blackAlpha'>
                                     <Thead>
                                         <Tr>
-                                            <Td>Archivo</Td>
+                                            <Td>Archivos</Td>
                                             <Td>Fecha</Td>
                                             <Td>Eliminar</Td>
                                         </Tr>
@@ -171,13 +218,11 @@ const asamblea = (data) => {
                                         {showAsambleaArchivos()}
                                     </Tbody>
                                 </Table>
+                                <Button my={'5'} colorScheme={"teal"} float={"right"} onClick={()=>subirArchivos(asambleas.asambleaId._id)} >Subir Archivo</Button>
                             </AccordionPanel>
                         </AccordionItem>
                     </Accordion>
-
-
                 </Stack>
-                
             </Container>
         </Box>
     )

@@ -23,44 +23,6 @@ const asamblea = () => {
         }
     }
 
-    const subirArchivos = async (id_asamblea) => {
-
-        const { value: file } = await Swal.fire({
-        title: 'Select File',
-        input: 'file',
-        })
-        if (file){
-            try {
-                const formData = new FormData();
-                formData.append("archivos", file)
-                const response = await axios.post(`${process.env.API_URL}/file/carpeta/${id_asamblea}`, formData, {headers:{"Content-Type": "multi/form-data"}} )
-                console.log(response)
-                if (response.status === 201){
-                    Swal.fire({
-                        title: 'Archivo Subido',
-                        text: 'El archivo se ha eliminado con exito',
-                        icon: 'success',
-                        confirmButtonText: 'Ok'
-                    })
-                }
-                }catch (error) {
-                Swal.fire({
-                    title: 'Error',
-                    text: `El archivo no se ha subido`,
-                    icon: 'error',
-                    confirmButtonText: 'Ok'
-                })
-            }
-        }else{
-            Swal.fire({
-                title: 'Seleccione un archivo',
-                text: `No ha seleccionado ningún archivo`,
-                icon: 'error',
-                confirmButtonText: 'Ok'
-            })
-        }
-    }
-
     useEffect(()=>{
         getAsambleas()
     }, [])
@@ -74,9 +36,6 @@ const asamblea = () => {
                     <Td>{asamblea.fecha}</Td>
                     <Td>
                         <Button onClick={()=>router.push(`/asamblea/ver/${asamblea._id}`)}>Ver mas</Button>
-                    </Td>
-                    <Td>
-                    <Button onClick={()=>subirArchivos(asamblea._id)}>Subir</Button>
                     </Td>
                 </Tr>
             )
@@ -98,7 +57,6 @@ const asamblea = () => {
                             <Td>Tipo</Td>
                             <Td>Fecha</Td>
                             <Td>Detalles</Td>
-                            <Td>Subir</Td>
                         </Tr>
                     </Thead>
                     <Tbody>
