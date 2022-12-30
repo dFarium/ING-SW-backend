@@ -5,6 +5,8 @@ import { Container, Heading, Tbody,Stack,HStack,Button,RadioGroup,Radio, Box, Di
 import ShowInfo from '../../../components/ShowInfo'
 import Swal from 'sweetalert2'
 import Arriba from '../../../components/Arriba'
+import VerAsistencias from '../../../components/VerAsistencias'
+
 
 
 export async function getServerSideProps(context){
@@ -133,7 +135,7 @@ const asamblea = (data) => {
                     <HStack w={"full"} py={10}>
                         <Button w={"full"} colorScheme={"teal"} onClick={() => router.push(`/asamblea/editar/${asambleas.asambleaId._id}`)}>Editar</Button>
                         <Button w={"full"} colorScheme={"teal"} onClick={() => eliminarAsamblea()}>Eliminar</Button>
-                        <verAsistencias id={asambleas.asambleaId._id}></verAsistencias>
+                        <VerAsistencias id={asambleas.asambleaId._id}></VerAsistencias>
                         <Button w={"full"} colorScheme={"teal"} onClick={() => router.push("/asamblea/ver")}>Volver</Button>
                     </HStack>
                 <RadioGroup>
