@@ -157,7 +157,7 @@ const eliminarArchivosAsociados = (req, res)=>{
                 return res.status(400).send({ message: 'Error al obtener los archivos'})
             }
             if(files.length === 0){
-                return res.status(404).send({ message: 'No existen archivos'})
+                return res.status(200).send({ message: 'No existen archivos que eliminar'})
             }
             let largo= files.length
             let flag=0
