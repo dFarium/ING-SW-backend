@@ -64,7 +64,6 @@ const borrarComentario = (req, res) => {
         if (!comentario1) {
             return res.status(404).send({ message: "No se encontró el comentario" })
         }
-        
         if(rolUsuario === 'admin' || user === comentario1.user.toString()){
             Comentario.findByIdAndDelete(id, (error, comentario2) => {
                 if (error) {

@@ -35,13 +35,17 @@ const asamblea = (data) => {
     //moi
     const [comentarios, setComentarios] = useState([])
     //moi
-    const obtenerComentarios = async () => {
-        const response = await axios.get(`${process.env.API_URL}/comentarios`)
-        setComentarios(response.data)
+    
+    const obtenerComentarios = async (id_asamblea) => {
+        try {
+            const response = await axios.get(`${process.env.API_URL}/comentario/specific/${id_asamblea}`)
+            setComentarios(response.data)
+        } catch (error) {
+        }
     }
     //moi
     useEffect(() => {
-        obtenerComentarios()
+        obtenerComentarios(asambleas.asambleaId._id)
     }, [])
     //moi
     const showComentarios = () => {
@@ -247,17 +251,17 @@ const asamblea = (data) => {
                             </AccordionPanel>
                         </AccordionItem>
                         {/* Acordeon 2  */}
-                        <AccordionItem my={'15'}>
+                        <AccordionItem my={"5"}>
                             <h2>
                                 {/* Colores boton */}
                                 <AccordionButton bg='gray.200' _expanded={{  bg: 'orange.400', color: 'white' }}>
                                     <Box as="span" flex='1' textAlign='center'>
-                                    Comentarios
+                                        Comentarios
                                     </Box>
                                     <AccordionIcon />
                                 </AccordionButton>
                             </h2>
-                                    <AccordionPanel pb={'5'}>
+                            <AccordionPanel pb={'5'}>
                                     <Container maxW='1250px'>
                                         <Table variant="simple" centerContent>
                                         <Thead>
@@ -272,10 +276,9 @@ const asamblea = (data) => {
                                         </Tbody>
                                         </Table>
                                     </Container>
-                                    </AccordionPanel>
+                            </AccordionPanel>
                         </AccordionItem>
                     </Accordion>
-                    
                 </Stack>
             </Container>
         </Box>
