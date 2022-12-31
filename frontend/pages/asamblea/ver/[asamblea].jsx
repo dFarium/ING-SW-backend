@@ -221,7 +221,24 @@ const asamblea = (data) => {
                                 <Button my={'5'} colorScheme={"teal"} float={"right"} onClick={()=>subirArchivos(asambleas.asambleaId._id)} >Subir Archivo</Button>
                             </AccordionPanel>
                         </AccordionItem>
+                        {/* Acordeon 2  */}
+                        <AccordionItem>
+                            <h2>
+                                {/* Colores boton */}
+                                <AccordionButton bg='gray.200' _expanded={{  bg: 'orange', color: 'white' }}>
+                                    <Box as="span" flex='1' textAlign='center'>
+                                        Comentarios
+                                    </Box>
+                                    <AccordionIcon />
+                                </AccordionButton>
+                            </h2>
+                            <AccordionPanel pb={'4'}>
+                                {/* Contenido del label*/}
+
+                            </AccordionPanel>
+                        </AccordionItem>
                     </Accordion>
+                    
                 </Stack>
             </Container>
         </Box>

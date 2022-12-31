@@ -19,7 +19,7 @@ export const index = () => {
                 </HStack>
                 <HStack w={"full"} py={'28'}>
                     <Button w={"full"} colorScheme={"teal"} float={"right"} onClick={()=>router.push('/usuarios/crear_usuario')} >Ingresar Usuario</Button>
-                    <Button w={"full"} colorScheme={"teal"} float={"right"} onClick={()=>router.push('/')}>Vacio</Button>
+                    <Button w={"full"} colorScheme={"teal"} float={"right"} onClick={()=>router.push('/usuarios/ver')}>Usuarios</Button>
                     <Button w={"full"} colorScheme={"teal"} float={"right"} onClick={()=>router.push('/')}>Vacio</Button>
                 </HStack>
             </Container>

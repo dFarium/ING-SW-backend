@@ -1,6 +1,5 @@
 const fileModel = require("../models/file")
 const Asamblea = require("../models/asamblea")
-const asamblea = require("../models/asamblea")
 const fs = require('fs');
 
 const uploadNewFile = (req, res) => {
