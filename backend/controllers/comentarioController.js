@@ -2,6 +2,7 @@ const { json } = require('express');
 const { Db } = require('mongodb');
 const mongoose = require('mongoose');
 const Comentario = require('../models/comentario');
+const Asamblea = require("../models/asamblea")
 const user = require('../models/user');
 
 const ingresarComentario = (req,res) =>{
@@ -90,10 +91,34 @@ const obtenerComentario = (req, res) => {
         })
 }
 
+const viewAsambleaComentario = (req, res)=>{
+
+    Asamblea.findById(req.params.id, (error, asamblea) => {
+        if (error) {
+            return res.status(400).send({ message: "Error al obtener el comentario" })
+        }
+        if (!asamblea) {
+            return res.status(404).send({ message: "El comentario no existe" })
+        }
+
+        Comentario.find({asamblea: req.params.id},(error,comment)=>{
+            if(error){
+                return res.status(400).send({ message: 'Error al obtener el comentario'})
+            }
+            if(comment.length === 0){
+                return res.status(404).send({ message: "El comentario no existe"})
+            }else{
+                return res.status(201).send(comment)
+            }
+        })
+    })
+}
+
 module.exports = {
     ingresarComentario,
     obtenerComentarios,
     actualizarComentario,
     borrarComentario,
-    obtenerComentario
+    obtenerComentario,
+    viewAsambleaComentario
 }
