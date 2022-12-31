@@ -30,7 +30,9 @@ export async function getServerSideProps(context){
 const asamblea = (data) => {
     const router = useRouter()
     const [asambleas] = useState(data)
-    const[values, setValues] = useState({})
+    const[values, setValues] = useState({
+        asamblea: `${asambleas.asambleaId._id}`
+    })
 
 //----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -293,16 +295,16 @@ const asamblea = (data) => {
                             <AccordionPanel pb={'5'}>
                                     <Container maxW='1250px'>
                                         <Table variant="simple">
-                                        <Thead>
-                                            <Tr>
-                                            <Th>Comentario</Th>
-                                            <Th>Fecha</Th>
-                                            <Th>Usuario</Th>
-                                            </Tr>
-                                        </Thead>
-                                        <Tbody wy={10}>
-                                            {showComentarios()}
-                                        </Tbody>
+                                            <Thead>
+                                                <Tr>
+                                                    <Th>Comentario</Th>
+                                                    <Th>Fecha</Th>
+                                                    <Th>Usuario</Th>
+                                                </Tr>
+                                            </Thead>
+                                            <Tbody wy={10}>
+                                                {showComentarios()}
+                                            </Tbody>
                                         </Table>
                                     </Container>
                                     <Accordion allowMultiple w={"full"}>
@@ -322,10 +324,7 @@ const asamblea = (data) => {
                                                             <Textarea placeholder="Ingresa un comentario" type={"text"} onChange={onChange} name="apartado"/>
                                                         </FormControl>
                                                         <FormControl my={2}>
-                                                            <Input placeholder="Ingresa tu nombre" type={"text"} onChange={onChange} name="user"/>
-                                                        </FormControl>
-                                                        <FormControl>
-                                                            <Input placeholder="Ingresa la asamblea" type={"text"} onChange={onChange} name="asamblea"/>
+                                                            <Input placeholder="Ingresa tu ID de usuario" type={"text"} onChange={onChange} name="user"/>
                                                         </FormControl>
                                                         <Center>
                                                             <Button colorScheme="messenger" size="md" type="submit" my={5} onClick={onSubmit}>Enviar</Button>
