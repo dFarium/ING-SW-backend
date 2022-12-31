@@ -86,7 +86,6 @@ const getAsistencia = (req, res) => {
 const asistenciaPorAsamblea = (req, res) => {
     const asambleaId = req.params['id']
     let filtro = {asamblea: `${asambleaId}`}
-    
     Asistencia.find(filtro).populate({ path: 'asamblea user' }).exec((error,asistencia) =>{
         if(error){
             return res.status(400).send({ message: "No se ha podido encontrar una asistencia" })
@@ -97,6 +96,11 @@ const asistenciaPorAsamblea = (req, res) => {
         return res.status(200).send(asistencia)
     })
 }
+
+// const updateVariasAsambleas = (req,res) =>{
+//     req.
+//     Asistencia.updateMany()
+// }
 
 module.exports = {
     createAsistencia,

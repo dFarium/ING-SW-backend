@@ -3,14 +3,24 @@ import { Container, Table, Thead, Tbody, Tr, Td, Heading, Button,Box } from '@ch
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import Arriba from '../../components/Arriba'
+import Swal from 'sweetalert2'
 
 const asamblea = () => {
     const router = useRouter()
     const [asambleas, setAsambleas] = useState([])
 
     const getAsambleas = async () => {
-        const response =await axios.get(`${process.env.API_URL}/asambleas`)
-        setAsambleas(response.data)
+        try {
+            const response =await axios.get(`${process.env.API_URL}/asambleas`)
+            setAsambleas(response.data)
+        } catch (error) {
+            Swal.fire({
+                title: 'Sin Asambleas',
+                text: `No existe ninguna asamblea por el momento`,
+                icon: 'warning',
+                confirmButtonText: 'Ok'
+            })
+        }
     }
 
     useEffect(()=>{
@@ -31,6 +41,8 @@ const asamblea = () => {
             )
         })
     }
+
+    
     return (
         <Box>
             <Arriba/>

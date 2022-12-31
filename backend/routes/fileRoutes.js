@@ -9,7 +9,7 @@ api.post("/file/:archivo/:id", upload.array('archivos'), fileSize, fileControlle
 api.get('/files/', fileController.getFiles)
 api.get('/file/download/:id', fileController.downloadFile)
 api.delete('/file/delete/:archivo/:id', fileController.deleteFile)
-api.get('/file/:id', fileController.viewFile)
-
+api.get('/file/:id', fileController.viewAsambleaFiles)
+api.get('/file/specific/:id', fileController.viewFile)
 
 module.exports = api
