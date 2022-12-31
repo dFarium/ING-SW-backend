@@ -1,4 +1,4 @@
-import { Button, Container, Stack,HStack ,Heading,Radio,RadioGroup} from '@chakra-ui/react'
+import { Button, Container, Stack,HStack ,Heading,Radio,RadioGroup,Box} from '@chakra-ui/react'
 import Swal from 'sweetalert2'
 import { useRouter } from 'next/router'
 import { crearUsuario } from '../../data/usuario'
@@ -6,11 +6,15 @@ import { Formik } from 'formik'
 import FormInput from '../../components/FormInput'
 import FormikError from '../../components/FormikError'
 import userValidation from '../../validations/userValidation'
+import Arriba from '../../components/Arriba'
 
 const usuario = () => {
     const router = useRouter()
     return(
+    <Box>
+    <Arriba/>
     <Container maxW="container.md">
+    <Button colorScheme={"teal"} float={"left"} onClick={()=>router.push('/usuarios/ver')} >Volver</Button>
         <Heading textAlign={"center"} my={10}>Ingresar Usuario</Heading>
         <Formik
         initialValues={{
@@ -72,6 +76,7 @@ const usuario = () => {
             )}
         </Formik>
     </Container>
+    </Box>
     )
 }
 

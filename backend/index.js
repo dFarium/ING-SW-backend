@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const app = express();
+const cookieParser = require('cookie-parser');
 dotenv.config();
 
 const asistenciaRoutes = require('./routes/asistenciaRoutes');
@@ -12,10 +13,11 @@ const fileRoutes = require('./routes/fileRoutes');
 const comentarioRoutes = require('./routes/comentarioRoutes');
 const mailerRoutes = require('./routes/mailerRoutes');
 
-app.use(cors());
+app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
 app.use(express.json());
 app.options('*', cors());
 
+app.use(cookieParser());
 app.use('/api', asistenciaRoutes);
 app.use('/api', asambleaRoutes);
 app.use('/api', userRoutes);
