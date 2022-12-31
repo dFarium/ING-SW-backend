@@ -4,7 +4,6 @@ const asamblea = require("../models/asamblea")
 const fs = require('fs');
 
 const uploadNewFile = (req, res) => {
-    
     const { files } = req
     if (req.params.fileValido === false){
         return res.status(415).send({ message: 'Solo se aceptan archivos con extensión .pdf, .doc y .docx' })
