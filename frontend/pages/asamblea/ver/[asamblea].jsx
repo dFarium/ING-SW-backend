@@ -31,7 +31,7 @@ const asamblea = (data) => {
     const router = useRouter()
     const [asambleas] = useState(data)
     const[values, setValues] = useState({})
-
+// ------------------------------------------------------------------------------------------------------------------------------------------------------------
     //moi
     const [comentarios, setComentarios] = useState([])
     //moi
@@ -60,7 +60,7 @@ const asamblea = (data) => {
             )
         })
     }
-
+// ------------------------------------------------------------------------------------------------------------------------------------------------------------
     const onChange = async (e) =>{
         setValues({
             ...values,
@@ -72,7 +72,8 @@ const asamblea = (data) => {
     const eliminarAsamblea = async () =>{
         try {
             const response = await axios.delete(`${process.env.API_URL}/asamblea/delete/${asambleas.asambleaId._id}`,{data: values })
-            if (response.status === 200){
+            const response2 = await axios.delete(`${process.env.API_URL}/file/deleteAll/${asambleas.asambleaId._id}`)
+            if (response.status === 200 && response2 === 200){
                 Swal.fire({
                     title: 'Asamblea eliminada',
                     text: 'La asamblea se ha eliminado con exito',
@@ -83,6 +84,19 @@ const asamblea = (data) => {
                         router.push("/asamblea/ver")
                     }
                 })
+            }else{
+                if(response.status === 200){
+                    Swal.fire({
+                        title: 'Asamblea eliminada',
+                        text: 'La asamblea ha sido eliminada con exito, pero no sus archivos correctamente',
+                        icon: 'warning',
+                        confirmButtonText: 'Ok'
+                    }).then((result)=>{
+                        if (result.isConfirmed){
+                            router.push("/asamblea/ver")
+                        }
+                    })
+                }
             }
             }catch (error) {
             Swal.fire({
