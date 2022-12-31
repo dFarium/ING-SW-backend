@@ -82,7 +82,7 @@ const getAsamblea = (req, res) => {
     const { id } = req.params
     Asamblea.findById(id, (error, asamblea) => {
         if (error) {
-            return res.status(400).send({ message: "No se ha podido modificar la asamblea" })
+            return res.status(400).send({ message: "No se ha podido obtener la asamblea" })
         }
         if (!asamblea) {
             return res.status(404).send({ message: "No se ha podido encontrar la asamblea" })

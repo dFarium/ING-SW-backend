@@ -17,10 +17,10 @@ export async function getServerSideProps(context){
             }
         }
     } catch (error) {
-        console.log("ERROR",error)
+        console.log("ERROR")
         return{
             redirect:{
-                destination: '/asamblea/ver',
+                destination: `/asamblea/ver/`,
                 permanent: true
             }
         }

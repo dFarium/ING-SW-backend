@@ -10,7 +10,6 @@ import Arriba from '../../components/Arriba'
 const asamblea = () => {
 
     const router = useRouter()
-
     const[values, setValues] = useState({
         name: '',
         tipo: '',
