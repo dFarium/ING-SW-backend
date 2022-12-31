@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const asistenciaSchema = new Schema({
-    asamblea: [{
+    asamblea: {
         type: Schema.Types.ObjectId,
         ref: 'asamblea',
         required: true
-    }],
+    },
     user:{
         type: Schema.Types.ObjectId,
         ref: 'user',

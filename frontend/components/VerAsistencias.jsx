@@ -18,7 +18,8 @@ import {
     Checkbox,
     Radio,
     RadioGroup,
-    HStack
+    HStack,
+    Check
 } from '@chakra-ui/react'
 import axios from 'axios'
 
@@ -42,14 +43,18 @@ const VerAsistencias = ({id}) => {
         return checkbox;
     }
 
-    function modificarAsisteCheckbox (asiste){
+    function modificarAsisteCheckbox (asistencia){
         let checkbox;
-        if(asiste === "Presente"){
-            checkbox = <Checkbox defaultChecked></Checkbox>;
+        if(asistencia.asistencia === "Presente"){
+            checkbox = <Checkbox defaultChecked onChange={console.log("BOMDIA")}></Checkbox>;
         }else{
-            checkbox = <Checkbox ></Checkbox>;
+            checkbox = <Checkbox onChange={modificarAsistencia(asistencia._id)}></Checkbox>;
         }
         return checkbox;
+    }
+
+    const modificarAsistencia = (id) =>{
+        console.log("jaja el id es ",id)
     }
 
     const getAsistenciasAsamblea = async () => {
@@ -77,7 +82,7 @@ const VerAsistencias = ({id}) => {
             return(
                 <Tr key={asistencia._id}>
                     <Td>{asistencia.user.name}</Td>
-                    <Td textAlign={"center"}>{modificarAsisteCheckbox(asistencia.asistencia)}</Td>
+                    <Td textAlign={"center"}>{modificarAsisteCheckbox(asistencia)}</Td>
                 </Tr>
             )
         })
@@ -89,6 +94,8 @@ const VerAsistencias = ({id}) => {
             [e.target.name]: e.target.value
         })
     }
+
+    
 
 
     return (

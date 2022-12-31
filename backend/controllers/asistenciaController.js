@@ -88,7 +88,7 @@ const asistenciaPorAsamblea = (req, res) => {
     let filtro = {asamblea: `${asambleaId}`}
     Asistencia.find(filtro).populate({ path: 'asamblea user' }).exec((error,asistencia) =>{
         if(error){
-            return res.status(400).send({ message: "No se ha podido encontrar una asistencia" })
+            return res.status(400).send({ message: "No se ha podido obtener las asistencias" })
         }
         if(!asistencia){
             return res.status(404).send({ message: "No se ha podido encontrar una asistencia" })
