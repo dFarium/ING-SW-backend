@@ -242,7 +242,7 @@ const asamblea = (data) => {
                         <AccordionItem my={'15'}>
                             <h2>
                                 <AccordionButton bg='gray.200'  _expanded={{  bg: 'teal.400', color: 'white' }}>
-                                    <Box as="span" flex='1' textAlign='left'>
+                                    <Box as="span" flex='1' textAlign='center'>
                                     Archivos Adjuntos
                                     </Box>
                                     <AccordionIcon />
