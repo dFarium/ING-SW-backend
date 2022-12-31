@@ -1,4 +1,6 @@
 const Asamblea = require('../models/asamblea');
+const User = require('../models/user');
+const Asistencia =require('../models/asistencia');
 
 const createAsamblea = (req, res) => {
     const { name, tipo, fecha, rolUsuario } = req.body
@@ -13,6 +15,8 @@ const createAsamblea = (req, res) => {
             if (error) {
                 return res.status(400).send({ message: "No se ha podido crear la asamblea" })
             }
+            //console.log(asamblea._id)
+            inicializarAsistencias(req,res,asamblea._id)
             return res.status(201).send(asamblea)
         })
     }
@@ -120,12 +124,35 @@ const filtrado = (req,res) =>{
     })
 }
 
+const inicializarAsistencias = (req,res,asambleaId)=>{
+    let datos = {} ,asistencia = {asistencia: "Ausente"}, asamblea = {asamblea:`${asambleaId}`}
+    User.find({}, (error, user) => {
+        if (error) {
+            return res.status(400).send({ message: 'Error al obtener los usuarios' });
+        }
+        user.map(user => {
+            user = {user: `${user._id}`}
+            datos = {...user, ...asamblea, ...asistencia}
+            const newAsistencia = new Asistencia (datos)
+
+            newAsistencia.save((error, asistencia) => {
+                if (error){
+                    console.log(error)
+                }
+            })
+        })
+    })
+}
+
+
+
 module.exports = {
     createAsamblea,
     getAsambleas,
     updateAsamblea,
     deleteAsamblea,
     getAsamblea,
-    filtrado
+    filtrado,
+    inicializarAsistencias
 }
 
