@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import axios from 'axios'
-import { Container, Heading, Tbody,Stack,HStack,Button,RadioGroup,Radio, Box, Divider, Accordion, AccordionItem, AccordionButton, AccordionPanel,AccordionIcon, Table, Thead, Tr, Th, Td, Link} from '@chakra-ui/react'
+import { FormControl, Center, FormLabel, Textarea, Input, Container, Heading, Tbody,Stack,HStack,Button,RadioGroup,Radio, Box, Divider, Accordion, AccordionItem, AccordionButton, AccordionPanel,AccordionIcon, Table, Thead, Tr, Th, Td, Link} from '@chakra-ui/react'
 import ShowInfo from '../../../components/ShowInfo'
 import Swal from 'sweetalert2'
 import Arriba from '../../../components/Arriba'
@@ -31,6 +31,31 @@ const asamblea = (data) => {
     const router = useRouter()
     const [asambleas] = useState(data)
     const[values, setValues] = useState({})
+
+    //moi
+    const [comentarios, setComentarios] = useState([])
+    //moi
+    const obtenerComentarios = async () => {
+        const response = await axios.get(`${process.env.API_URL}/comentarios`)
+        setComentarios(response.data)
+    }
+    //moi
+    useEffect(() => {
+        obtenerComentarios()
+    }, [])
+    //moi
+    const showComentarios = () => {
+        return comentarios.map(comentario => {
+            return (
+                <Tr key={comentario._id}>
+                <Td maxW="500">{comentario.apartado}</Td>
+                <Td maxW="500">{comentario.fecha}</Td>
+                <Td maxW="500">{comentario.user && comentario.user.name}</Td>
+                <Td><Button colorScheme="twitter" variant='link' onClick={() => router.push(`/comentarios/comentario/${comentario._id}`)}>detalle</Button></Td>
+                </Tr>
+            )
+        })
+    }
 
     const onChange = async (e) =>{
         setValues({
@@ -222,20 +247,32 @@ const asamblea = (data) => {
                             </AccordionPanel>
                         </AccordionItem>
                         {/* Acordeon 2  */}
-                        <AccordionItem>
+                        <AccordionItem my={'15'}>
                             <h2>
                                 {/* Colores boton */}
-                                <AccordionButton bg='gray.200' _expanded={{  bg: 'orange', color: 'white' }}>
+                                <AccordionButton bg='gray.200' _expanded={{  bg: 'orange.400', color: 'white' }}>
                                     <Box as="span" flex='1' textAlign='center'>
-                                        Comentarios
+                                    Comentarios
                                     </Box>
                                     <AccordionIcon />
                                 </AccordionButton>
                             </h2>
-                            <AccordionPanel pb={'4'}>
-                                {/* Contenido del label*/}
-
-                            </AccordionPanel>
+                                    <AccordionPanel pb={'5'}>
+                                    <Container maxW='1250px'>
+                                        <Table variant="simple" centerContent>
+                                        <Thead>
+                                            <Tr>
+                                            <Th>Comentario</Th>
+                                            <Th>Fecha</Th>
+                                            <Th>Usuario</Th>
+                                            </Tr>
+                                        </Thead>
+                                        <Tbody wy={10}>
+                                            {showComentarios()}
+                                        </Tbody>
+                                        </Table>
+                                    </Container>
+                                    </AccordionPanel>
                         </AccordionItem>
                     </Accordion>
                     

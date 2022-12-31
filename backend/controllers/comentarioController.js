@@ -17,7 +17,7 @@ const ingresarComentario = (req,res) =>{
 }
 
 const obtenerComentarios = (req, res) => {
-            Comentario.find({}).populate({path: 'user'}).exec((error, comentario) => { //modificación para mostrar user
+            Comentario.find({}).populate({path: 'user'}).populate({path: 'asamblea'}).exec((error, comentario) => { //modificación para mostrar user
             if (error) {
                 return res.status(400).send({ message: "No se pudo realizar la busqueda" })
             }
@@ -79,7 +79,7 @@ const borrarComentario = (req, res) => {
 
 const obtenerComentario = (req, res) => {
     const { id } = req.params
-    Comentario.findById(id, (error, comentario) => {
+    Comentario.findById(id).populate({path: 'user'}).populate({path: 'asamblea'}).exec((error, comentario) => {
         if (error) {
             return res.status(400).send({ message: "No se ha podido modificar el comentario" })
         }
