@@ -19,6 +19,7 @@ const fileSchema = new Schema({
     },
     asamblea: {
         type:Schema.Types.ObjectId,
+        ref: 'asamblea',
         required: true,
         default: null
     }

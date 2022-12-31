@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import axios from 'axios'
-import { Container, Heading, Tbody,Stack,HStack,Button,RadioGroup,Radio, Box } from '@chakra-ui/react'
+import { Container, Heading, Tbody,Stack,HStack,Button,RadioGroup,Radio, Box, Divider, Accordion, AccordionItem, AccordionButton, AccordionPanel,AccordionIcon, Table, Thead, Tr, Th, Td, Link} from '@chakra-ui/react'
 import ShowInfo from '../../../components/ShowInfo'
 import Swal from 'sweetalert2'
 import Arriba from '../../../components/Arriba'
+import VerAsistencias from '../../../components/VerAsistencias'
+
 
 
 export async function getServerSideProps(context){
-    console.log(context.params.asamblea)
     try {
         const response = await axios.get(`${process.env.API_URL}/asamblea/search/${context.params.asamblea}`)
         return{
@@ -17,7 +18,6 @@ export async function getServerSideProps(context){
             }
         }
     } catch (error) {
-        console.log("ERROR",error)
         return{
             redirect:{
                 destination: '/asamblea/ver',
@@ -30,8 +30,7 @@ export async function getServerSideProps(context){
 const asamblea = (data) => {
     const router = useRouter()
     const [asambleas] = useState(data)
-    const[values, setValues] = useState({
-    })
+    const[values, setValues] = useState({})
 
     const onChange = async (e) =>{
         setValues({
@@ -42,7 +41,6 @@ const asamblea = (data) => {
 
 
     const eliminarAsamblea = async () =>{
-        console.log(values)
         try {
             const response = await axios.delete(`${process.env.API_URL}/asamblea/delete/${asambleas.asambleaId._id}`,{data: values })
             if (response.status === 200){
@@ -67,6 +65,115 @@ const asamblea = (data) => {
         }
     }
 
+// ------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    const [archivos, setArchivos] = useState([])
+
+    const getAsambleaArchivos = async (id_asamblea) => {
+        try {
+            const response = await axios.get(`${process.env.API_URL}/file/${id_asamblea}`)
+            setArchivos(response.data)
+        } catch (error) {
+        }
+    }
+
+    const eliminarArchivos = async (id_archivo, id_asamblea) =>{
+        try {
+            //AGREGAR MODALs
+            const response = await axios.delete(`${process.env.API_URL}/file/delete/${id_archivo}/${id_asamblea}`)
+            if (response.status === 200){
+                Swal.fire({
+                    title: 'Archivo eliminado',
+                    text: 'El archivo se ha eliminado con exito',
+                    icon: 'success',
+                    confirmButtonText: 'Ok'
+                }).then((result)=>{
+                    if (result.isConfirmed){
+                        router.reload()
+                    }
+                })
+            }
+            }catch (error) {
+            Swal.fire({
+                title: 'Error',
+                text: `El archivo no se ha podido eliminar`,
+                icon: 'error',
+                confirmButtonText: 'Ok'
+            })
+        }
+    }
+
+    useEffect(()=>{
+        getAsambleaArchivos(asambleas.asambleaId._id)
+    }, [])
+
+    const showAsambleaArchivos = () =>{
+        return archivos.map(archivos =>{
+            return(
+                <Tr key={archivos._id}>
+                    <Td ><Link color='blue.500' href={`${process.env.API_URL}/file/download/${archivos._id}`}>{archivos.name}</Link></Td>
+                    <Td >{archivos.fecha}</Td>
+                    <Td ><Button colorScheme={"red"} onClick={()=>eliminarArchivos(archivos._id, asambleas.asambleaId._id)}>Eliminar</Button></Td>
+                </Tr>
+            )
+        })
+    }
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    const subirArchivos = async (id_asamblea) => {
+
+        const { value: file } = await Swal.fire({
+        title: 'Seleccionar Archivo',
+        input: 'file',
+        })
+        if (file){
+            try {
+                const formData = new FormData();
+                formData.append("archivos", file)
+                const response = await axios.post(`${process.env.API_URL}/file/carpeta/${id_asamblea}`, formData, {headers:{"Content-Type": "multi/form-data"}} )
+
+                if (response.status == 201){
+                    Swal.fire({
+                        title: 'Archivo Subido',
+                        text: 'El archivo se ha subido con exito',
+                        icon: 'success',
+                        confirmButtonText: 'Ok'
+                    }).then((result)=>{
+                        if (result.isConfirmed){
+                            router.reload()
+                        }
+                    })
+                }
+                }catch (error) {
+                if(error.response.status == 415){
+                    Swal.fire({
+                        title: 'Error',
+                        text: `El tipo de archivo es invalido`,
+                        icon: 'error',
+                        confirmButtonText: 'Ok'
+                    })
+                }else{
+                    Swal.fire({
+                        title: 'Error',
+                        text: `El archivo no se ha subido`,
+                        icon: 'error',
+                        confirmButtonText: 'Ok'
+                    })
+                }
+            }
+        }else{
+            Swal.fire({
+                title: 'Seleccione un archivo',
+                text: `No ha seleccionado ningún archivo`,
+                icon: 'error',
+                confirmButtonText: 'Ok'
+            })
+        }
+    }
+
+
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
     return (
         <Box>
             <Arriba/>
@@ -75,19 +182,47 @@ const asamblea = (data) => {
                     <HStack w={"full"} py={10}>
                         <Button w={"full"} colorScheme={"teal"} onClick={() => router.push(`/asamblea/editar/${asambleas.asambleaId._id}`)}>Editar</Button>
                         <Button w={"full"} colorScheme={"teal"} onClick={() => eliminarAsamblea()}>Eliminar</Button>
+                        <VerAsistencias id={asambleas.asambleaId._id}></VerAsistencias>
                         <Button w={"full"} colorScheme={"teal"} onClick={() => router.push("/asamblea/ver")}>Volver</Button>
                     </HStack>
-                <Stack w={"full"}>
-                    <ShowInfo tag="Nombre" data={asambleas.asambleaId.name} />
-                    <ShowInfo tag="Tipo" data={asambleas.asambleaId.tipo} />
-                    <ShowInfo tag="Archivos" data={asambleas.asambleaId.archivos}/>
-                </Stack>
                 <RadioGroup>
                     <HStack spacing='24px'>
                     <Radio value='user' onChange={onChange} name={"rolUsuario"}>user</Radio>
                     <Radio value='admin' onChange={onChange} name={"rolUsuario"}>admin</Radio>
                     </HStack>
                 </RadioGroup>
+                <Divider/>
+                <Stack w={"full"} py={10}>
+                    <ShowInfo tag="Nombre" data={asambleas.asambleaId.name} />
+                    <ShowInfo tag="Tipo" data={asambleas.asambleaId.tipo} />
+                    <Accordion allowMultiple w={"full"}>
+                        <AccordionItem my={'15'}>
+                            <h2>
+                                <AccordionButton bg='gray.200'  _expanded={{  bg: 'teal.400', color: 'white' }}>
+                                    <Box as="span" flex='1' textAlign='left'>
+                                    Archivos Adjuntos
+                                    </Box>
+                                    <AccordionIcon />
+                                </AccordionButton>
+                            </h2>
+                            <AccordionPanel pb={'4'}>
+                                <Table size='sm' variant='striped' colorScheme='blackAlpha'>
+                                    <Thead>
+                                        <Tr>
+                                            <Td>Archivos</Td>
+                                            <Td>Fecha</Td>
+                                            <Td>Eliminar</Td>
+                                        </Tr>
+                                    </Thead>
+                                    <Tbody>
+                                        {showAsambleaArchivos()}
+                                    </Tbody>
+                                </Table>
+                                <Button my={'5'} colorScheme={"teal"} float={"right"} onClick={()=>subirArchivos(asambleas.asambleaId._id)} >Subir Archivo</Button>
+                            </AccordionPanel>
+                        </AccordionItem>
+                    </Accordion>
+                </Stack>
             </Container>
         </Box>
     )
