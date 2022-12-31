@@ -17,29 +17,19 @@ const comentarios = () => {
 
     const onSubmit = async (e) => {
         e.preventDefault()
-        console.log(values)
         try {
-            const response = await axios.post(`${process.env.API_URL}/comentario`, values)
-            console.log("hola"+response.data.apartado)
-            if (response.status === 201){
-                Swal.fire({
-                    title: 'Comentario creado',
-                    text: 'Comentario creado correctamente',
-                    icon: 'success',
-                    confirmButtonText: 'Ok'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        router.push('/')
-                    }
-                })
-            } else {
-                Swal.fire({
-                    title: 'Error',
-                    text: 'Ha ocurrido un error',
-                    icon: 'error',
-                    confirmButtonText: 'Ok'
-                })
-            }
+            await axios.post(`${process.env.API_URL}/comentario`, values)
+            //setSuccessMessage(response.data.message)
+            Swal.fire({
+                title: 'Comentario creado',
+                text: 'Comentario creado correctamente',
+                icon: 'success',
+                confirmButtonText: 'Ok'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    router.push('/comentarios')
+                }
+            })
         } catch (error) {
             Swal.fire({
                 title: 'Error',
@@ -54,8 +44,8 @@ const comentarios = () => {
         setValues({
             ...values,
             [e.target.name]: e.target.value
-        })
-        console.log(e.target.name, e.target.value)
+    })
+        
     }
 
     return (
