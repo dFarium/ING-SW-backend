@@ -41,10 +41,8 @@ export const index = (data) => {
                 </HStack>
                 <HStack w={"full"} py={'28'}>
                     <Button w={"full"} colorScheme={"teal"} float={"right"} onClick={()=>router.push('/usuarios/ver')} >Ver Usuarios</Button>
-                <Button w={"full"} colorScheme={"teal"} float={"right"} onClick={()=>router.push('/loguearse/login')} >Iniciar Sesión</Button>
-                <Button w={"full"} colorScheme={"teal"} float={"right"} onClick={()=>router.push('/loguearse/logout')} >cerrar Sesión</Button>
-                    <Button w={"full"} colorScheme={"teal"} float={"right"} onClick={()=>router.push('/')}>Vacio</Button>
-                    <Button w={"full"} colorScheme={"teal"} float={"right"} onClick={()=>router.push('/')}>Vacio</Button>
+                    <Button w={"full"} colorScheme={"teal"} float={"right"} onClick={()=>router.push('/loguearse/login')} >Iniciar Sesión</Button>
+                    <Button w={"full"} colorScheme={"teal"} float={"right"} onClick={()=>router.push('/loguearse/logout')} >cerrar Sesión</Button>
                 </HStack>
             </Container>
         </Box>
