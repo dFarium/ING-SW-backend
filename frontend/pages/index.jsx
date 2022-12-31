@@ -8,7 +8,6 @@ export const index = () => {
 
     const router = useRouter()
     return (
-
         <Box>
         <Arriba/>
             <Container maxW="container.xl">
@@ -16,11 +15,11 @@ export const index = () => {
                 <HStack w={"full"} py={'28'}>
                     <Button w={"full"} colorScheme={"teal"} float={"right"} onClick={()=>router.push('/asamblea/ver')}>Asambleas</Button>
                     <Button w={"full"} colorScheme={"teal"} float={"right"} onClick={()=>router.push('/archivos/verArchivos')}>Historial de Actas</Button>
-                    <Button w={"full"} colorScheme={"teal"} float={"right"} onClick={()=>router.push('/asamblea/ver')}>Mandar Avisos</Button>
+                    <Button w={"full"} colorScheme={"teal"} float={"right"} onClick={()=>router.push('/enviar_email/email')} >Mandar Avisos</Button>
                 </HStack>
                 <HStack w={"full"} py={'28'}>
-                    <Button w={"full"} colorScheme={"teal"} float={"right"} onClick={()=>router.push('/')}>Vacio</Button>
-                    <Button w={"full"} colorScheme={"teal"} float={"right"} onClick={()=>router.push('/')}>Vacio</Button>
+                    <Button w={"full"} colorScheme={"teal"} float={"right"} onClick={()=>router.push('/usuarios/crear_usuario')} >Ingresar Usuario</Button>
+                    <Button w={"full"} colorScheme={"teal"} float={"right"} onClick={()=>router.push('/usuarios/ver')}>Usuarios</Button>
                     <Button w={"full"} colorScheme={"teal"} float={"right"} onClick={()=>router.push('/')}>Vacio</Button>
                 </HStack>
             </Container>

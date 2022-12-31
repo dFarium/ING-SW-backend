@@ -1,6 +1,7 @@
 const Asamblea = require('../models/asamblea');
 const User = require('../models/user');
 const Asistencia =require('../models/asistencia');
+const file = require('../models/file');
 
 const createAsamblea = (req, res) => {
     const { name, tipo, fecha, rolUsuario } = req.body
@@ -68,6 +69,7 @@ const deleteAsamblea = (req, res) => {
                 if (!asamblea) {
                     return res.status(404).send({ message: "No se ha podido encontrar la asamblea" })
                 }
+                //Cuando vaya a eliminar asamblea, eliminar archivos
                 return res.status(200).send({ message: "Se ha eliminado la asamblea de forma correcta" })
         })
     }
@@ -143,8 +145,6 @@ const inicializarAsistencias = (req,res,asambleaId)=>{
         })
     })
 }
-
-
 
 module.exports = {
     createAsamblea,
