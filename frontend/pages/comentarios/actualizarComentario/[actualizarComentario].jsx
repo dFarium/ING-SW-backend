@@ -41,7 +41,7 @@ const actualizarComentario = (props) => {
                 confirmButtonText: 'Ok'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    router.push('/comentarios')
+                    router.push(`/asamblea/ver/${comentarioID.asamblea._id}`)
                 }
             })
         } catch (error) {
@@ -51,7 +51,6 @@ const actualizarComentario = (props) => {
                 icon: 'error',
                 confirmButtonText: 'Ok'
             })
-            
         }
     }
 
@@ -64,7 +63,7 @@ const actualizarComentario = (props) => {
 
     return (
         <Container maxW="container.md">
-            <Heading textAlign={"center"} my={10}>Modificar Comentario</Heading>
+            <Heading textAlign={"center"} my={10}>Modifica el c omentario</Heading>
             <Stack>
                 <FormControl>
                     <FormLabel>Comentario Anterior:</FormLabel>
@@ -84,7 +83,7 @@ const actualizarComentario = (props) => {
                     <Input id="user" name="user" placeholder="Ingrese tú id usuario" onChange={onChange} />
                 </FormControl>
                 <Button colorScheme="facebook" size="md" type="submit" my={5} onClick={onSubmit}>Enviar</Button>
-                <Button my={5} mx={5} onClick={() => router.push(`/comentarios`)}>Volver</Button>
+                <Button my={5} mx={5} onClick={() => router.push(`/asamblea/ver`)}>Volver</Button>
         </Container>
     )
 }

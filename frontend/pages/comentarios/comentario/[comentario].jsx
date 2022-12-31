@@ -24,8 +24,6 @@ export async function getServerSideProps(context) {
 const comentario = (props) => {
     const router = useRouter()
     const {comentarioID} = props
-    const [errorMessage, setErrorMessage] = useState('')
-    const [successMessage, setSuccessMessage] = useState('')
     const [values, setValues] = useState({})
 
     const onChange = async (e) =>{
@@ -45,7 +43,7 @@ const comentario = (props) => {
                 confirmButtonText: 'Ok'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    router.push('/comentarios')
+                    router.push('/asamblea/ver')
                 }
             })
             } catch (error) {
@@ -95,22 +93,16 @@ const comentario = (props) => {
                     </RadioGroup>
                 </Center>
                 <Center>
-                </Center>
-                <Center>
                     <FormControl>
                         <Center>
                             {/* <FormLabel my={4} htmlFor="name">Usuario: </FormLabel> */}
                             <Input my={5}maxW="300px" id="user" name="user" placeholder="Ingresa tú id" onChange={onChange} />
                         </Center>
-                        
                     </FormControl>
                 </Center>
                 <Center>
-                    <Button coloScheme="facebook" size="md" type="submit" my={5} onClick={() => router.push(`/comentarios`)}>Comentarios</Button>
+                    <Button coloScheme="facebook" size="md" type="submit" onClick={() => router.push(`/asamblea/ver/`)}>Volver</Button>
                 </Center>
-                        
-                        {errorMessage && <Text color="red">{errorMessage}</Text>}
-                        {successMessage && <Text color="green">{successMessage}</Text>}
             </Container>
     )
 }
