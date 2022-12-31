@@ -8,6 +8,7 @@ api.put('/asistencia/update/:id', asistenciaController.updateAsistencia);
 api.delete('/asistencia/delete/:id', asistenciaController.deleteAsistencia);
 api.get('/asistencia/search/:id', asistenciaController.getAsistencia);
 api.get('/asistenciaAsamblea/search/:id', asistenciaController.asistenciaPorAsamblea);
+api.put('/asistenciaURL/update/:id/:asistencia/:rolUsuario', asistenciaController.updateAsistenciaURL);
 
 
 module.exports = api;

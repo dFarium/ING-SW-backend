@@ -45,7 +45,7 @@ export async function getServerSideProps(context){
 const asistencia = (data) => {
     const router = useRouter()
     const [asistencia] = useState(data)
-    
+
     const showAsistencia = () =>{
         return asistencia.asambleaId.map(asistencia =>{
             return(
@@ -65,9 +65,9 @@ const asistencia = (data) => {
     function modificarAsisteCheckbox (asistencia){
         let checkbox;
         if(asistencia.asistencia === "Presente"){
-            checkbox = <Switch isReadOnly defaultChecked ></Switch>;
+            checkbox = <Switch colorScheme="teal" isReadOnly defaultChecked ></Switch>;
         }else{
-            checkbox = <Switch isReadOnly></Switch>;
+            checkbox = <Switch colorScheme="teal" isReadOnly></Switch>;
         }
         return checkbox;
     }
@@ -77,6 +77,8 @@ const asistencia = (data) => {
             <Arriba/>
             <Container maxW="container.xl">
                 <Heading textAlign={"center"} my={15}>Asistencia de {asistencia.asambleaId[0].asamblea.name}</Heading>
+                <Button colorScheme={"teal"} float={"left"} onClick={() => router.push(`/asamblea/ver/${asistencia.asambleaId[0].asamblea._id}`)}>Volver</Button>
+                <Button colorScheme={"teal"} float={"right"} onClick={() => router.push(`/asistencia/editar/${asistencia.asambleaId[0].asamblea._id}`)}>Modificar Asistencia</Button>
                 <Table variant="simple" my={15}>
                     <Thead>
                         <Tr>
@@ -88,10 +90,7 @@ const asistencia = (data) => {
                         {showAsistencia()}
                     </Tbody>
                 </Table>
-                <Button colorScheme={"teal"} float={"right"} onClick={() => router.push(`/asistencia/editar/${asistencia.asambleaId[0].asamblea._id}`)}>Modificar Asistencia</Button>
-
             </Container>
-            <Button colorScheme={"teal"} float={"right"} onClick={()=>giveId()}>Ver</Button>
         </Box>
 
     )
