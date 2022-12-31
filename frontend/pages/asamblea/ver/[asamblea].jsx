@@ -72,8 +72,7 @@ const asamblea = (data) => {
     const eliminarAsamblea = async () =>{
         try {
             const response = await axios.delete(`${process.env.API_URL}/asamblea/delete/${asambleas.asambleaId._id}`,{data: values })
-            const response2 = await axios.delete(`${process.env.API_URL}/file/deleteAll/${asambleas.asambleaId._id}`)
-            if (response.status === 200 && response2 === 200){
+            if (response.status === 200){
                 Swal.fire({
                     title: 'Asamblea eliminada',
                     text: 'La asamblea se ha eliminado con exito',
@@ -84,19 +83,29 @@ const asamblea = (data) => {
                         router.push("/asamblea/ver")
                     }
                 })
-            }else{
-                if(response.status === 200){
-                    Swal.fire({
-                        title: 'Asamblea eliminada',
-                        text: 'La asamblea ha sido eliminada con exito, pero no sus archivos correctamente',
-                        icon: 'warning',
-                        confirmButtonText: 'Ok'
-                    }).then((result)=>{
-                        if (result.isConfirmed){
-                            router.push("/asamblea/ver")
-                        }
-                    })
-                }
+            }
+            }catch (error) {
+                Swal.fire({
+                    title: 'Error',
+                    text: `La asamblea no se ha podido eliminar`,
+                    icon: 'error',
+                    confirmButtonText: 'Ok'
+                })
+            }
+    }
+
+    const desvincularArchivos = async () =>{
+        try {
+            const response = await axios.delete(`${process.env.API_URL}/file/deleteAll/${asambleas.asambleaId._id}`)
+            if (response.status === 200){
+                Swal.fire({
+                    title: 'Archivos Asociados eliminados',
+                    text: 'Los archivos adjuntos de la asamblea han sido borrados',
+                    icon: 'success',
+                    confirmButtonText: 'Ok'
+                }).then(()=>{
+                    eliminarAsamblea()
+                })
             }
             }catch (error) {
             Swal.fire({
@@ -224,7 +233,7 @@ const asamblea = (data) => {
                 <Heading my={15}> {asambleas.asambleaId.name}</Heading>
                     <HStack w={"full"} py={10}>
                         <Button w={"full"} colorScheme={"teal"} onClick={() => router.push(`/asamblea/editar/${asambleas.asambleaId._id}`)}>Editar</Button>
-                        <Button w={"full"} colorScheme={"teal"} onClick={() => eliminarAsamblea()}>Eliminar</Button>
+                        <Button w={"full"} colorScheme={"teal"} onClick={() => desvincularArchivos()}>Eliminar</Button>
                         <Button w={"full"} colorScheme={"teal"} onClick={() => router.push(`/asistencia/ver/${asambleas.asambleaId._id}`)}>Ver Asistencias</Button>
                         <Button w={"full"} colorScheme={"teal"} onClick={() => router.push("/asamblea/ver")}>Volver</Button>
                     </HStack>
