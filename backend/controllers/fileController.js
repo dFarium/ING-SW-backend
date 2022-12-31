@@ -1,8 +1,10 @@
 const fileModel = require("../models/file")
 const Asamblea = require("../models/asamblea")
 const asamblea = require("../models/asamblea")
+const fs = require('fs');
 
 const uploadNewFile = (req, res) => {
+    
     const { files } = req
     if (req.params.fileValido === false){
         return res.status(400).send({ message: 'Solo se aceptan archivos con extensión .pdf, .doc y .docx' })
@@ -50,15 +52,12 @@ const uploadNewFile = (req, res) => {
 
 const getFiles = (req, res)=> {
 
-    const consulta = fileModel.find({});
-
-    consulta.sort('-date').exec ((err, files) => {
-
-        if(err){
-            return res.status(400).send({ message: 'Error al obtener los archivo'})
+    fileModel.find({}).populate({ path: 'asamblea' }).exec((error, files) => {
+        if (error) {
+            return res.status(400).send({ message: 'Error al obtener los archivo' })
         }
-        if(files.length === 0){
-            return res.status(404).send({ message: 'No existen archivos'})
+        if (files.length === 0) {
+            return res.status(404).send({ message: "No existen archivos" })
         }
         return res.status(200).send(files)
     })
@@ -86,26 +85,32 @@ const deleteFile = (req, res) => {
         }
         //CREAR VECTOR
         let vector1 = asamblea.archivos
-        const vector2 = vector1.filter(puma => puma!= req.params.archivo)
+        const vector2 = vector1.filter(criterio => criterio!= req.params.archivo)
         Asamblea.findByIdAndUpdate(id, {archivos: vector2} , (error) => {
             if(error){
                 return res.status(400).send({ message: 'Error al eliminar el archivo'})
             }else{
-                fileModel.findByIdAndDelete(archivo, (err, file)=>{
+                fileModel.findByIdAndDelete(archivo, async (err, file)=>{
                     if(err){
                         return res.status(400).send({ message: 'No se ha podido eliminar el archivo'})
                     }
                     if(!file){
                         return res.status(404).send({ message: 'No se ha podido encontrar el archivo'})
                     }
-                    return res.status(200).send({message: 'Se ha eliminado el archivo de forma correcta'})
+                    await fs.unlink(file.url,(err)=>{
+                        if (err){
+                            console.error(err)
+                            return res.status(400).send({ message: "Error al obtener el archivo" })
+                        }
+                        return res.status(200).send({ message: "Archivo Eliminado" })
+                    })
                 })
             }
         })
     })
 }
 
-const viewFile = (req, res)=>{
+const viewAsambleaFiles = (req, res)=>{
 
     Asamblea.findById(req.params.id, (error, asamblea) => {
         if (error) {
@@ -128,10 +133,24 @@ const viewFile = (req, res)=>{
     })
 }
 
+const viewFile = (req, res)=> {
+    const {id} = req.params
+    fileModel.findById(id, (err, file)=>{
+        if(!file){
+            return res.status(404).send({ message: 'El archivo no existe'})
+        }
+        if(err){
+            return res.status(400).send({ message: 'Error al buscar el archivo'})
+        }
+        res.send(file)
+    })
+}
+
 module.exports = {
     uploadNewFile,
     getFiles,
     downloadFile,
     deleteFile,
+    viewAsambleaFiles,
     viewFile
 }
