@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import axios from 'axios'
-import { Container, Heading, Tbody,Stack,HStack,Button,RadioGroup,Radio, Box, Divider, Accordion, AccordionItem, AccordionButton, AccordionPanel,AccordionIcon, Table, Thead, Tr, Th, Td, Link} from '@chakra-ui/react'
+import { FormControl, Center, FormLabel, Textarea, Input, Container, Heading, Tbody,Stack,HStack,Button,RadioGroup,Radio, Box, Divider, Accordion, AccordionItem, AccordionButton, AccordionPanel,AccordionIcon, Table, Thead, Tr, Th, Td, Link} from '@chakra-ui/react'
 import ShowInfo from '../../../components/ShowInfo'
 import Swal from 'sweetalert2'
 import Arriba from '../../../components/Arriba'
@@ -31,7 +31,36 @@ const asamblea = (data) => {
     const router = useRouter()
     const [asambleas] = useState(data)
     const[values, setValues] = useState({})
-
+// ------------------------------------------------------------------------------------------------------------------------------------------------------------
+    //moi
+    const [comentarios, setComentarios] = useState([])
+    //moi
+    
+    const obtenerComentarios = async (id_asamblea) => {
+        try {
+            const response = await axios.get(`${process.env.API_URL}/comentario/specific/${id_asamblea}`)
+            setComentarios(response.data)
+        } catch (error) {
+        }
+    }
+    //moi
+    useEffect(() => {
+        obtenerComentarios(asambleas.asambleaId._id)
+    }, [])
+    //moi
+    const showComentarios = () => {
+        return comentarios.map(comentario => {
+            return (
+                <Tr key={comentario._id}>
+                <Td maxW="500">{comentario.apartado}</Td>
+                <Td maxW="500">{comentario.fecha}</Td>
+                <Td maxW="500">{comentario.user && comentario.user.name}</Td>
+                <Td><Button colorScheme="twitter" variant='link' onClick={() => router.push(`/comentarios/comentario/${comentario._id}`)}>detalle</Button></Td>
+                </Tr>
+            )
+        })
+    }
+// ------------------------------------------------------------------------------------------------------------------------------------------------------------
     const onChange = async (e) =>{
         setValues({
             ...values,
@@ -53,6 +82,29 @@ const asamblea = (data) => {
                     if (result.isConfirmed){
                         router.push("/asamblea/ver")
                     }
+                })
+            }
+            }catch (error) {
+                Swal.fire({
+                    title: 'Error',
+                    text: `La asamblea no se ha podido eliminar`,
+                    icon: 'error',
+                    confirmButtonText: 'Ok'
+                })
+            }
+    }
+
+    const desvincularArchivos = async () =>{
+        try {
+            const response = await axios.delete(`${process.env.API_URL}/file/deleteAll/${asambleas.asambleaId._id}`)
+            if (response.status === 200){
+                Swal.fire({
+                    title: 'Archivos Asociados eliminados',
+                    text: 'Los archivos adjuntos de la asamblea han sido borrados',
+                    icon: 'success',
+                    confirmButtonText: 'Ok'
+                }).then(()=>{
+                    eliminarAsamblea()
                 })
             }
             }catch (error) {
@@ -181,8 +233,8 @@ const asamblea = (data) => {
                 <Heading my={15}> {asambleas.asambleaId.name}</Heading>
                     <HStack w={"full"} py={10}>
                         <Button w={"full"} colorScheme={"teal"} onClick={() => router.push(`/asamblea/editar/${asambleas.asambleaId._id}`)}>Editar</Button>
-                        <Button w={"full"} colorScheme={"teal"} onClick={() => eliminarAsamblea()}>Eliminar</Button>
-                        <VerAsistencias id={asambleas.asambleaId._id}></VerAsistencias>
+                        <Button w={"full"} colorScheme={"teal"} onClick={() => desvincularArchivos()}>Eliminar</Button>
+                        <Button w={"full"} colorScheme={"teal"} onClick={() => router.push(`/asistencia/ver/${asambleas.asambleaId._id}`)}>Ver Asistencias</Button>
                         <Button w={"full"} colorScheme={"teal"} onClick={() => router.push("/asamblea/ver")}>Volver</Button>
                     </HStack>
                 <RadioGroup>
@@ -219,6 +271,34 @@ const asamblea = (data) => {
                                     </Tbody>
                                 </Table>
                                 <Button my={'5'} colorScheme={"teal"} float={"right"} onClick={()=>subirArchivos(asambleas.asambleaId._id)} >Subir Archivo</Button>
+                            </AccordionPanel>
+                        </AccordionItem>
+                        {/* Acordeon 2  */}
+                        <AccordionItem my={"5"}>
+                            <h2>
+                                {/* Colores boton */}
+                                <AccordionButton bg='gray.200' _expanded={{  bg: 'orange.400', color: 'white' }}>
+                                    <Box as="span" flex='1' textAlign='center'>
+                                        Comentarios
+                                    </Box>
+                                    <AccordionIcon />
+                                </AccordionButton>
+                            </h2>
+                            <AccordionPanel pb={'5'}>
+                                    <Container maxW='1250px'>
+                                        <Table variant="simple" centerContent>
+                                        <Thead>
+                                            <Tr>
+                                            <Th>Comentario</Th>
+                                            <Th>Fecha</Th>
+                                            <Th>Usuario</Th>
+                                            </Tr>
+                                        </Thead>
+                                        <Tbody wy={10}>
+                                            {showComentarios()}
+                                        </Tbody>
+                                        </Table>
+                                    </Container>
                             </AccordionPanel>
                         </AccordionItem>
                     </Accordion>
