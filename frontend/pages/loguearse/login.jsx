@@ -5,6 +5,8 @@ import {login, checkToken } from "../../data/usuario"
 import { useRouter } from "next/router"
 import Cookie from "js-cookie"
 import Arriba from '../../components/Arriba'
+const jwt = require("jwt-simple")
+
 
 export const getServerSideProps = async (context) => {
     try {
@@ -42,8 +44,14 @@ const logearse = ({data}) => {
             const response = await login(usuario.correo)
             if (response.status === 200){
                 Cookie.set("token", response.data.token, {expires: 1})
-                router.push("/")
-            }
+                Swal.fire({
+                    icon:'success',
+                    title:'Se ha iniciado sesión',
+                    text:'Ha iniciado sesión correctamente'
+                }).then(() => {
+                    router.push("/")
+                }
+            )}
         } catch (error) {
             console.log(error)
             return Swal.fire({
@@ -52,12 +60,15 @@ const logearse = ({data}) => {
                 text: "A ocurrido un error con el token"
             })
         }
+        const prueba = Cookie.get("token")
+        const decode = jwt.decode(prueba, process.env.SECRET_KEY)
+        console.log(decode.rol)
     }
     return (
         <Box>
             <Arriba/>
             <Container maxW="container.md">
-                <Heading textAlign={"center"} my={15}Iniciar Sesión></Heading>
+                <Heading textAlign={"center"} my={15}>Iniciar Sesión</Heading>
                 <Stack>
                     <FormControl>
                         <FormLabel>Correo</FormLabel>
