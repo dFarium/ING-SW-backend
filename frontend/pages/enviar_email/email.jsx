@@ -3,6 +3,42 @@ import { Textarea, Button, Container, Input, Stack, Text, HStack, Heading, FormC
 import axios from 'axios'
 import Swal from 'sweetalert2'
 import { useRouter } from 'next/router'
+const jwt = require("jwt-simple")
+import {checkToken} from '../../data/usuario'
+
+export const getServerSideProps = async (context) => {
+  try {
+      const response = await checkToken(context.req.headers.cookie)
+      const decode = jwt.decode(context.req.cookies.token,process.env.SECRET_KEY)
+      if (decode.rol === 'admin'){
+          if (response.status === 200){
+              return{
+                  props: {}
+              }
+          }else{
+              return{
+                  redirect: {
+                      destination: "/",
+                      permanent: false
+                  }
+              }
+          }
+      }else{
+          return{
+              redirect: {
+                  destination: "/",
+                  permanent: false
+              }
+          }
+      }
+  } catch (error) {
+      console.log(error)
+      return{
+          props: {}
+      }
+  }
+}
+
 
 const email = () => {
 
@@ -57,6 +93,7 @@ const onChange = (e) => {
 
   return (
     <Container maxW= "container.md">
+      <Button colorScheme={"teal"} float={"left"} onClick={()=>router.push('/')} >Volver</Button>
       <Heading textAlign={"center"} my={10}>Enviar Correos</Heading>
       <Stack>
           <FormControl>

@@ -1,16 +1,61 @@
-import { Button, Container, Stack,HStack ,Heading,Radio,RadioGroup} from '@chakra-ui/react'
+import { Button, Container, Stack,HStack ,Heading,Radio,RadioGroup,Box} from '@chakra-ui/react'
 import Swal from 'sweetalert2'
 import { useRouter } from 'next/router'
-import { crearUsuario } from '../../data/usuario'
+import { crearUsuario, checkToken } from '../../data/usuario'
 import { Formik } from 'formik'
 import FormInput from '../../components/FormInput'
 import FormikError from '../../components/FormikError'
 import userValidation from '../../validations/userValidation'
+import Arriba from '../../components/Arriba'
+const jwt = require("jwt-simple")
 
-const usuario = () => {
+export const getServerSideProps = async (context) => {
+    try {
+        const response = await checkToken(context.req.headers.cookie)
+        const decode = jwt.decode(context.req.cookies.token,process.env.SECRET_KEY)
+        if (decode.rol === 'admin'){
+            if (response.status === 200){
+                return{
+                    props: {
+                        existe: response.config.headers.cookie
+                    }
+                }
+            }else{
+                return{
+                    redirect: {
+                        destination: "/",
+                        permanent: false
+                    }
+                }
+            }
+        }else{
+            return{
+                redirect: {
+                    destination: "/",
+                    permanent: false
+                }
+            }
+        }
+    } catch (error) {
+        console.log(error)
+        return{
+            redirect: {
+                destination: "/",
+                permanent: false
+            }
+        }
+    }
+}
+
+
+const usuario = (data) => {
+ 
     const router = useRouter()
     return(
+    <Box>
+    <Arriba token={data.existe}/>
     <Container maxW="container.md">
+    <Button colorScheme={"teal"} float={"left"} onClick={()=>router.push('/usuarios/ver')} >Volver</Button>
         <Heading textAlign={"center"} my={10}>Ingresar Usuario</Heading>
         <Formik
         initialValues={{
@@ -21,7 +66,6 @@ const usuario = () => {
         }}
         validationSchema={userValidation}
         onSubmit = {async (values) => {
-            console.log(values)
             try {
                 const response = await crearUsuario(values)
                 if (response.status===201){
@@ -72,6 +116,7 @@ const usuario = () => {
             )}
         </Formik>
     </Container>
+    </Box>
     )
 }
 
