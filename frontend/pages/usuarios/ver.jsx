@@ -1,21 +1,43 @@
 import { useState, useEffect } from 'react'
-import { Container, Table, Thead, Tbody, Tr, Td, Heading, Button, Link } from '@chakra-ui/react'
+import { Container, Table, Thead, Tbody, Tr, Td, Heading, Button, Box } from '@chakra-ui/react'
 import axios from 'axios'
 import { useRouter } from 'next/router'
+import { getUsuario } from '../../data/usuario'
+import Arriba from '../../components/Arriba'
 
-
-const usuario = () => {
-    const router = useRouter()
-    const [usuario, setUsuario] = useState([])
-
-    const getUsuario = async () => {
-        const response =await axios.get(`${process.env.API_URL}/users`)
-        setUsuario(response.data)
+export const getServerSideProps = async (context) => {
+    try {
+        const response = await getUsuario(context.req.headers.cookie)
+        if (response.status === 200){
+            return {
+                props: {
+                    data: response.data,
+                    existe: response.config.headers.cookie
+                }
+            }
+        }
+    } catch (error) {
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false
+            }
+        }
     }
+}
 
-    useEffect(()=>{
-        getUsuario()
-    }, [])
+const usuario = ({data}) => {
+    const router = useRouter()
+    const [usuario] = useState(data)
+
+    // const getUsuario = async () => {
+        
+    //     setUsuario(response.data)
+    // }
+
+    // useEffect(()=>{
+    //     getUsuario()
+    // }, [])
 
     const showUsuario = () =>{
         return usuario.map(usuario =>{
@@ -24,15 +46,17 @@ const usuario = () => {
                     <Td>{usuario.name}</Td>
                     <Td>{usuario.email}</Td>
                     <Td>{usuario.role}</Td>
-                    {/* <Td>
-                        <Button onClick={()=>router.push(`/asamblea/ver/${asamblea._id}`)}>Ver mas</Button>
-                    </Td> */}
+                    <Td>
+                        <Button onClick={()=>router.push(`/usuarios/ver/${usuario._id}`)}>Ver mas</Button>
+                    </Td>
                 </Tr>
             )
         })
     }
     return (
-        <Container maxW="container.xl">
+        <Box>
+            <Arriba token={data.existe}/>
+            <Container maxW="container.xl">
             <Heading textAlign={"center"} my={15}>Usuario</Heading>
             <Button colorScheme={"teal"} float={"right"} onClick={()=>router.push('/usuarios/crear_usuario')} >Ingresar Usuario</Button>
             <Button colorScheme={"teal"} float={"left"} onClick={()=>router.push('/')} >Volver</Button>
@@ -49,6 +73,7 @@ const usuario = () => {
                 </Tbody>
             </Table>
             </Container>
+        </Box>
     )
     }
 

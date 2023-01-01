@@ -88,13 +88,33 @@ const asistenciaPorAsamblea = (req, res) => {
     let filtro = {asamblea: `${asambleaId}`}
     Asistencia.find(filtro).populate({ path: 'asamblea user' }).exec((error,asistencia) =>{
         if(error){
-            return res.status(400).send({ message: "No se ha podido encontrar una asistencia" })
+            return res.status(400).send({ message: "No se ha podido obtener las asistencias" })
         }
         if(!asistencia){
             return res.status(404).send({ message: "No se ha podido encontrar una asistencia" })
         }
         return res.status(200).send(asistencia)
     })
+}
+
+const updateAsistenciaURL = (req, res) => {
+    const  id  = req.params.id
+    const asist  = req.params.asistencia
+    const rolUsuario = req.params.rolUsuario
+    if (rolUsuario === "1"){
+        Asistencia.findByIdAndUpdate(id, {asistencia: `${asist}`}, (error, asistencia) => {
+            if (error) {
+                return res.status(400).send({ message: "No se pudo actualizar la asistencia" })
+            }
+            if (!asistencia) {
+                return res.status(404).send({ message: "No se encontro la asistencia" })
+            }
+            return res.status(200).send({ message: "Asistencia modificada" })
+        })
+    }
+    else{
+        return res.status(401).send({ message: "Debe ser administrador para modificar la asistencia" })
+    }
 }
 
 // const updateVariasAsambleas = (req,res) =>{
@@ -108,5 +128,6 @@ module.exports = {
     updateAsistencia,
     deleteAsistencia,
     getAsistencia,
-    asistenciaPorAsamblea
+    asistenciaPorAsamblea,
+    updateAsistenciaURL
 }

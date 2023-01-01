@@ -4,8 +4,39 @@ import { FormControl, FormLabel } from '@chakra-ui/react'
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import Swal from 'sweetalert2'
+import Arriba from '../../components/Arriba'
+import {checkToken} from '../../data/usuario'
 
-export default function Home() {
+export async function getServerSideProps(context){
+  try {
+      const res = await checkToken(context.req.headers.cookie)
+      //const decode = jwt.decode(context.req.cookies.token,process.env.SECRET_KEY)
+          if (res.status === 200){
+              return{
+                  props:{
+                      existe: res.config.headers.cookie,
+                  }
+              }
+          }else{
+              return{
+                  redirect: {
+                      destination: "/",
+                      permanent: false
+                  }
+              }
+          }
+  } catch (error) {
+      console.log("ERROR",error)
+      return{
+          redirect:{
+              destination: '/',
+              permanent: true
+          }
+      }
+  }
+}
+
+export default function Home(data) {
   const [comentarios, setComentarios] = useState([])
   const router = useRouter()
 
@@ -70,6 +101,7 @@ export default function Home() {
 
   return (
     <Box>
+      <Arriba token={data.existe}/>
       <Center>
         <Heading mx={10} my={10}> Comentarios </Heading>
         {/* <Button mx={10} my={10} onClick={() => window.location.reload()}>REFRESH</Button> */}

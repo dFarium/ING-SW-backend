@@ -82,7 +82,7 @@ const getAsamblea = (req, res) => {
     const { id } = req.params
     Asamblea.findById(id, (error, asamblea) => {
         if (error) {
-            return res.status(400).send({ message: "No se ha podido modificar la asamblea" })
+            return res.status(400).send({ message: "No se ha podido obtener la asamblea" })
         }
         if (!asamblea) {
             return res.status(404).send({ message: "No se ha podido encontrar la asamblea" })
@@ -145,27 +145,6 @@ const inicializarAsistencias = (req,res,asambleaId)=>{
         })
     })
 }
-
-const eliminarArchivosAsociados = (res,asambleaId)=>{
-    let datos = {} ,asistencia = {asistencia: "Ausente"}, asamblea = {asamblea:`${asambleaId}`}
-    User.find({}, (error, user) => {
-        if (error) {
-            return res.status(400).send({ message: 'Error al obtener los usuarios' });
-        }
-        user.map(user => {
-            user = {user: `${user._id}`}
-            datos = {...user, ...asamblea, ...asistencia}
-            const newAsistencia = new Asistencia (datos)
-
-            newAsistencia.save((error, asistencia) => {
-                if (error){
-                    console.log(error)
-                }
-            })
-        })
-    })
-}
-
 
 module.exports = {
     createAsamblea,

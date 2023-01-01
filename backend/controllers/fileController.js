@@ -97,7 +97,6 @@ const deleteFile = (req, res) => {
                     }
                     await fs.unlink(file.url,(err)=>{
                         if (err){
-                            console.error(err)
                             return res.status(400).send({ message: "Error al obtener el archivo" })
                         }
                         return res.status(200).send({ message: "Archivo Eliminado" })
@@ -144,11 +143,58 @@ const viewFile = (req, res)=> {
     })
 }
 
+const eliminarArchivosAsociados = (req, res)=>{
+
+    Asamblea.findByIdAndUpdate(req.params.id, {archivos: []} , (error, asamblea) => {
+        if(error){
+            return res.status(404).send({ message: 'No se ha encontrado la asamblea'})
+        }
+        if (!asamblea) {
+            return res.status(404).send({ message: "La asamblea no existe" })
+        }
+        fileModel.find({asamblea: req.params.id}, (error,files)=>{
+            if(error){
+                return res.status(400).send({ message: 'Error al obtener los archivos'})
+            }
+            if(files.length === 0){
+                return res.status(200).send({ message: 'No existen archivos que eliminar'})
+            }
+            let largo= files.length
+            let flag=0
+            files.map(files =>{
+                fileModel.findByIdAndDelete(files._id, async (err, file)=>{
+                    if(err && flag!=-1){
+                        flag=-1
+                        return res.status(400).send({ message: 'No se ha podido eliminar el archivo'})
+                    }
+                    if(!file && flag!=-1){
+                        flag=-1
+                        return res.status(404).send({ message: 'No se ha podido encontrar el archivo'})
+                    }
+                    await fs.unlink(file.url,(err)=>{
+                        if (err && flag!=-1){
+                            flag=-1
+                            return res.status(400).send({ message: "Error al obtener el archivo" })
+                        }
+                        if(flag!=-1){
+                            flag= flag+1
+                        }
+                        if(flag==largo){
+                            return res.status(200).send({ message: "Archivos Eliminados" })
+                        }
+                    })
+                })
+            })
+        })
+    })
+}
+
 module.exports = {
     uploadNewFile,
     getFiles,
     downloadFile,
     deleteFile,
     viewAsambleaFiles,
-    viewFile
+    viewFile,
+    eliminarArchivosAsociados
 }

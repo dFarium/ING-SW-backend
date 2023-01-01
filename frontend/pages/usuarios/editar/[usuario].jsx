@@ -1,29 +1,31 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/router'
 import axios from 'axios'
 import { Container, Heading, Tbody,Stack,HStack,Button,FormControl,FormLabel,Input,RadioGroup,Radio,Box } from '@chakra-ui/react'
 import Swal from 'sweetalert2'
 import Arriba from '../../../components/Arriba'
-import {checkToken} from '../../../data/usuario'
-const jwt = require('jwt-simple')
+import  {checkToken} from '../../../data/usuario'
+import {userValidation} from '../../../validations/userValidation'
+import { Formik } from 'formik'
+import FormInput from '../../../components/FormInput'
+import FormikError from '../../../components/FormikError'
+const jwt = require("jwt-simple")
 
-
+//FUNCION PARA OBTENER LOS USUARIOS, ADEMAS VERIFICAR SI EXISTE TOKEN Y CON ROL DE ADMINISTRADOR
 export async function getServerSideProps(context){
     try {
         const res = await checkToken(context.req.headers.cookie)
         const decode = jwt.decode(context.req.cookies.token,process.env.SECRET_KEY)
-        if(decode.rol==='admin'){
+        if (decode.rol === 'admin'){
             if (res.status === 200){
-                const response = await axios.get(`${process.env.API_URL}/asamblea/search/${context.params.asamblea}`)
+                const response = await axios.get(`${process.env.API_URL}/user/search/${context.params.usuario}`)
                 return{
                     props:{
-                        asambleaId: response.data,
+                        usuarioId: response.data,
                         existe: res.config.headers.cookie,
-                        rol:decode.rol
                     }
                 }
             }else{
-                console.log("No hay token")
                 return{
                     redirect: {
                         destination: "/",
@@ -32,7 +34,6 @@ export async function getServerSideProps(context){
                 }
             }
         }else{
-            console.log("No eres admin")
             return{
                 redirect: {
                     destination: "/",
@@ -44,43 +45,44 @@ export async function getServerSideProps(context){
         console.log("ERROR",error)
         return{
             redirect:{
-                destination: '/asamblea/ver',
+                destination: '/usuarios/ver',
                 permanent: true
             }
         }
     }
 }
-const asamblea = (data) => {
 
-    const onChange = async (e) =>{
+const usuario = (data) => {
+
+    const onChange = async (e) => {
         setValues({
-            ...values,
-            [e.target.name]: e.target.value
+        ...values,
+        [e.target.name]: e.target.value
         })
     }
 
     const onSubmit = async (e) =>{
         //e.preventDefault()
-        console.log(values)
+        console.log(`${usuarios.usuarioId}`)
         try {
-            const response = await axios.put(`${process.env.API_URL}/asamblea/update/${asambleas.asambleaId._id}`,values)
-            console.log(response)
-            if (response.status === 200){
+            const response = await axios.put(`${process.env.API_URL}/user/update/${usuarios.usuarioId._id}`, values)
+            if(response.status === 200){
                 Swal.fire({
-                    title: 'Asamblea creada',
-                    text: 'La asamblea se ha creado con exito',
+                    title: 'El usuario se ha modificado',
+                    text: 'El usuario ha sido modificado con exito',
                     icon: 'success',
                     confirmButtonText: 'Ok'
                 }).then((result)=>{
                     if (result.isConfirmed){
-                        router.push("/asamblea/ver")
+                        router.push("/usuarios/ver")
                     }
                 })
             }
         } catch (error) {
+            console.log(error)
             Swal.fire({
                 title: 'Error',
-                text: `La asamblea no se ha podido crear ${error}`,
+                text: 'El usuario no se podido modificar',
                 icon: 'error',
                 confirmButtonText: 'Ok'
             })
@@ -88,40 +90,43 @@ const asamblea = (data) => {
     }
 
     const router = useRouter()
-    const [asambleas] = useState(data)
-    let date = asambleas.asambleaId.fecha.substring(0,16)
-    console.log(asambleas.asambleaId._id)
-
+    const [usuarios] = useState(data)
     const[values, setValues] = useState({
-        name: `${asambleas.asambleaId.name}`,
-        tipo: `${asambleas.asambleaId.tipo}`,
-        fecha: `${asambleas.asambleaId.fecha}`,
+        name: `${usuarios.usuarioId.name}`,
+        email: `${usuarios.usuarioId.email}`,
+        role: `${usuarios.usuarioId.role}`,
         rolUsuario: 'admin'
     })
-
-    return (
+    return(
         <Box>
             <Arriba token={data.existe}/>
             <Container>
-                <Heading textAlign={"center"} my={15}>Editar Asamblea</Heading>
+                <Heading textAlign={"center"} my={15}>Editar Usuario</Heading>
                 <Stack>
                     <FormControl isRequired="true">
-                        <FormLabel>Nombre asamblea</FormLabel>
-                        <Input defaultValue={`${asambleas.asambleaId.name}`} placeholder="Asamblea" type={"text"} maxLength={100} onChange={onChange} name={"name"}/>
+                        <FormLabel>Nombre usuario</FormLabel>
+                        <Input defaultValue={`${usuarios.usuarioId.name}`} placeholder="Nombre" type={"text"} maxLength={100} onChange={onChange} name={"name"} />
                     </FormControl>
+
                     <FormControl isRequired="true">
-                        <FormLabel >Tipo asamblea</FormLabel>
-                            <RadioGroup defaultValue={asambleas.asambleaId.tipo}>
+                        <FormLabel>Correo</FormLabel>
+                        <Input defaultValue={`${usuarios.usuarioId.email}`} placeholder="Correo" type={"text"} maxLength={100} onChange={onChange} name={"email"} />
+                    </FormControl>
+
+                    {/* <FormControl isRequired="true">
+                        <FormLabel>Rol</FormLabel>
+                        <Input defaultValue={`${usuarios.usuarioId.role}`} placeholder="Role" type={"text"} maxLength={100} onChange={onChange} name={"role"} />
+                    </FormControl> */}
+                    <FormControl isRequired="true">
+                        <FormLabel >Rol del usuario</FormLabel>
+                            <RadioGroup >
                                 <HStack spacing='24px'>
-                                    <Radio value='Ordinaria' onChange={onChange} name={"tipo"}>Ordinaria</Radio>
-                                    <Radio value='Extraordinaria' onChange={onChange} name={"tipo"}>Extraordinaria</Radio>
+                                    <Radio value='user' onChange={onChange} name={"role"}>user</Radio>
+                                    <Radio value='admin' onChange={onChange} name={"role"}>admin</Radio>
                                 </HStack>
                             </RadioGroup>
                     </FormControl>
-                    <FormControl isRequired="true">
-                        <FormLabel>Fecha</FormLabel>
-                        <Input defaultValue={`${date}`} placeholder="Select Date and Time" size="xl" type="datetime-local" onChange={onChange} name={"fecha"}/>
-                    </FormControl>
+
                     {/* <FormControl isRequired="true">
                         <FormLabel >rolUsuario</FormLabel>
                             <RadioGroup >
@@ -131,14 +136,16 @@ const asamblea = (data) => {
                                 </HStack>
                             </RadioGroup>
                     </FormControl> */}
+
+
                 </Stack>
                 <HStack justifyContent={"space-between"}>
                     <Button colorScheme={"teal"} type="submit" my={5} onClick={onSubmit}>Finalizar edicion</Button>
-                    <Button colorScheme={"teal"} onClick={()=>router.push(`/asamblea/ver/${asambleas.asambleaId._id}`)}>Volver</Button>
+                    <Button colorScheme={"teal"} onClick={()=>router.push(`/usuarios/ver/${usuarios.usuarioId._id}`)}>Volver</Button>
                 </HStack>
             </Container>
         </Box>
     )
 }
 
-export default asamblea
+export default usuario
