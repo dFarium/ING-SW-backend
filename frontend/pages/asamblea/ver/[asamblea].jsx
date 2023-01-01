@@ -32,6 +32,8 @@ import { Container,
     ModalCloseButton,
     useDisclosure
 } from '@chakra-ui/react'
+import {checkToken} from '../../../data/usuario'
+const jwt = require("jwt-simple")
 import ShowInfo from '../../../components/ShowInfo'
 import Swal from 'sweetalert2'
 import Arriba from '../../../components/Arriba'

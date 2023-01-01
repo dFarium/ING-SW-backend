@@ -4,6 +4,8 @@ import axios from 'axios'
 import { useRouter } from 'next/router'
 import Arriba from '../../components/Arriba'
 import Swal from 'sweetalert2'
+import {checkToken} from '../../data/usuario'
+const jwt = require('jwt-simple')
 import { DownloadIcon, DeleteIcon} from '../../node_modules/@chakra-ui/icons'
 
 const archivos= () => {
