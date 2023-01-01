@@ -1,7 +1,8 @@
-import { Container,Heading,  Button, HStack,Link,Box} from '@chakra-ui/react'
+import { Container,Heading,  Button, HStack,Link,Box, Icon} from '@chakra-ui/react'
 import React from 'react'
 import { useRouter } from 'next/router'
 import Arriba from '../components/Arriba'
+import { PhoneIcon, AddIcon, WarningIcon } from '../node_modules/@chakra-ui/icons'
 
 export const index = () => {
 
@@ -12,6 +13,10 @@ export const index = () => {
         <Arriba/>
             <Container maxW="container.xl">
                 <Heading textAlign={"center"} my={15}>Bienvenido</Heading>
+                
+                <PhoneIcon />
+
+                
                 <HStack w={"full"} py={'28'}>
                     <Button w={"full"} colorScheme={"teal"} float={"right"} onClick={()=>router.push('/asamblea/ver')}>Asambleas</Button>
                     <Button w={"full"} colorScheme={"teal"} float={"right"} onClick={()=>router.push('/archivos/verArchivos')}>Historial de Actas</Button>

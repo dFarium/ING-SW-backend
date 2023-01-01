@@ -4,6 +4,7 @@ import axios from 'axios'
 import { useRouter } from 'next/router'
 import Arriba from '../../components/Arriba'
 import Swal from 'sweetalert2'
+import { DownloadIcon, DeleteIcon} from '../../node_modules/@chakra-ui/icons'
 
 const archivos= () => {
 
@@ -66,9 +67,13 @@ const archivos= () => {
                     </Td>
                     <Td>{archivos.fecha}</Td>
                     <Td>
-                        <Button onClick={()=>router.push(`${process.env.API_URL}/file/download/${archivos._id}`)}>Download</Button>
+                        {/* <Button onClick={()=>router.push(`${process.env.API_URL}/file/download/${archivos._id}`)}>Download</Button> */}
+                        <DownloadIcon mx={'5'} w={6} h={6} color="teal.500" onClick={()=>router.push(`${process.env.API_URL}/file/download/${archivos._id}`)}></DownloadIcon>
                     </Td>
-                    <Td><Button onClick={()=>eliminarArchivos(archivos._id, archivos.asamblea._id)}>Eliminar</Button></Td>
+                    <Td>
+                        {/* <Button colorScheme={"red"} onClick={()=>eliminarArchivos(archivos._id, archivos.asamblea._id)}>Eliminar</Button> */}
+                        <DeleteIcon mx={'5'} w={6} h={6} color="red.400" onClick={()=>eliminarArchivos(archivos._id, archivos.asamblea._id)}></DeleteIcon>
+                    </Td>
                 </Tr>
             )
         })
@@ -77,7 +82,7 @@ const archivos= () => {
     return (
         <Box>
             <Arriba/>
-            <Container maxW="container.xl">
+            <Container maxW="container.xl" >
             <Heading textAlign={"center"} my={16}>Historial de Actas</Heading>
             <Button colorScheme={"teal"} my={15} mx={15} float={'left'} onClick={()=>router.push('/')} >Volver</Button>
             <Table my={15} variant="simple">
@@ -86,7 +91,7 @@ const archivos= () => {
                         <Td>Archivo</Td>
                         <Td>Asamblea</Td>
                         <Td>Fecha</Td>
-                        <Td>Descarga</Td>
+                        <Td>Descargar</Td>
                         <Td>Eliminar</Td>
                     </Tr>
                 </Thead>
