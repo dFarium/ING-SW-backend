@@ -1,11 +1,20 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import axios from 'axios'
-import { FormControl, Center, FormLabel, Textarea, Input, Container, Heading, Tbody,Stack,HStack,Button,RadioGroup,Radio, Box, Divider, Accordion, AccordionItem, AccordionButton, AccordionPanel,AccordionIcon, Table, Thead, Tr, Th, Td, Link} from '@chakra-ui/react'
+import { Container, Heading, Tbody,Stack,HStack,Button,RadioGroup,Radio, Box, Divider, Accordion, AccordionItem, AccordionButton, AccordionPanel,AccordionIcon, Table, Thead, Tr, Th, Td, Link} from '@chakra-ui/react'
 import ShowInfo from '../../../components/ShowInfo'
 import Swal from 'sweetalert2'
 import Arriba from '../../../components/Arriba'
-import VerAsistencias from '../../../components/VerAsistencias'
+import {
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
+    useDisclosure
+  } from '@chakra-ui/react'
 
 
 
@@ -31,6 +40,7 @@ const asamblea = (data) => {
     const router = useRouter()
     const [asambleas] = useState(data)
     const[values, setValues] = useState({})
+    const { isOpen, onOpen, onClose } = useDisclosure()
 // ------------------------------------------------------------------------------------------------------------------------------------------------------------
     //moi
     const [comentarios, setComentarios] = useState([])
@@ -229,16 +239,32 @@ const asamblea = (data) => {
     return (
         <Box>
             <Arriba/>
-            <Container maxW="container.xl" centerContent>
-                <Heading my={15}> {asambleas.asambleaId.name}</Heading>
+            <Container maxW="container.xl" >
+                <Heading my={15} textAlign={"center"}> {asambleas.asambleaId.name}</Heading>
+
+
+                <Button float={"left"} colorScheme={"teal"} onClick={() => router.push("/asamblea/ver")}>Volver</Button>
                     <HStack w={"full"} py={10}>
-                        <Button w={"full"} colorScheme={"teal"} onClick={() => router.push(`/asamblea/editar/${asambleas.asambleaId._id}`)}>Editar</Button>
-                        <Button w={"full"} colorScheme={"teal"} onClick={() => desvincularArchivos()}>Eliminar</Button>
-                        <Button w={"full"} colorScheme={"teal"} onClick={() => router.push(`/asistencia/ver/${asambleas.asambleaId._id}`)}>Ver Asistencias</Button>
-                        <Button w={"full"} colorScheme={"teal"} onClick={() => router.push("/asamblea/ver")}>Volver</Button>
+                        <Button w={"full"} colorScheme={"green"} onClick={() => router.push(`/asamblea/editar/${asambleas.asambleaId._id}`)}>Editar</Button>
+                        <Button w={"full"} colorScheme={"teal"} onClick={() => router.push(`/asistencia/ver/${asambleas.asambleaId._id}`)}>Ver asistencias asamblea</Button>
+                        <Button w={"full"} colorScheme={"red"} onClick={onOpen}>Eliminar asamblea</Button>
+                        
+                        <Modal isOpen={isOpen} onClose={onClose}>
+                            <ModalOverlay/>
+                                <ModalContent>
+                                    <ModalHeader>Eliminar?</ModalHeader>
+                                    <ModalCloseButton/>
+                                    <ModalBody>¿Esta seguro de eliminar esta asamblea?</ModalBody>
+                                    <ModalFooter justifyContent={"space-between"}>
+                                        <Button colorScheme={"red"} onClick={() => {onClose(); desvincularArchivos();} }>Eliminar</Button>
+                                        <Button colorScheme={"teal"} onClick={onClose}>Cancelar</Button>
+                                    </ModalFooter>
+                                </ModalContent>
+                        </Modal>
+
                     </HStack>
-                <RadioGroup>
-                    <HStack spacing='24px'>
+                <RadioGroup >
+                    <HStack spacing='24px' >
                     <Radio value='user' onChange={onChange} name={"rolUsuario"}>user</Radio>
                     <Radio value='admin' onChange={onChange} name={"rolUsuario"}>admin</Radio>
                     </HStack>
@@ -286,7 +312,7 @@ const asamblea = (data) => {
                             </h2>
                             <AccordionPanel pb={'5'}>
                                     <Container maxW='1250px'>
-                                        <Table variant="simple" centerContent>
+                                        <Table variant="simple" >
                                         <Thead>
                                             <Tr>
                                             <Th>Comentario</Th>

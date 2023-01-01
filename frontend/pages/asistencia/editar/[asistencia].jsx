@@ -99,20 +99,28 @@ const asistencia = (data) => {
         
         try {
             const response = await axios.put(`${process.env.API_URL}/asistenciaURL/update/${id}/${values}/${rolUser}`)
-            if (response.status != 200){
-                Swal.fire({
-                    title: 'Error',
-                    text: `La asistencia no se ha podido modificar`,
-                    icon: 'error',
-                    confirmButtonText: 'Ok'
-                })
-            }
+            // if (response.status != 200){
+            //     Swal.fire({
+            //         title: 'Error',
+            //         text: `La asistencia no se ha podido modificar`,
+            //         icon: 'error',
+            //         confirmButtonText: 'Ok'
+            //     }).then((result)=>{
+            //         if (result.isConfirmed){
+            //             router.reload()
+            //         }
+            //     })
+            // }
         } catch (error) {
             Swal.fire({
                 title: 'Error',
                 text: `La asistencia no se ha podido modificar`,
                 icon: 'error',
                 confirmButtonText: 'Ok'
+            }).then((result)=>{
+                if (result.isConfirmed){
+                    router.reload()
+                }
             })
         }
     }
