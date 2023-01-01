@@ -46,46 +46,35 @@ export async function getServerSideProps(context){
 const asistencia = (data) => {
     const router = useRouter()
     const [asistencia] = useState(data)
-
+    let rolUsuario = 0
     const[values, setValues] = useState({
         asistencia: '',
         rolUsuario: ''
     })
 
     const onChangeSwitch = async (e,id) =>{
+        let asist
         if(e.target.checked){
-            setValues({
-                ...values,
-                [e.target.name]: "Presente"
-            })
-            console.log(values)
+            asist = "Presente"
         }else{
-            setValues({
-                ...values,
-                [e.target.name]: "Ausente"
-            })
+            asist = "Ausente"
         }
-        setValues({
-            ...values,
-            values
-        })
-        //updateAsistencia(id,values)
+        updateAsistencia(id,asist,rolUsuario)
     }
 
     const onChangeRol = async (e) =>{
-            setValues({
-                ...values,
-                [e.target.name]: e.target.value
-            })
-            console.log(values)
-}
+        if(e.target.value === "admin"){
+            rolUsuario = 1
+        }else{
+            rolUsuario = 0
+        }
+    }
 
     const showAsistencia = () =>{
         return asistencia.asambleaId.map(asistencia =>{
             return(
                 <Tr key={asistencia._id}>
                     <Td>{asistencia.user.name}</Td>
-                    <Td>{asistencia._id}</Td>
                     <Td>
                         <FormControl>
                             {modificarAsisteCheckbox(asistencia)}
@@ -96,36 +85,32 @@ const asistencia = (data) => {
         })
     }
 
-
     function modificarAsisteCheckbox (asistencia){
         let checkbox;
         if(asistencia.asistencia === "Presente"){
-            checkbox = <Switch  defaultChecked onChange={(event)=>onChangeSwitch(event,asistencia._id)} name="asistencia" value={asistencia._id} ></Switch>;
+            checkbox = <Switch colorScheme="teal" defaultChecked onChange={(event)=>onChangeSwitch(event,asistencia._id,rolUsuario)} name="asistencia"  ></Switch>;
         }else{
-            checkbox = <Switch onChange={(event)=>onChangeSwitch(event,asistencia._id)} name="asistencia" value={asistencia._id}></Switch>;
+            checkbox = <Switch colorScheme="teal" onChange={(event)=>onChangeSwitch(event,asistencia._id,rolUsuario)} name="asistencia" value={asistencia._id}></Switch>;
         }
         return checkbox;
     }
 
-
-    const updateAsistencia = async (id,values) =>{
-
+    const updateAsistencia = async (id,values,rolUser) =>{
         
-        console.log("id asistencia:",id)
         try {
-            const response = await axios.put(`${process.env.API_URL}/asistencia/update/${id}`,values)
-            if (response.status === 200){
+            const response = await axios.put(`${process.env.API_URL}/asistenciaURL/update/${id}/${values}/${rolUser}`)
+            if (response.status != 200){
                 Swal.fire({
-                    title: 'Asistencia Modificada',
-                    text: 'La asamblea se ha creado con exito',
-                    icon: 'success',
+                    title: 'Error',
+                    text: `La asistencia no se ha podido modificar`,
+                    icon: 'error',
                     confirmButtonText: 'Ok'
                 })
             }
         } catch (error) {
             Swal.fire({
                 title: 'Error',
-                text: `La asamblea no se ha podido crear ${error}`,
+                text: `La asistencia no se ha podido modificar`,
                 icon: 'error',
                 confirmButtonText: 'Ok'
             })
@@ -136,7 +121,15 @@ const asistencia = (data) => {
         <Box>
             <Arriba/>
             <Container maxW="container.xl">
+
                 <Heading textAlign={"center"} my={15}>Editar asistencia de {asistencia.asambleaId[0].asamblea.name}</Heading>
+                <HStack float={"right"}>
+                    <RadioGroup >
+                        <Radio onChange={onChangeRol} name="rolUsuario" value="user">user</Radio>
+                        <Radio onChange={onChangeRol} name="rolUsuario" value="admin">admin</Radio>
+                    </RadioGroup>
+                <Button colorScheme={"teal"} float={"right"} onClick={() => router.push(`/asistencia/ver/${asistencia.asambleaId[0].asamblea._id}`)}>Finalizar Edicion</Button>
+                </HStack>
                 <Table variant="simple" my={15}>
                     <Thead>
                         <Tr>
@@ -148,18 +141,8 @@ const asistencia = (data) => {
                         {showAsistencia()}
                     </Tbody>
                 </Table>
-                <HStack float={"right"}>
-                    <RadioGroup >
-                        <Radio onChange={onChangeRol} name="rolUsuario" value="user">user</Radio>
-                        <Radio onChange={onChangeRol} name="rolUsuario" value="admin">admin</Radio>
-                    </RadioGroup>
-                <Button colorScheme={"teal"} float={"right"} onClick={() => router.push(`/asistencia/ver/${asistencia.asambleaId[0].asamblea._id}`)}>Finalizar Edicion</Button>
-                </HStack>
-                
-
             </Container>
         </Box>
-
     )
 }
 
