@@ -77,7 +77,7 @@ const asamblea = (data) => {
 
     return (
         <Box>
-            <Arriba/>
+            <Arriba token={data.existe}/>
             <Container>
                 <Heading textAlign={"center"} my={15}>Editar Asamblea</Heading>
                 <Stack>
