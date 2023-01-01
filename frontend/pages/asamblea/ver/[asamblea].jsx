@@ -1,7 +1,37 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import axios from 'axios'
-import { FormControl, Center, FormLabel, Textarea, Input, Container, Heading, Tbody,Stack,HStack,Button,RadioGroup,Radio, Box, Divider, Accordion, AccordionItem, AccordionButton, AccordionPanel,AccordionIcon, Table, Thead, Tr, Th, Td, Link, Icon} from '@chakra-ui/react'
+import { Container,
+    Heading,
+    Tbody,
+    Stack,
+    HStack,
+    Button,
+    RadioGroup,
+    Radio,
+    Box,
+    Divider,
+    Accordion,
+    AccordionItem,
+    AccordionButton,
+    AccordionPanel,
+    AccordionIcon,
+    Table,
+    Thead,
+    Tr,
+    Th,
+    Td,
+    Link,
+    Icon,
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
+    useDisclosure
+} from '@chakra-ui/react'
 import ShowInfo from '../../../components/ShowInfo'
 import Swal from 'sweetalert2'
 import Arriba from '../../../components/Arriba'
