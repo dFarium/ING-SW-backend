@@ -57,6 +57,7 @@ const onChange = (e) => {
 
   return (
     <Container maxW= "container.md">
+      <Button colorScheme={"teal"} float={"left"} onClick={()=>router.push('/')} >Volver</Button>
       <Heading textAlign={"center"} my={10}>Enviar Correos</Heading>
       <Stack>
           <FormControl>
