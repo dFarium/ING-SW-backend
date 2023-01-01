@@ -12,9 +12,7 @@ const jwt = require("jwt-simple")
 export const getServerSideProps = async (context) => {
     try {
         const response = await checkToken(context.req.headers.cookie)
-        console.log('response: ',response)
         const decode = jwt.decode(context.req.cookies.token,process.env.SECRET_KEY)
-        console.log('decode: ',decode)
         if (decode.rol === 'admin'){
             if (response.status === 200){
                 return{

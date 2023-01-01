@@ -13,7 +13,6 @@ const jwt = require("jwt-simple")
 
 //FUNCION PARA OBTENER LOS USUARIOS, ADEMAS VERIFICAR SI EXISTE TOKEN Y CON ROL DE ADMINISTRADOR
 export async function getServerSideProps(context){
-    console.log(context.params.usuario)
     try {
         const res = await checkToken(context.req.headers.cookie)
         const decode = jwt.decode(context.req.cookies.token,process.env.SECRET_KEY)
