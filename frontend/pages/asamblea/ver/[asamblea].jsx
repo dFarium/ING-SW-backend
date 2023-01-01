@@ -233,11 +233,11 @@ const asamblea = (data) => {
                 <Button float={"left"} colorScheme={"teal"} onClick={() => router.push("/asamblea/ver")}>Volver</Button>
                     <HStack w={"full"} py={10}>
                         <Button w={"full"} colorScheme={"green"} onClick={() => router.push(`/asamblea/editar/${asambleas.asambleaId._id}`)}>Editar</Button>
+                        <Button w={"full"} colorScheme={"teal"} onClick={() => router.push(`/asistencia/ver/${asambleas.asambleaId._id}`)}>Ver asistencias asamblea</Button>
                         <Button w={"full"} colorScheme={"red"} onClick={() => desvincularArchivos()}>Eliminar</Button>
-                        <Button w={"full"} colorScheme={"teal"} onClick={() => router.push(`/asistencia/ver/${asambleas.asambleaId._id}`)}>Ver Asistencias</Button>
                     </HStack>
-                <RadioGroup>
-                    <HStack spacing='24px'>
+                <RadioGroup >
+                    <HStack spacing='24px' >
                     <Radio value='user' onChange={onChange} name={"rolUsuario"}>user</Radio>
                     <Radio value='admin' onChange={onChange} name={"rolUsuario"}>admin</Radio>
                     </HStack>
@@ -285,7 +285,7 @@ const asamblea = (data) => {
                             </h2>
                             <AccordionPanel pb={'5'}>
                                     <Container maxW='1250px'>
-                                        <Table variant="simple" centerContent>
+                                        <Table variant="simple" >
                                         <Thead>
                                             <Tr>
                                             <Th>Comentario</Th>
