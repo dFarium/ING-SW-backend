@@ -59,7 +59,7 @@ const logearse = ({data}) => {
             return Swal.fire({
                 icon: "error",
                 title:"Error",
-                text: "A ocurrido un error con el token"
+                text: `A ocurrido un error con el token${error}`
             })
         }
         prueba = Cookie.get("token")
@@ -77,9 +77,10 @@ const logearse = ({data}) => {
                         <Input type="email" name="correo" onChange={handleChange}/>
                     </FormControl>
                 </Stack>
-                <HStack>
-                <Button colorScheme={"teal"} float={"left"} onClick={()=>router.push('/')} >Volver</Button>
+                <HStack justifyContent={"space-between"} py={5}>
+                <Button colorScheme={"teal"}  onClick={()=>router.push('/')} >Volver</Button>
                 <Button colorScheme="teal" size="md" type="submit" my={5} onClick={onSubmit}>Login</Button>
+                
                 </HStack>
             </Container>
         </Box>
