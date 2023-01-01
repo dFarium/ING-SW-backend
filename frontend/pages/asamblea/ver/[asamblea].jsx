@@ -6,18 +6,33 @@ import ShowInfo from '../../../components/ShowInfo'
 import Swal from 'sweetalert2'
 import Arriba from '../../../components/Arriba'
 import VerAsistencias from '../../../components/VerAsistencias'
-
-
+import {checkToken} from '../../../data/usuario'
+const jwt = require("jwt-simple")
 
 export async function getServerSideProps(context){
     try {
-        const response = await axios.get(`${process.env.API_URL}/asamblea/search/${context.params.asamblea}`)
-        return{
-            props:{
-                asambleaId: response.data
+        const res = await checkToken(context.req.headers.cookie)
+        const decode = jwt.decode(context.req.cookies.token,process.env.SECRET_KEY)
+            if (res.status === 200){
+                const response = await axios.get(`${process.env.API_URL}/asamblea/search/${context.params.asamblea}`)
+                return{
+                    props:{
+                        asambleaId: response.data,
+                        existe: res.config.headers.cookie,
+                        rol:decode.rol
+                    }
+                }
+            }else{
+                console.log("No hay token")
+                return{
+                    redirect: {
+                        destination: "/",
+                        permanent: false
+                    }
+                }
             }
-        }
     } catch (error) {
+        console.log("ERROR",error)
         return{
             redirect:{
                 destination: '/asamblea/ver',
@@ -26,6 +41,25 @@ export async function getServerSideProps(context){
         }
     }
 }
+
+
+// export async function getServerSideProps(context){
+//     try {
+//         const response = await axios.get(`${process.env.API_URL}/asamblea/search/${context.params.asamblea}`)
+//         return{
+//             props:{
+//                 asambleaId: response.data
+//             }
+//         }
+//     } catch (error) {
+//         return{
+//             redirect:{
+//                 destination: '/asamblea/ver',
+//                 permanent: true
+//             }
+//         }
+//     }
+// }
 
 const asamblea = (data) => {
     const router = useRouter()
@@ -70,31 +104,41 @@ const asamblea = (data) => {
 
 
     const eliminarAsamblea = async () =>{
-        try {
-            const response = await axios.delete(`${process.env.API_URL}/asamblea/delete/${asambleas.asambleaId._id}`,{data: values })
-            if (response.status === 200){
-                Swal.fire({
-                    title: 'Asamblea eliminada',
-                    text: 'La asamblea se ha eliminado con exito',
-                    icon: 'success',
-                    confirmButtonText: 'Ok'
-                }).then((result)=>{
-                    if (result.isConfirmed){
-                        router.push("/asamblea/ver")
-                    }
-                })
-            }
-            }catch (error) {
-                Swal.fire({
-                    title: 'Error',
-                    text: `La asamblea no se ha podido eliminar`,
-                    icon: 'error',
-                    confirmButtonText: 'Ok'
-                })
-            }
+        if (data.rol==='admin'){
+            try {
+                const response = await axios.delete(`${process.env.API_URL}/asamblea/delete/${asambleas.asambleaId._id}`,{data: values })
+                if (response.status === 200){
+                    Swal.fire({
+                        title: 'Asamblea eliminada',
+                        text: 'La asamblea se ha eliminado con exito',
+                        icon: 'success',
+                        confirmButtonText: 'Ok'
+                    }).then((result)=>{
+                        if (result.isConfirmed){
+                            router.push("/asamblea/ver")
+                        }
+                    })
+                }
+                }catch (error) {
+                    Swal.fire({
+                        title: 'Error',
+                        text: `La asamblea no se ha podido eliminar`,
+                        icon: 'error',
+                        confirmButtonText: 'Ok'
+                    })
+                }
+        }else{
+            Swal.fire({
+                title: 'Error',
+                text: `No tiene los permisos para eliminar asambleas`,
+                icon: 'error',
+                confirmButtonText: 'Ok'
+            })
+        }
     }
 
     const desvincularArchivos = async () =>{
+        if (data.rol==='admin'){
         try {
             const response = await axios.delete(`${process.env.API_URL}/file/deleteAll/${asambleas.asambleaId._id}`)
             if (response.status === 200){
@@ -115,6 +159,14 @@ const asamblea = (data) => {
                 confirmButtonText: 'Ok'
             })
         }
+        }else{
+            Swal.fire({
+                title: 'Error',
+                text: `No tiene los permisos para eliminar archivos asociados`,
+                icon: 'error',
+                confirmButtonText: 'Ok'
+            })
+        }
     }
 
 // ------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -130,25 +182,34 @@ const asamblea = (data) => {
     }
 
     const eliminarArchivos = async (id_archivo, id_asamblea) =>{
-        try {
-            //AGREGAR MODALs
-            const response = await axios.delete(`${process.env.API_URL}/file/delete/${id_archivo}/${id_asamblea}`)
-            if (response.status === 200){
+        if (data.rol==='admin'){
+            try {
+                //AGREGAR MODALs
+                const response = await axios.delete(`${process.env.API_URL}/file/delete/${id_archivo}/${id_asamblea}`)
+                if (response.status === 200){
+                    Swal.fire({
+                        title: 'Archivo eliminado',
+                        text: 'El archivo se ha eliminado con exito',
+                        icon: 'success',
+                        confirmButtonText: 'Ok'
+                    }).then((result)=>{
+                        if (result.isConfirmed){
+                            router.reload()
+                        }
+                    })
+                }
+                }catch (error) {
                 Swal.fire({
-                    title: 'Archivo eliminado',
-                    text: 'El archivo se ha eliminado con exito',
-                    icon: 'success',
+                    title: 'Error',
+                    text: `El archivo no se ha podido eliminar`,
+                    icon: 'error',
                     confirmButtonText: 'Ok'
-                }).then((result)=>{
-                    if (result.isConfirmed){
-                        router.reload()
-                    }
                 })
             }
-            }catch (error) {
+        }else{
             Swal.fire({
                 title: 'Error',
-                text: `El archivo no se ha podido eliminar`,
+                text: `No tiene los permisos para eliminar archivos`,
                 icon: 'error',
                 confirmButtonText: 'Ok'
             })
@@ -174,6 +235,7 @@ const asamblea = (data) => {
 
     const subirArchivos = async (id_asamblea) => {
 
+        if (data.rol==='admin'){
         const { value: file } = await Swal.fire({
         title: 'Seleccionar Archivo',
         input: 'file',
@@ -221,6 +283,14 @@ const asamblea = (data) => {
                 confirmButtonText: 'Ok'
             })
         }
+        }else{
+            Swal.fire({
+                title: 'Error',
+                text: `No tiene los permisos para subir archivos`,
+                icon: 'error',
+                confirmButtonText: 'Ok'
+            })
+        }
     }
 
 
@@ -228,7 +298,7 @@ const asamblea = (data) => {
 
     return (
         <Box>
-            <Arriba/>
+            <Arriba token={data.existe}/>
             <Container maxW="container.xl" centerContent>
                 <Heading my={15}> {asambleas.asambleaId.name}</Heading>
                     <HStack w={"full"} py={10}>

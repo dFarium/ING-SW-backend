@@ -4,10 +4,48 @@ import axios from 'axios'
 import Swal from 'sweetalert2'
 import { useRouter } from 'next/router'
 import Arriba from '../../components/Arriba'
+const jwt = require("jwt-simple")
+import {checkToken} from '../../data/usuario'
 
+export const getServerSideProps = async (context) => {
+    try {
+        const response = await checkToken(context.req.headers.cookie)
+        const decode = jwt.decode(context.req.cookies.token,process.env.SECRET_KEY)
+        if (decode.rol === 'admin'){
+            if (response.status === 200){
+                return{
+                    props: {
+                        existe: response.config.headers.cookie
+                    }
+                }
+            }else{
+                return{
+                    redirect: {
+                        destination: "/",
+                        permanent: false
+                    }
+                }
+            }
+        }else{
+            return{
+                redirect: {
+                    destination: "/",
+                    permanent: false
+                }
+            }
+        }
+    } catch (error) {
+        console.log(error)
+        return{
+            redirect: {
+                destination: "/",
+                permanent: false
+            }
+        }
+    }
+}
 
-
-const asamblea = () => {
+const asamblea = (data) => {
 
     const router = useRouter()
     const[values, setValues] = useState({
@@ -54,7 +92,7 @@ const asamblea = () => {
 
     return(
         <Box>
-            <Arriba/>
+            <Arriba token={data.existe}/>
             <Container>
                 <Heading textAlign={"center"} my={15}>Crear Asamblea</Heading>
                 <Stack>
