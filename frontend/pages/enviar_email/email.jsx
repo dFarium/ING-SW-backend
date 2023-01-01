@@ -1,10 +1,11 @@
 import { useState, useEffect }from 'react'
-import { Textarea, Button, Container, Input, Stack, Text, HStack, Heading, FormControl, FormLabel } from '@chakra-ui/react'
+import { Textarea, Button, Container, Input, Stack, Box, Heading, FormControl, FormLabel } from '@chakra-ui/react'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 import { useRouter } from 'next/router'
 const jwt = require("jwt-simple")
 import {checkToken} from '../../data/usuario'
+import Arriba from '../../components/Arriba'
 
 export const getServerSideProps = async (context) => {
   try {
@@ -13,7 +14,9 @@ export const getServerSideProps = async (context) => {
       if (decode.rol === 'admin'){
           if (response.status === 200){
               return{
-                  props: {}
+                  props: {
+                    existe: response.config.headers.cookie
+                  }
               }
           }else{
               return{
@@ -34,13 +37,16 @@ export const getServerSideProps = async (context) => {
   } catch (error) {
       console.log(error)
       return{
-          props: {}
-      }
+        redirect: {
+            destination: "/",
+            permanent: false
+        }
+    }
   }
 }
 
 
-const email = () => {
+const email = (data) => {
 
 const [values, setValues] = useState ({
   from: '',
@@ -92,6 +98,8 @@ const onChange = (e) => {
 }
 
   return (
+    <Box>
+    <Arriba token={data.existe}/>
     <Container maxW= "container.md">
       <Button colorScheme={"teal"} float={"left"} onClick={()=>router.push('/')} >Volver</Button>
       <Heading textAlign={"center"} my={10}>Enviar Correos</Heading>
@@ -113,6 +121,7 @@ const onChange = (e) => {
       </Stack>
       <Button colorScheme="teal" size="md" type="submit" my={5} onClick={onSubmit}>Enviar correo</Button>
     </Container>
+    </Box>
   )
 }
 

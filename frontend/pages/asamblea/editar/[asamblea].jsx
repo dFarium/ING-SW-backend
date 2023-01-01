@@ -4,28 +4,52 @@ import axios from 'axios'
 import { Container, Heading, Tbody,Stack,HStack,Button,FormControl,FormLabel,Input,RadioGroup,Radio,Box } from '@chakra-ui/react'
 import Swal from 'sweetalert2'
 import Arriba from '../../../components/Arriba'
-
+import {checkToken} from '../../../data/usuario'
+const jwt = require('jwt-simple')
 
 
 export async function getServerSideProps(context){
     try {
-        const response = await axios.get(`${process.env.API_URL}/asamblea/search/${context.params.asamblea}`)
-        return{
-            props:{
-                asambleaId: response.data
+        const res = await checkToken(context.req.headers.cookie)
+        const decode = jwt.decode(context.req.cookies.token,process.env.SECRET_KEY)
+        if(decode.rol==='admin'){
+            if (res.status === 200){
+                const response = await axios.get(`${process.env.API_URL}/asamblea/search/${context.params.asamblea}`)
+                return{
+                    props:{
+                        asambleaId: response.data,
+                        existe: res.config.headers.cookie,
+                        rol:decode.rol
+                    }
+                }
+            }else{
+                console.log("No hay token")
+                return{
+                    redirect: {
+                        destination: "/",
+                        permanent: false
+                    }
+                }
+            }
+        }else{
+            console.log("No eres admin")
+            return{
+                redirect: {
+                    destination: "/",
+                    permanent: false
+                }
             }
         }
     } catch (error) {
-        console.log("ERROR")
+        console.log("ERROR",error)
         return{
             redirect:{
-                destination: `/asamblea/ver/`,
+                destination: '/asamblea/ver',
                 permanent: true
             }
         }
     }
 }
-
 const asamblea = (data) => {
 
     const onChange = async (e) =>{
@@ -72,12 +96,12 @@ const asamblea = (data) => {
         name: `${asambleas.asambleaId.name}`,
         tipo: `${asambleas.asambleaId.tipo}`,
         fecha: `${asambleas.asambleaId.fecha}`,
-        rolUsuario: ''
+        rolUsuario: 'admin'
     })
 
     return (
         <Box>
-            <Arriba/>
+            <Arriba token={data.existe}/>
             <Container>
                 <Heading textAlign={"center"} my={15}>Editar Asamblea</Heading>
                 <Stack>
@@ -98,7 +122,7 @@ const asamblea = (data) => {
                         <FormLabel>Fecha</FormLabel>
                         <Input defaultValue={`${date}`} placeholder="Select Date and Time" size="xl" type="datetime-local" onChange={onChange} name={"fecha"}/>
                     </FormControl>
-                    <FormControl isRequired="true">
+                    {/* <FormControl isRequired="true">
                         <FormLabel >rolUsuario</FormLabel>
                             <RadioGroup >
                                 <HStack spacing='24px'>
@@ -106,7 +130,7 @@ const asamblea = (data) => {
                                     <Radio value='admin' onChange={onChange} name={"rolUsuario"}>admin</Radio>
                                 </HStack>
                             </RadioGroup>
-                    </FormControl>
+                    </FormControl> */}
                 </Stack>
                 <HStack justifyContent={"space-between"}>
                     <Button colorScheme={"teal"} type="submit" my={5} onClick={onSubmit}>Finalizar edicion</Button>

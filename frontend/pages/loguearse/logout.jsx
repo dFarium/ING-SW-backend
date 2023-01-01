@@ -31,7 +31,7 @@ const router = useRouter()
         Cookies.remove("token")
         router.push("/")
     }
-    return(
+    return (
         <Container>
             <Button colorScheme={"red"} onClick={cerrarSesion}>Cerrar sesion</Button>
         </Container>
