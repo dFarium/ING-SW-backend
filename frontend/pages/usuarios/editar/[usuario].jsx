@@ -21,7 +21,8 @@ export async function getServerSideProps(context){
                 const response = await axios.get(`${process.env.API_URL}/user/search/${context.params.usuario}`)
                 return{
                     props:{
-                        usuarioId: response.data
+                        usuarioId: response.data,
+                        existe: res.config.headers.cookie,
                     }
                 }
             }else{
@@ -98,7 +99,7 @@ const usuario = (data) => {
     })
     return(
         <Box>
-            <Arriba/>
+            <Arriba token={data.existe}/>
             <Container>
                 <Heading textAlign={"center"} my={15}>Editar Usuario</Heading>
                 <Stack>

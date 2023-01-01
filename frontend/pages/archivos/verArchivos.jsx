@@ -8,7 +8,39 @@ import {checkToken} from '../../data/usuario'
 const jwt = require('jwt-simple')
 import { DownloadIcon, DeleteIcon} from '../../node_modules/@chakra-ui/icons'
 
-const archivos= () => {
+
+//funcion para obtener la cookie y ver que rol tiene el usuario
+export async function getServerSideProps(context){
+    try {
+        const res = await checkToken(context.req.headers.cookie)
+        const decode = jwt.decode(context.req.cookies.token,process.env.SECRET_KEY)
+            if (res.status === 200){
+                return{
+                    props:{
+                        existe: res.config.headers.cookie,
+                        rol:decode.rol
+                    }
+                }
+            }else{
+                return{
+                    redirect: {
+                        destination: "/",
+                        permanent: false
+                    }
+                }
+            }
+    } catch (error) {
+        console.log("ERROR",error)
+        return{
+            redirect:{
+                destination: '/',
+                permanent: true
+            }
+        }
+    }
+}
+
+const archivos= (data) => {
 
     const [archivos, setArchivos] = useState([])
     const router = useRouter()
@@ -28,28 +60,31 @@ const archivos= () => {
     }
 
     const eliminarArchivos = async (id_archivo, id_asamblea) =>{
-        try {
-            //AGREGAR MODALs
-            const response = await axios.delete(`${process.env.API_URL}/file/delete/${id_archivo}/${id_asamblea}`)
-            if (response.status === 200){
+        //Si el usuario es admin podra eliminar archivos
+        if(data.rol==='admin'){
+            try {
+                //AGREGAR MODALs
+                const response = await axios.delete(`${process.env.API_URL}/file/delete/${id_archivo}/${id_asamblea}`)
+                if (response.status === 200){
+                    Swal.fire({
+                        title: 'Archivo eliminado',
+                        text: 'El archivo se ha eliminado con exito',
+                        icon: 'success',
+                        confirmButtonText: 'Ok'
+                    }).then((result)=>{
+                        if (result.isConfirmed){
+                            router.reload()
+                        }
+                    })
+                }
+                }catch (error) {
                 Swal.fire({
-                    title: 'Archivo eliminado',
-                    text: 'El archivo se ha eliminado con exito',
-                    icon: 'success',
+                    title: 'Error',
+                    text: `El archivo no se ha podido eliminar`,
+                    icon: 'error',
                     confirmButtonText: 'Ok'
-                }).then((result)=>{
-                    if (result.isConfirmed){
-                        router.reload()
-                    }
                 })
             }
-            }catch (error) {
-            Swal.fire({
-                title: 'Error',
-                text: `El archivo no se ha podido eliminar`,
-                icon: 'error',
-                confirmButtonText: 'Ok'
-            })
         }
     }
 
@@ -85,8 +120,8 @@ const archivos= () => {
 
     return (
         <Box>
-            <Arriba/>
-            <Container maxW="container.xl" >
+            <Arriba token={data.existe}/>
+            <Container maxW="container.xl">
             <Heading textAlign={"center"} my={16}>Historial de Actas</Heading>
             <Button colorScheme={"teal"} my={15} mx={15} float={'left'} onClick={()=>router.push('/')} >Volver</Button>
             <Table my={15} variant="simple">

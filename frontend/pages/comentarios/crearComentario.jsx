@@ -1,11 +1,44 @@
 import {useState} from "react";
 import React from "react";  
-import { Textarea, Button, Container, Input, Stack, Text, HStack, Heading, FormControl, FormLabel} from '@chakra-ui/react'
+import { Textarea, Button, Container, Input, Stack, Text, HStack, Heading, FormControl, FormLabel, Box} from '@chakra-ui/react'
 import axios from "axios";
 import Swal from 'sweetalert2'
 import { useRouter } from 'next/router'
+import Arriba from '../../components/Arriba'
+const jwt = require("jwt-simple")
 
-const comentarios = () => {
+//Validacion mediante cookies
+export const getServerSideProps = async (context) => {
+    try {
+        const response = await checkToken(context.req.headers.cookie)
+            if (response.status === 200){
+                return{
+                    props: {
+                        existe: response.config.headers.cookie
+                    }
+                }
+            }else{
+                console.log("No hay token")
+                return{
+                    redirect: {
+                        destination: "/",
+                        permanent: false
+                    }
+                }
+            }
+    } catch (error) {
+        console.log(error)
+        return{
+            redirect: {
+                destination: "/",
+                permanent: false
+            }
+        }
+    }
+}
+
+
+const comentarios = (data) => {
 
     const [values, setValues] = useState({
         apartado: '',
@@ -49,6 +82,8 @@ const comentarios = () => {
     }
 
     return (
+        <Box>
+            <Arriba token={data.existe}/>
         <Container maxW="container.md">
             <Heading textAlign={"center"} my={10}>Crear Comentario</Heading>
             <Stack>
@@ -65,6 +100,7 @@ const comentarios = () => {
             </Stack>
             <Button colorScheme="facebook" size="md" type="submit" my={5} onClick={onSubmit}>Enviar</Button>
         </Container>
+        </Box>
     )
 }
 
