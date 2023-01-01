@@ -1,11 +1,28 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import axios from 'axios'
-import { Container, Heading, Tbody,Stack,HStack,Button,RadioGroup,Radio, Box, Divider, Accordion, AccordionItem, AccordionButton, AccordionPanel,AccordionIcon, Table, Thead, Tr, Th, Td, Link} from '@chakra-ui/react'
-import ShowInfo from '../../../components/ShowInfo'
-import Swal from 'sweetalert2'
-import Arriba from '../../../components/Arriba'
-import {
+import { Container,
+    Heading,
+    Tbody,
+    Stack,
+    HStack,
+    Button,
+    RadioGroup,
+    Radio,
+    Box,
+    Divider,
+    Accordion,
+    AccordionItem,
+    AccordionButton,
+    AccordionPanel,
+    AccordionIcon,
+    Table,
+    Thead,
+    Tr,
+    Th,
+    Td,
+    Link,
+    Icon,
     Modal,
     ModalOverlay,
     ModalContent,
@@ -14,9 +31,14 @@ import {
     ModalBody,
     ModalCloseButton,
     useDisclosure
-  } from '@chakra-ui/react'
+} from '@chakra-ui/react'
 import {checkToken} from '../../../data/usuario'
 const jwt = require("jwt-simple")
+import ShowInfo from '../../../components/ShowInfo'
+import Swal from 'sweetalert2'
+import Arriba from '../../../components/Arriba'
+import { BiUpload } from 'react-icons/bi'
+import { DeleteIcon } from '../../../node_modules/@chakra-ui/icons'
 
 export async function getServerSideProps(context){
     try {
@@ -217,7 +239,9 @@ const asamblea = (data) => {
                 <Tr key={archivos._id}>
                     <Td ><Link color='blue.500' href={`${process.env.API_URL}/file/download/${archivos._id}`}>{archivos.name}</Link></Td>
                     <Td >{archivos.fecha}</Td>
-                    <Td ><Button colorScheme={"red"} onClick={()=>eliminarArchivos(archivos._id, asambleas.asambleaId._id)}>Eliminar</Button></Td>
+                    <Td ><Button bg={'transparent'}  onClick={()=>eliminarArchivos(archivos._id, asambleas.asambleaId._id)}>
+                        <DeleteIcon  w={6} h={6} color="red.400"></DeleteIcon>
+                    </Button></Td>
                 </Tr>
             )
         })
@@ -347,7 +371,10 @@ const asamblea = (data) => {
                                         {showAsambleaArchivos()}
                                     </Tbody>
                                 </Table>
-                                <Button my={'5'} colorScheme={"teal"} float={"right"} onClick={()=>subirArchivos(asambleas.asambleaId._id)} >Subir Archivo</Button>
+                                <Button my={'5'} colorScheme={"teal"} float={"right"} onClick={()=>subirArchivos(asambleas.asambleaId._id)} >
+                                    Subir Archivo
+                                    <Icon mx={'1.5'} w={5} h={5} as={BiUpload}/>
+                                </Button>
                             </AccordionPanel>
                         </AccordionItem>
                         {/* Acordeon 2  */}

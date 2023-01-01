@@ -1,9 +1,9 @@
 import React from 'react'
 import { Box, Heading, Button, Image, Link, Flex, cookieStorageManager} from '@chakra-ui/react'
 import Cookies from 'js-cookie'
-// import axios from 'axios'
 import { useRouter } from 'next/router'
 import {logout} from '../data/usuario'
+import Menu from './Menu'
 
 
 
@@ -33,7 +33,7 @@ const Arriba = ({token}) => {
         <Box bg="gray.800" color="white">
             <Flex alignItems="center" justifyContent="space-between" px={6} py={4}>
                 <Flex>
-                    <Link href="/">Inicio</Link>
+                    <Menu></Menu>
                 </Flex>
                 <Flex justifyContent="space-between">
                     {Cambiar_Link()}
