@@ -67,12 +67,14 @@ const archivos= () => {
                     </Td>
                     <Td>{archivos.fecha}</Td>
                     <Td>
-                        {/* <Button onClick={()=>router.push(`${process.env.API_URL}/file/download/${archivos._id}`)}>Download</Button> */}
-                        <DownloadIcon mx={'5'} w={6} h={6} color="teal.500" onClick={()=>router.push(`${process.env.API_URL}/file/download/${archivos._id}`)}></DownloadIcon>
+                        <Button mx={'2.5'} bg={'white'} onClick={()=>router.push(`${process.env.API_URL}/file/download/${archivos._id}`)}>
+                            <DownloadIcon  w={6} h={6} color="green.500" ></DownloadIcon>
+                        </Button>
                     </Td>
                     <Td>
-                        {/* <Button colorScheme={"red"} onClick={()=>eliminarArchivos(archivos._id, archivos.asamblea._id)}>Eliminar</Button> */}
-                        <DeleteIcon mx={'5'} w={6} h={6} color="red.400" onClick={()=>eliminarArchivos(archivos._id, archivos.asamblea._id)}></DeleteIcon>
+                        <Button mx={'2.5'}  bg={'white'} onClick={()=>eliminarArchivos(archivos._id, archivos.asamblea._id)}>
+                            <DeleteIcon  w={6} h={6} color="red.400"></DeleteIcon>
+                        </Button>
                     </Td>
                 </Tr>
             )
