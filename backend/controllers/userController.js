@@ -74,10 +74,10 @@ const getUser = (req, res) => {
 }
 
 const updateUser = async (req, res) => {
-    const { name, email, password, rolUsuario } = req.body;
+    const { name, email, role, rolUsuario } = req.body;
     const { id } = req.params;
     if(rolUsuario === "admin"){
-        User.findByIdAndUpdate(id, { name, email, password }, (err, user) => {
+        User.findByIdAndUpdate(id, { name, email, role }, (err, user) => {
             if (err) {
                 return res.status(400).send({ message: 'Error al actualizar el usuario' });
             }

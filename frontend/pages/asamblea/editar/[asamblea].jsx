@@ -8,7 +8,6 @@ import Arriba from '../../../components/Arriba'
 
 
 export async function getServerSideProps(context){
-    console.log(context.params.asamblea)
     try {
         const response = await axios.get(`${process.env.API_URL}/asamblea/search/${context.params.asamblea}`)
         return{

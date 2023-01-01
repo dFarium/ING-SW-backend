@@ -28,6 +28,8 @@ export const getServerSideProps = async (context) => {
 }
 
 const logearse = ({data}) => {
+    let prueba
+    console.log(data)
     const [usuario, setUsuario] = useState({correo: ""})
     const router = useRouter()
 
@@ -60,13 +62,13 @@ const logearse = ({data}) => {
                 text: `A ocurrido un error con el token${error}`
             })
         }
-        const prueba = Cookie.get("token")
+        prueba = Cookie.get("token")
         const decode = jwt.decode(prueba, process.env.SECRET_KEY)
         console.log(decode.rol)
     }
+
     return (
         <Box>
-            <Arriba/>
             <Container maxW="container.md">
                 <Heading textAlign={"center"} my={15}>Iniciar Sesión</Heading>
                 <Stack>
