@@ -31,7 +31,6 @@ export const index = (data) => {
         <Box>
             <Arriba/>
         <Box>
-        <Arriba/>
             <Container maxW="container.xl">
                 <Heading textAlign={"center"} my={15}>Bienvenido</Heading>
                 <HStack w={"full"} py={'28'}>
