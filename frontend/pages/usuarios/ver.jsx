@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
-import { Container, Table, Thead, Tbody, Tr, Td, Heading, Button, Link } from '@chakra-ui/react'
+import { Container, Table, Thead, Tbody, Tr, Td, Heading, Button, Box } from '@chakra-ui/react'
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import { getUsuario } from '../../data/usuario'
-import Cookies from 'js-cookie'
+import Arriba from '../../components/Arriba'
 
 export const getServerSideProps = async (context) => {
     try {
@@ -11,7 +11,8 @@ export const getServerSideProps = async (context) => {
         if (response.status === 200){
             return {
                 props: {
-                    data: response.data
+                    data: response.data,
+                    existe: response.config.headers.cookie
                 }
             }
         }
@@ -53,7 +54,9 @@ const usuario = ({data}) => {
         })
     }
     return (
-        <Container maxW="container.xl">
+        <Box>
+            <Arriba token={data.existe}/>
+            <Container maxW="container.xl">
             <Heading textAlign={"center"} my={15}>Usuario</Heading>
             <Button colorScheme={"teal"} float={"right"} onClick={()=>router.push('/usuarios/crear_usuario')} >Ingresar Usuario</Button>
             <Button colorScheme={"teal"} float={"left"} onClick={()=>router.push('/')} >Volver</Button>
@@ -70,6 +73,7 @@ const usuario = ({data}) => {
                 </Tbody>
             </Table>
             </Container>
+        </Box>
     )
     }
 

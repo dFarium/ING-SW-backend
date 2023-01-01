@@ -4,8 +4,30 @@ import axios from 'axios'
 import { useRouter } from 'next/router'
 import Arriba from '../../components/Arriba'
 import Swal from 'sweetalert2'
+import {checkToken} from '../../data/usuario'
 
-const asamblea = () => {
+export const getServerSideProps = async (context) => {
+    try {
+        const response = await checkToken(context.req.headers.cookie)
+        if (response.status === 200){
+            return{
+                props:{
+                    existe: response.config.headers.cookie
+                }
+            }
+        }
+    } catch (error) {
+        console.log(error)
+        return{
+            redirect: {
+                destination: "/",
+                permanent: false
+            }
+        }
+    }
+}
+
+const asamblea = (data) => {
     const router = useRouter()
     const [asambleas, setAsambleas] = useState([])
 
@@ -45,7 +67,7 @@ const asamblea = () => {
     
     return (
         <Box>
-            <Arriba/>
+            <Arriba token={data.existe}/>
             <Container maxW="container.xl">
                 <Heading textAlign={"center"} my={15}>Asambleas</Heading>
                 <Button colorScheme={"teal"} float={"right"} onClick={()=>router.push('/asamblea/crear')} >Crear Asamblea</Button>
