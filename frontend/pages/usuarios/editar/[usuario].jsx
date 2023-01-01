@@ -62,7 +62,7 @@ const usuario = (data) => {
 
     const onSubmit = async (e) =>{
         //e.preventDefault()
-        console.log(`${usuarios.usuarioId._id}`)
+        console.log(`${usuarios.usuarioId}`)
         try {
             const response = await axios.put(`${process.env.API_URL}/user/update/${usuarios.usuarioId._id}`, values)
             if(response.status === 200){
@@ -93,7 +93,8 @@ const usuario = (data) => {
     const[values, setValues] = useState({
         name: `${usuarios.usuarioId.name}`,
         email: `${usuarios.usuarioId.email}`,
-        rolUsuario: ''
+        role: `${usuarios.usuarioId.role}`,
+        rolUsuario: 'admin'
     })
     return(
         <Box>
@@ -107,11 +108,25 @@ const usuario = (data) => {
                     </FormControl>
 
                     <FormControl isRequired="true">
-                        <FormLabel>Nombre usuario</FormLabel>
-                        <Input defaultValue={`${usuarios.usuarioId.email}`} placeholder="Nombre" type={"text"} maxLength={100} onChange={onChange} name={"name"} />
+                        <FormLabel>Correo</FormLabel>
+                        <Input defaultValue={`${usuarios.usuarioId.email}`} placeholder="Correo" type={"text"} maxLength={100} onChange={onChange} name={"email"} />
                     </FormControl>
 
+                    {/* <FormControl isRequired="true">
+                        <FormLabel>Rol</FormLabel>
+                        <Input defaultValue={`${usuarios.usuarioId.role}`} placeholder="Role" type={"text"} maxLength={100} onChange={onChange} name={"role"} />
+                    </FormControl> */}
                     <FormControl isRequired="true">
+                        <FormLabel >Rol del usuario</FormLabel>
+                            <RadioGroup >
+                                <HStack spacing='24px'>
+                                    <Radio value='user' onChange={onChange} name={"role"}>user</Radio>
+                                    <Radio value='admin' onChange={onChange} name={"role"}>admin</Radio>
+                                </HStack>
+                            </RadioGroup>
+                    </FormControl>
+
+                    {/* <FormControl isRequired="true">
                         <FormLabel >rolUsuario</FormLabel>
                             <RadioGroup >
                                 <HStack spacing='24px'>
@@ -119,7 +134,9 @@ const usuario = (data) => {
                                     <Radio value='admin' onChange={onChange} name={"rolUsuario"}>admin</Radio>
                                 </HStack>
                             </RadioGroup>
-                    </FormControl>
+                    </FormControl> */}
+
+
                 </Stack>
                 <HStack justifyContent={"space-between"}>
                     <Button colorScheme={"teal"} type="submit" my={5} onClick={onSubmit}>Finalizar edicion</Button>

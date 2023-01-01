@@ -16,7 +16,9 @@ export const getServerSideProps = async (context) => {
         if (decode.rol === 'admin'){
             if (response.status === 200){
                 return{
-                    props: {}
+                    props: {
+                        existe: response.config.headers.cookie
+                    }
                 }
             }else{
                 return{
@@ -37,17 +39,21 @@ export const getServerSideProps = async (context) => {
     } catch (error) {
         console.log(error)
         return{
-            props: {}
+            redirect: {
+                destination: "/",
+                permanent: false
+            }
         }
     }
 }
 
 
-const usuario = () => {
+const usuario = (data) => {
+ 
     const router = useRouter()
     return(
     <Box>
-    <Arriba/>
+    <Arriba token={data.existe}/>
     <Container maxW="container.md">
     <Button colorScheme={"teal"} float={"left"} onClick={()=>router.push('/usuarios/ver')} >Volver</Button>
         <Heading textAlign={"center"} my={10}>Ingresar Usuario</Heading>
@@ -60,7 +66,6 @@ const usuario = () => {
         }}
         validationSchema={userValidation}
         onSubmit = {async (values) => {
-            console.log(values)
             try {
                 const response = await crearUsuario(values)
                 if (response.status===201){

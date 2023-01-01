@@ -5,31 +5,30 @@ import Arriba from '../components/Arriba'
 import {checkToken} from '../data/usuario'
 // let token
 
-// export const getServerSideProps = async (context) => {
-//     try {
-//         const response = await checkToken(context.req.headers.cookie)
-//         if (response.status === 200){
-//             return{
-                
-//                 props: {
-//                     data: response.data
-//                 }
-//             }
-//         }
-//     } catch (error) {
-//         console.log(error)
-//         return{
-//             props: {}
-//         }
-//     }
-// }
+export const getServerSideProps = async (context) => {
+    try {
+        const response = await checkToken(context.req.headers.cookie)
+        if (response.status === 200){
+            return{
+                props: {
+                    existe: response.config.headers.cookie
+                }
+            }
+        }
+    } catch (error) {
+        console.log(error)
+        return{
+            props: {}
+        }
+    }
+}
 
 export const index = (data) => {
     // console.log(token)
     const router = useRouter()
     return (
         <Box>
-            <Arriba/>
+            <Arriba token={data.existe}/>
         <Box>
             <Container maxW="container.xl">
                 <Heading textAlign={"center"} my={15}>Bienvenido</Heading>
