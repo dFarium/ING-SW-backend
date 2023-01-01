@@ -1,12 +1,49 @@
 import { Button, Container, Stack,HStack ,Heading,Radio,RadioGroup,Box} from '@chakra-ui/react'
 import Swal from 'sweetalert2'
 import { useRouter } from 'next/router'
-import { crearUsuario } from '../../data/usuario'
+import { crearUsuario, checkToken } from '../../data/usuario'
 import { Formik } from 'formik'
 import FormInput from '../../components/FormInput'
 import FormikError from '../../components/FormikError'
 import userValidation from '../../validations/userValidation'
 import Arriba from '../../components/Arriba'
+const jwt = require("jwt-simple")
+
+export const getServerSideProps = async (context) => {
+    try {
+        const response = await checkToken(context.req.headers.cookie)
+        console.log('response: ',response)
+        const decode = jwt.decode(context.req.cookies.token,process.env.SECRET_KEY)
+        console.log('decode: ',decode)
+        if (decode.rol === 'admin'){
+            if (response.status === 200){
+                return{
+                    props: {}
+                }
+            }else{
+                return{
+                    redirect: {
+                        destination: "/",
+                        permanent: false
+                    }
+                }
+            }
+        }else{
+            return{
+                redirect: {
+                    destination: "/",
+                    permanent: false
+                }
+            }
+        }
+    } catch (error) {
+        console.log(error)
+        return{
+            props: {}
+        }
+    }
+}
+
 
 const usuario = () => {
     const router = useRouter()

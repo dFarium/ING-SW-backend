@@ -5,6 +5,7 @@ require('dotenv').config();
 const createToken = (user) => {
     const payload = {
         sub: user._id,
+        rol: user.role,
         iat: moment().unix(),
         exp: moment().add(1,'hours').unix(),
     }

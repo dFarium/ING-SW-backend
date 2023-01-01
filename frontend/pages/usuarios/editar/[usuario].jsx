@@ -4,21 +4,41 @@ import axios from 'axios'
 import { Container, Heading, Tbody,Stack,HStack,Button,FormControl,FormLabel,Input,RadioGroup,Radio,Box } from '@chakra-ui/react'
 import Swal from 'sweetalert2'
 import Arriba from '../../../components/Arriba'
-import { editarUsuario } from '../../../data/usuario'
+import  {checkToken} from '../../../data/usuario'
 import {userValidation} from '../../../validations/userValidation'
 import { Formik } from 'formik'
 import FormInput from '../../../components/FormInput'
 import FormikError from '../../../components/FormikError'
+const jwt = require("jwt-simple")
 
-
-
+//FUNCION PARA OBTENER LOS USUARIOS, ADEMAS VERIFICAR SI EXISTE TOKEN Y CON ROL DE ADMINISTRADOR
 export async function getServerSideProps(context){
     console.log(context.params.usuario)
     try {
-        const response = await axios.get(`${process.env.API_URL}/user/search/${context.params.usuario}`)
-        return{
-            props:{
-                usuarioId: response.data
+        const res = await checkToken(context.req.headers.cookie)
+        const decode = jwt.decode(context.req.cookies.token,process.env.SECRET_KEY)
+        if (decode.rol === 'admin'){
+            if (res.status === 200){
+                const response = await axios.get(`${process.env.API_URL}/user/search/${context.params.usuario}`)
+                return{
+                    props:{
+                        usuarioId: response.data
+                    }
+                }
+            }else{
+                return{
+                    redirect: {
+                        destination: "/",
+                        permanent: false
+                    }
+                }
+            }
+        }else{
+            return{
+                redirect: {
+                    destination: "/",
+                    permanent: false
+                }
             }
         }
     } catch (error) {
@@ -104,7 +124,7 @@ const usuario = (data) => {
                 </Stack>
                 <HStack justifyContent={"space-between"}>
                     <Button colorScheme={"teal"} type="submit" my={5} onClick={onSubmit}>Finalizar edicion</Button>
-                    <Button colorScheme={"teal"} onClick={()=>router.push(`/usuarios/ver/${usuarios.userId._id}`)}>Volver</Button>
+                    <Button colorScheme={"teal"} onClick={()=>router.push(`/usuarios/ver/${usuarios.usuarioId._id}`)}>Volver</Button>
                 </HStack>
             </Container>
         </Box>
