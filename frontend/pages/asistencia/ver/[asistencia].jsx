@@ -21,15 +21,31 @@ import {
 } from '@chakra-ui/react'
 import axios from 'axios'
 import Arriba from '../../../components/Arriba'
+import {checkToken} from '../../../data/usuario'
+const jwt = require("jwt-simple")
 
 export async function getServerSideProps(context){
     try {
-        const response = await axios.get(`${process.env.API_URL}/asistenciaAsamblea/search/${context.params.asistencia}`)
-        return{
-            props:{
-                asambleaId: response.data
+        const res = await checkToken(context.req.headers.cookie)
+        const decode = jwt.decode(context.req.cookies.token,process.env.SECRET_KEY)
+            if (res.status === 200){
+                const response = await axios.get(`${process.env.API_URL}/asistenciaAsamblea/search/${context.params.asistencia}`)
+                return{
+                    props:{
+                        asambleaId: response.data,
+                        existe: res.config.headers.cookie,
+                        rol:decode.rol
+                    }
+                }
+            }else{
+                console.log("No hay token")
+                return{
+                    redirect: {
+                        destination: "/",
+                        permanent: false
+                    }
+                }
             }
-        }
     } catch (error) {
         console.log("ERROR",error)
         return{
@@ -63,18 +79,27 @@ const asistencia = (data) => {
 
 
     function modificarAsisteCheckbox (asistencia){
-        let checkbox;
-        if(asistencia.asistencia === "Presente"){
-            checkbox = <Switch colorScheme="teal" isReadOnly defaultChecked ></Switch>;
+        if(data.rol==='admin'){
+            let checkbox;
+            if(asistencia.asistencia === "Presente"){
+                checkbox = <Switch colorScheme="teal" isReadOnly defaultChecked ></Switch>;
+            }else{
+                checkbox = <Switch colorScheme="teal" isReadOnly></Switch>;
+            }
+            return checkbox;
         }else{
-            checkbox = <Switch colorScheme="teal" isReadOnly></Switch>;
+            wal.fire({
+                title: 'Error',
+                text: `No tiene los permisos para modificar asistencia`,
+                icon: 'error',
+                confirmButtonText: 'Ok'
+            })
         }
-        return checkbox;
     }
 
     return (
         <Box>
-            <Arriba/>
+            <Arriba token={data.existe}/>
             <Container maxW="container.xl">
                 <Heading textAlign={"center"} my={15}>Asistencia de {asistencia.asambleaId[0].asamblea.name}</Heading>
                 <Button colorScheme={"teal"} float={"left"} onClick={() => router.push(`/asamblea/ver/${asistencia.asambleaId[0].asamblea._id}`)}>Volver</Button>

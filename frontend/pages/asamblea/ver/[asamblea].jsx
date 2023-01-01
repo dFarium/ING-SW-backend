@@ -51,29 +51,10 @@ export async function getServerSideProps(context){
     }
 }
 
-
-// export async function getServerSideProps(context){
-//     try {
-//         const response = await axios.get(`${process.env.API_URL}/asamblea/search/${context.params.asamblea}`)
-//         return{
-//             props:{
-//                 asambleaId: response.data
-//             }
-//         }
-//     } catch (error) {
-//         return{
-//             redirect:{
-//                 destination: '/asamblea/ver',
-//                 permanent: true
-//             }
-//         }
-//     }
-// }
-
 const asamblea = (data) => {
     const router = useRouter()
     const [asambleas] = useState(data)
-    const[values, setValues] = useState({})
+    const[values, setValues] = useState({rolUsuario: 'admin'})
     const { isOpen, onOpen, onClose } = useDisclosure()
 // ------------------------------------------------------------------------------------------------------------------------------------------------------------
     //moi
@@ -318,7 +299,7 @@ const asamblea = (data) => {
                         <Button w={"full"} colorScheme={"green"} onClick={() => router.push(`/asamblea/editar/${asambleas.asambleaId._id}`)}>Editar</Button>
                         <Button w={"full"} colorScheme={"teal"} onClick={() => router.push(`/asistencia/ver/${asambleas.asambleaId._id}`)}>Ver asistencias asamblea</Button>
                         <Button w={"full"} colorScheme={"red"} onClick={onOpen}>Eliminar asamblea</Button>
-                        
+
                         <Modal isOpen={isOpen} onClose={onClose}>
                             <ModalOverlay/>
                                 <ModalContent>
@@ -333,12 +314,12 @@ const asamblea = (data) => {
                         </Modal>
 
                     </HStack>
-                <RadioGroup >
+                {/* <RadioGroup >
                     <HStack spacing='24px' >
                     <Radio value='user' onChange={onChange} name={"rolUsuario"}>user</Radio>
                     <Radio value='admin' onChange={onChange} name={"rolUsuario"}>admin</Radio>
                     </HStack>
-                </RadioGroup>
+                </RadioGroup> */}
                 <Divider/>
                 <Stack w={"full"} py={10}>
                     <ShowInfo tag="Nombre" data={asambleas.asambleaId.name} />

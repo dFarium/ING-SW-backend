@@ -1,4 +1,5 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 
 const crearUsuario = async (values) => {
     const response = await axios.post(`${process.env.API_URL}/user`, {
@@ -7,11 +8,6 @@ const crearUsuario = async (values) => {
         role: values.role,
         rolUsuario: values.rolUsuario
     });
-    return response
-}
-
-const editarUsuario = async (id,token) => {
-    const response = await axios.put(`${process.env.API_URL}/user/update/${id}`, {headers: {cookie: token}});
     return response
 }
 
@@ -32,6 +28,7 @@ const checkToken = async (token) => {
 
 const logout = async () => {
     const response = await axios.get(`${process.env.API_URL}/user/logout`);
+    Cookies.remove("token")
     return response
 }
 

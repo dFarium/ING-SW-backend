@@ -52,7 +52,7 @@ const asamblea = (data) => {
         name: '',
         tipo: '',
         fecha: '',
-        rolUsuario: ''
+        rolUsuario: 'admin'
     })
 
     const onChange = async (e) =>{
@@ -113,7 +113,7 @@ const asamblea = (data) => {
                         <FormLabel>Fecha</FormLabel>
                         <Input placeholder="Select Date and Time" size="xl" type="datetime-local" onChange={onChange} name={"fecha"}/>
                     </FormControl>
-                    <FormControl isRequired="true">
+                    {/* <FormControl isRequired="true">
                         <FormLabel >rolUsuario</FormLabel>
                             <RadioGroup >
                                 <HStack spacing='24px'>
@@ -121,7 +121,7 @@ const asamblea = (data) => {
                                     <Radio value='admin' onChange={onChange} name={"rolUsuario"}>admin</Radio>
                                 </HStack>
                             </RadioGroup>
-                    </FormControl>
+                    </FormControl> */}
                 </Stack>
                 <HStack justifyContent={"space-between"}>
                     <Button colorScheme={"teal"} type="submit" my={5} onClick={onSubmit}>Crear Asamblea</Button>
