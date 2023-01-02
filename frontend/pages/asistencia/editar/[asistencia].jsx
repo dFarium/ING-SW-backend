@@ -124,7 +124,7 @@ const asistencia = (data) => {
     const updateAsistencia = async (id,values,rolUser) =>{
         
         try {
-            const response = await axios.put(`${process.env.API_URL}/asistenciaURL/update/${id}/${values}/${rolUser}`)
+            const response = await axios.put(`${process.env.API_URL}/asistenciaURL/update/${id}/${values}/1`)
             // if (response.status != 200){
             //     Swal.fire({
             //         title: 'Error',

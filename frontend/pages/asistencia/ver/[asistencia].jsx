@@ -80,7 +80,6 @@ const asistencia = (data) => {
 
 
     function modificarAsisteCheckbox (asistencia){
-        if(data.rol==='admin'){
             let checkbox;
             if(asistencia.asistencia === "Presente"){
                 checkbox = <Switch colorScheme="teal" isReadOnly defaultChecked ></Switch>;
@@ -88,14 +87,17 @@ const asistencia = (data) => {
                 checkbox = <Switch colorScheme="teal" isReadOnly></Switch>;
             }
             return checkbox;
+
+    }
+
+    const botonModificar= () =>{
+        let boton
+        if(data.rol === "admin"){
+            boton = <Button colorScheme={"teal"} float={"right"} onClick={() => router.push(`/asistencia/editar/${asistencia.asambleaId[0].asamblea._id}`)}>Modificar Asistencia</Button>
         }else{
-            Swal.fire({
-                title: 'Error',
-                text: `No tiene los permisos para modificar asistencia`,
-                icon: 'error',
-                confirmButtonText: 'Ok'
-            })
+            boton = <div></div>
         }
+        return boton
     }
 
     return (
@@ -104,7 +106,8 @@ const asistencia = (data) => {
             <Container maxW="container.xl">
                 <Heading textAlign={"center"} my={15}>Asistencia de {asistencia.asambleaId[0].asamblea.name}</Heading>
                 <Button colorScheme={"teal"} float={"left"} onClick={() => router.push(`/asamblea/ver/${asistencia.asambleaId[0].asamblea._id}`)}>Volver</Button>
-                <Button colorScheme={"teal"} float={"right"} onClick={() => router.push(`/asistencia/editar/${asistencia.asambleaId[0].asamblea._id}`)}>Modificar Asistencia</Button>
+                {botonModificar()}
+                {/* <Button colorScheme={"teal"} float={"right"} onClick={() => router.push(`/asistencia/editar/${asistencia.asambleaId[0].asamblea._id}`)}>Modificar Asistencia</Button> */}
                 <Table variant="simple" my={15}>
                     <Thead>
                         <Tr>
