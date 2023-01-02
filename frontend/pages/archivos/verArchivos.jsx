@@ -95,6 +95,7 @@ const archivos= (data) => {
         }
     }
 
+
     useEffect(()=>{
         getArchivos()
     }, [])

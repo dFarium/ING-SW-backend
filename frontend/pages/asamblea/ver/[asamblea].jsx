@@ -317,6 +317,17 @@ const asamblea = (data) => {
             }
         })
     }
+
+    const uploadFileButton = ()=>{
+        if(data.rol==='admin'){
+            return(
+                <Button my={'5'} colorScheme={"teal"} float={"right"} onClick={()=>subirArchivos(asambleas.asambleaId._id)} >
+                    Subir Archivo
+                    <Icon mx={'1.5'} w={5} h={5} as={BiUpload}/>
+                </Button>
+            )
+        }
+    }
 //----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     const subirArchivos = async (id_asamblea) => {
@@ -443,10 +454,7 @@ const asamblea = (data) => {
                                         {showAsambleaArchivos()}
                                     </Tbody>
                                 </Table>
-                                <Button my={'5'} colorScheme={"teal"} float={"right"} onClick={()=>subirArchivos(asambleas.asambleaId._id)} >
-                                    Subir Archivo
-                                    <Icon mx={'1.5'} w={5} h={5} as={BiUpload}/>
-                                </Button>
+                                {uploadFileButton()}
                             </AccordionPanel>
                         </AccordionItem>
                         {/* Acordeon 2  */}
