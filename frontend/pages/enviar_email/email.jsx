@@ -1,5 +1,5 @@
 import { useState, useEffect }from 'react'
-import { Textarea, Button, Container, Input, Stack, Box, Heading, FormControl, FormLabel, Icon } from '@chakra-ui/react'
+import { Textarea, Button, Container, Input, Stack, Box, Heading, FormControl, FormLabel, Icon, HStack } from '@chakra-ui/react'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 import { useRouter } from 'next/router'
@@ -103,8 +103,7 @@ const onChange = (e) => {
     <Box>
     <Arriba token={data.existe}/>
     <Container maxW= "container.md">
-      <Button leftIcon={<ArrowBackIcon />}  colorScheme={"teal"} float={"left"} onClick={()=>router.push('/')} >Volver</Button>
-      <Heading textAlign={"center"} my={10}>Enviar Correos</Heading>
+      <Heading textAlign={"center"} my={15}>Enviar Correos</Heading>
       <Stack>
           <FormControl>
               <FormLabel fontWeight="bold" >¿Quien envia el correo?</FormLabel>
@@ -121,7 +120,8 @@ const onChange = (e) => {
               <Textarea placeholder='Escriba su correo' onChange={onChange} name={"texto"}/>
           </FormControl>
       </Stack>
-      <Button leftIcon={<Icon as={GrMail}/>} colorScheme="green" size="md" type="submit" my={5} onClick={onSubmit}>Enviar correo</Button>
+      <Button leftIcon={<Icon as={GrMail}/>} float={"right"} colorScheme="green" size="md" type="submit" my={15} onClick={onSubmit}>Enviar correo</Button>
+      <Button leftIcon={<ArrowBackIcon />}  my={15} colorScheme={"teal"} float={"left"} onClick={()=>router.push('/')} >Volver</Button>
     </Container>
     </Box>
   )

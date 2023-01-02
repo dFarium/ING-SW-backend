@@ -106,11 +106,16 @@ const comentario = (props) => {
                 }
             }
         }
+        const [fecha, horas] = comentarioID.fecha.split('T')
+        const [ano,mes,dia] =fecha.split('-')
+        const [hora, min] =horas.split(':')
+        const time = dia + '-' + mes + '-'  + ano + ' ' + hora +':' + min
     return (
         <Box>
             <Arriba token={props.existe}/>
             <Container maxW="1500px">
                 <Heading textAlign={"center"} my={10} >Detalles del comentario</Heading>
+                <Button my={5} float='left' colorScheme="teal" size="md" type="submit" onClick={() => router.push(`/asamblea/ver/${comentarioID.asamblea._id}`)}>Volver</Button>
                 <Table>
                     <Thead>
                         <Tr>
@@ -125,7 +130,7 @@ const comentario = (props) => {
                     <Thead>
                         <Tr>
                             <Td maxW="400px">{comentarioID.apartado}</Td>
-                            <Td maxW="400px">{comentarioID.fecha}</Td>
+                            <Td maxW="400px">{time}</Td>
                             <Td>{comentarioID.user && comentarioID.user.name}</Td>
                             <Td>{comentarioID.user && comentarioID.user.email}</Td>
                             <Td>{comentarioID.asamblea && comentarioID.asamblea.name}</Td>
@@ -152,9 +157,6 @@ const comentario = (props) => {
                             <Center> <Input defaultValue={`${props.usuarioId}`} isReadOnly maxW="300px" id="user" name="user" placeholder="Ingresa tú id" onChange={onChange} /> </Center>
                         </FormControl>
                     )}
-                </Center>
-                <Center>
-                    <Button my={5} colorScheme="teal" size="md" type="submit" onClick={() => router.push(`/asamblea/ver/`)}>Volver</Button>
                 </Center>
             </Container>
             </Box>
