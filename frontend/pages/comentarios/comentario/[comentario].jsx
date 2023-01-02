@@ -78,7 +78,7 @@ const comentario = (props) => {
                 confirmButtonText: 'Ok'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    router.push('/asamblea/ver')
+                    router.push(`/asamblea/ver/${comentarioID.asamblea._id}`)
                 }
             })
             } catch (error) {

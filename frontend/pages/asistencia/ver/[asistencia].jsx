@@ -80,7 +80,6 @@ const asistencia = (data) => {
 
 
     function modificarAsisteCheckbox (asistencia){
-        if(data.rol==='admin'){
             let checkbox;
             if(asistencia.asistencia === "Presente"){
                 checkbox = <Switch colorScheme="teal" isReadOnly defaultChecked ></Switch>;
@@ -88,14 +87,7 @@ const asistencia = (data) => {
                 checkbox = <Switch colorScheme="teal" isReadOnly></Switch>;
             }
             return checkbox;
-        }else{
-            Swal.fire({
-                title: 'Error',
-                text: `No tiene los permisos para modificar asistencia`,
-                icon: 'error',
-                confirmButtonText: 'Ok'
-            })
-        }
+
     }
 
     const botonModificar= () =>{
