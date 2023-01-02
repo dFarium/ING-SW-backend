@@ -7,6 +7,7 @@ import Swal from 'sweetalert2'
 import {checkToken} from '../../../data/usuario'
 const jwt = require("jwt-simple")
 import Arriba from '../../../components/Arriba'
+import { ArrowBackIcon, DeleteIcon, EditIcon  } from '../../../node_modules/@chakra-ui/icons'
 
 export async function getServerSideProps(context){
     try {
@@ -91,9 +92,9 @@ const usuario = (data) => {
             <Container maxW="container.xl" centerContent>
                 <Heading my={10}> {usuarios.usuarioId.name}</Heading>
                 <HStack w={"full"} py={10}>
-                    <Button w={"full"} colorScheme={"teal"} onClick={() => router.push(`/usuarios/editar/${usuarios.usuarioId._id}`)}>Editar</Button>
-                    <Button w={"full"} colorScheme={"teal"} onClick={() => eliminarUsuario()}>Eliminar</Button>
-                    <Button w={"full"} colorScheme={"teal"} onClick={() => router.push("/usuarios/ver")}>Volver</Button>
+                    <Button leftIcon={<EditIcon />} w={"full"} colorScheme={"teal"} onClick={() => router.push(`/usuarios/editar/${usuarios.usuarioId._id}`)}>Editar</Button>
+                    <Button leftIcon={<DeleteIcon />} w={"full"} colorScheme={"teal"} onClick={() => eliminarUsuario()}>Eliminar</Button>
+                    <Button leftIcon={<ArrowBackIcon />} w={"full"} colorScheme={"teal"} onClick={() => router.push("/usuarios/ver")}>Volver </Button>
                 </HStack>
                 <Stack w={"full"}>
                     <ShowInfo tag="Nombre" data={usuarios.usuarioId.name} />

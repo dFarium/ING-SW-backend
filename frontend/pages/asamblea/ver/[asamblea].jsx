@@ -38,7 +38,7 @@ import ShowInfo from '../../../components/ShowInfo'
 import Swal from 'sweetalert2'
 import Arriba from '../../../components/Arriba'
 import { BiUpload } from 'react-icons/bi'
-import { DeleteIcon } from '../../../node_modules/@chakra-ui/icons'
+import { DeleteIcon, EditIcon, ViewIcon, ArrowBackIcon } from '../../../node_modules/@chakra-ui/icons'
 
 export async function getServerSideProps(context){
     try {
@@ -153,7 +153,7 @@ const asamblea = (data) => {
                 if (response.status === 200){
                     Swal.fire({
                         title: 'Asamblea eliminada',
-                        text: 'La asamblea se ha eliminado con exito',
+                        text: 'La asamblea y sus archivos asociados se han eliminado con exito',
                         icon: 'success',
                         confirmButtonText: 'Ok'
                     }).then((result)=>{
@@ -185,14 +185,7 @@ const asamblea = (data) => {
         try {
             const response = await axios.delete(`${process.env.API_URL}/file/deleteAll/${asambleas.asambleaId._id}`)
             if (response.status === 200){
-                Swal.fire({
-                    title: 'Archivos Asociados eliminados',
-                    text: 'Los archivos adjuntos de la asamblea han sido borrados',
-                    icon: 'success',
-                    confirmButtonText: 'Ok'
-                }).then(()=>{
-                    eliminarAsamblea()
-                })
+                eliminarAsamblea()
             }
             }catch (error) {
             Swal.fire({
@@ -348,11 +341,12 @@ const asamblea = (data) => {
                 <Heading my={15} textAlign={"center"}> {asambleas.asambleaId.name}</Heading>
 
 
-                <Button float={"left"} colorScheme={"teal"} onClick={() => router.push("/asamblea/ver")}>Volver</Button>
+                <Button leftIcon={<ArrowBackIcon />}  float={"left"} colorScheme={"teal"} onClick={() => router.push("/asamblea/ver")}>Volver</Button>
                     <HStack w={"full"} py={10}>
-                        <Button w={"full"} colorScheme={"green"} onClick={() => router.push(`/asamblea/editar/${asambleas.asambleaId._id}`)}>Editar</Button>
-                        <Button w={"full"} colorScheme={"teal"} onClick={() => router.push(`/asistencia/ver/${asambleas.asambleaId._id}`)}>Ver asistencias asamblea</Button>
-                        <Button w={"full"} colorScheme={"red"} onClick={onOpen}>Eliminar asamblea</Button>
+                        <Button  leftIcon={<EditIcon />} w={"full"} colorScheme={"green"} onClick={() => router.push(`/asamblea/editar/${asambleas.asambleaId._id}`)}>
+                            Editar</Button>
+                        <Button leftIcon={<ViewIcon />} w={"full"} colorScheme={"teal"} onClick={() => router.push(`/asistencia/ver/${asambleas.asambleaId._id}`)}>Ver Asistencias Asamblea</Button>
+                        <Button leftIcon={<DeleteIcon />} w={"full"} colorScheme={"red"} onClick={onOpen}>Eliminar Asamblea</Button>
 
                         <Modal isOpen={isOpen} onClose={onClose}>
                             <ModalOverlay/>

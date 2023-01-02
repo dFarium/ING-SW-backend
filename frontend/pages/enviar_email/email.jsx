@@ -1,11 +1,13 @@
 import { useState, useEffect }from 'react'
-import { Textarea, Button, Container, Input, Stack, Box, Heading, FormControl, FormLabel } from '@chakra-ui/react'
+import { Textarea, Button, Container, Input, Stack, Box, Heading, FormControl, FormLabel, Icon } from '@chakra-ui/react'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 import { useRouter } from 'next/router'
 const jwt = require("jwt-simple")
 import {checkToken} from '../../data/usuario'
 import Arriba from '../../components/Arriba'
+import { ArrowBackIcon} from '../../node_modules/@chakra-ui/icons'
+import { GrMail } from 'react-icons/gr'
 
 export const getServerSideProps = async (context) => {
   try {
@@ -101,7 +103,7 @@ const onChange = (e) => {
     <Box>
     <Arriba token={data.existe}/>
     <Container maxW= "container.md">
-      <Button colorScheme={"teal"} float={"left"} onClick={()=>router.push('/')} >Volver</Button>
+      <Button leftIcon={<ArrowBackIcon />}  colorScheme={"teal"} float={"left"} onClick={()=>router.push('/')} >Volver</Button>
       <Heading textAlign={"center"} my={10}>Enviar Correos</Heading>
       <Stack>
           <FormControl>
@@ -119,7 +121,7 @@ const onChange = (e) => {
               <Textarea placeholder='Escriba su correo' onChange={onChange} name={"texto"}/>
           </FormControl>
       </Stack>
-      <Button colorScheme="teal" size="md" type="submit" my={5} onClick={onSubmit}>Enviar correo</Button>
+      <Button leftIcon={<Icon as={GrMail}/>} colorScheme="teal" size="md" type="submit" my={5} onClick={onSubmit}>Enviar correo</Button>
     </Container>
     </Box>
   )
