@@ -23,6 +23,7 @@ import axios from 'axios'
 import Arriba from '../../../components/Arriba'
 import {checkToken} from '../../../data/usuario'
 const jwt = require("jwt-simple")
+import Swal from 'sweetalert2'
 
 export async function getServerSideProps(context){
     try {
@@ -88,7 +89,7 @@ const asistencia = (data) => {
             }
             return checkbox;
         }else{
-            wal.fire({
+            Swal.fire({
                 title: 'Error',
                 text: `No tiene los permisos para modificar asistencia`,
                 icon: 'error',
