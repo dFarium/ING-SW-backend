@@ -19,7 +19,9 @@ export async function getServerSideProps(context){
                 return{
                     props:{
                         comentarioID: response.data,
-                        existe: res.config.headers.cookie
+                        existe: res.config.headers.cookie,
+                        usuarioId: decode.sub,
+                        rol: decode.rol
                     }
                 }
             }else{
@@ -54,7 +56,10 @@ export async function getServerSideProps(context){
 const comentario = (props) => {
     const router = useRouter()
     const {comentarioID} = props
-    const [values, setValues] = useState({})
+    const [values, setValues] = useState({
+        rolUsuario:`${props.rol}`,
+        user: `${props.usuarioId}`
+    })
 
     const onChange = async (e) =>{
         setValues({
@@ -132,24 +137,24 @@ const comentario = (props) => {
                     <Button colorScheme="red" mx={6} size="md" type="submit" my={5} onClick={borrarComentario}>Eliminar</Button>
                     <Button colorScheme= "green" size="md" type="submit" my={5} onClick={() => router.push(`/comentarios/actualizarComentario/${comentarioID._id}`)}>Editar</Button>
                 </Center>
-                <Center>
+                {/* <Center>
                     <RadioGroup my={5}>
                         <HStack spacing='24px'>
                             <Radio value='user' onChange={onChange} name={"rolUsuario"}>user</Radio>
                             <Radio value='admin' onChange={onChange} name={"rolUsuario"}>admin</Radio>
                         </HStack>
                     </RadioGroup>
-                </Center>
+                </Center> */}
                 <Center>
                     {values.rolUsuario === 'user' && (
                         <FormControl my={2} onChange={onChange} isRequired="true">
                             <Center> <FormLabel>Ingresa tú ID</FormLabel> </Center>
-                            <Center> <Input maxW="300px" id="user" name="user" placeholder="Ingresa tú id" onChange={onChange} /> </Center>
+                            <Center> <Input defaultValue={`${props.usuarioId}`} isReadOnly maxW="300px" id="user" name="user" placeholder="Ingresa tú id" onChange={onChange} /> </Center>
                         </FormControl>
                     )}
                 </Center>
                 <Center>
-                    <Button my={5} coloScheme="facebook" size="md" type="submit" onClick={() => router.push(`/asamblea/ver/`)}>Volver</Button>
+                    <Button my={5} colorScheme="teal" size="md" type="submit" onClick={() => router.push(`/asamblea/ver/`)}>Volver</Button>
                 </Center>
             </Container>
             </Box>
