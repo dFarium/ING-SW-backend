@@ -105,7 +105,7 @@ const usuario = (data) => {
                                 <ModalContent>
                                     <ModalHeader>Eliminar?</ModalHeader>
                                     <ModalCloseButton/>
-                                    <ModalBody>¿Esta seguro de eliminar esta asamblea?</ModalBody>
+                                    <ModalBody>¿Esta seguro de eliminar este Usuario?</ModalBody>
                                     <ModalFooter justifyContent={"space-between"}>
                                         <Button colorScheme={"red"} onClick={() =>{onClose(); eliminarUsuario();}}>Eliminar</Button>
                                         <Button colorScheme={"teal"} onClick={onClose}>Cancelar</Button>
