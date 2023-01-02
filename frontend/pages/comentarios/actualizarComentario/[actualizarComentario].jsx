@@ -11,7 +11,7 @@ const jwt = require("jwt-simple")
 export async function getServerSideProps(context){
     try {
         const res = await checkToken(context.req.headers.cookie)
-        const jwt = jwt.decode(context.req.cookies.token,process.env.SECRET_KEY)
+        const decode = jwt.decode(context.req.cookies.token,process.env.SECRET_KEY)
         if (res.status === 200){
                 const response = await axios.get(`${process.env.API_URL}/comentario/search/${context.params.actualizarComentario}`)
                 return{
@@ -74,7 +74,7 @@ const actualizarComentario = (props) => {
             return
         }
         try {
-            await axios.put(`${process.env.API_URL}/comentario/update/${comentarioID._id}`,values)
+            await axios.put(`${process.env.API_URL}/comentario/update/${comentario.comentarioID._id}`,values)
             Swal.fire({
                 title: 'Comentario modificado',
                 text: 'Comentario modificado correctamente',
@@ -82,29 +82,29 @@ const actualizarComentario = (props) => {
                 confirmButtonText: 'Ok'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    router.push(`/asamblea/ver/${comentarioID.asamblea._id}`)
+                    router.push(`/asamblea/ver/${comentario.comentarioID.asamblea._id}`)
                 }
             })
         } catch (error) {
 
-            if(error.response.status === 401){
+            if(error.status === 401){
                 Swal.fire({
                     title: 'Error',
                     text: 'No está autorizado para modificar el comentario',
                     icon: 'error',
                     confirmButtonText: 'Ok'
                 })
-            }else if(error.response.status === 404){
+            }else if(error.status === 404){
                 Swal.fire({
                     title: 'Error',
                     text: 'No se encontró el comentario',
                     icon: 'error',
                     confirmButtonText: 'Ok'
                 })
-            }else if(error.response.status === 400){
+            }else if(error.status === 400){
                 Swal.fire({
                     title: 'Error',
-                    text: 'No se pudo modificar error:'  + error.response.status,
+                    text: 'No se pudo modificar error:'  + error.status,
                     icon: 'error',
                     confirmButtonText: 'Ok'
                 })
@@ -128,7 +128,7 @@ const actualizarComentario = (props) => {
             <Stack>
                 <FormControl>
                     <FormLabel>Comentario Anterior:</FormLabel>
-                    <Text> {comentarioID.apartado} </Text>
+                    <Text> {comentario.comentarioID.apartado} </Text>
                     <FormLabel my={5}>Modifica aquí:</FormLabel>
                     <Textarea placeholder="Escribe aquí" type={"text"} onChange={onChange} name={"apartado"}/>
                 </FormControl>
