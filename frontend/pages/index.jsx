@@ -27,9 +27,9 @@ export const index = (data) => {
     // console.log(token)
     const router = useRouter()
     return (
-        <Box>
+        <Box >
             <Arriba token={data.existe}/>
-        <Box>
+        <Box >
             <Container maxW="container.xl">
                 <Heading textAlign={"center"} my={15}>Bienvenido</Heading>
                 <HStack w={"full"} py={'28'}>

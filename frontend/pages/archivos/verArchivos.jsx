@@ -60,10 +60,8 @@ const archivos= (data) => {
     }
 
     const eliminarArchivos = async (id_archivo, id_asamblea) =>{
-        //Si el usuario es admin podra eliminar archivos
         if(data.rol==='admin'){
             try {
-                //AGREGAR MODALs
                 const response = await axios.delete(`${process.env.API_URL}/file/delete/${id_archivo}/${id_asamblea}`)
                 if (response.status === 200){
                     Swal.fire({
@@ -94,15 +92,17 @@ const archivos= (data) => {
 
     const showArchivos = () =>{
         return archivos.map(archivos =>{
+            const [fecha, horas] = archivos.fecha.split('T')
+            const [ano,mes,dia] =fecha.split('-')
+            const [hora, min] =horas.split(':')
+            const time = dia + '-' + mes + '-'  + ano + '   ' + hora+':' + min
             return(
                 <Tr key={archivos._id}>
                     <Td>{archivos.name}</Td>
-                    {/* <Td><Link color='blue.400' href={`${process.env.API_URL}/file/download/${archivos._id}`}>{archivos.name}</Link></Td> */}
-                    {/* <Td>{archivos.asamblea.name}</Td> */}
                     <Td>
                         <Link color='blue.400' href={`/asamblea/ver/${archivos.asamblea._id}`}>{archivos.asamblea.name}</Link>
                     </Td>
-                    <Td>{archivos.fecha}</Td>
+                    <Td>{time}</Td>
                     <Td>
                         <Button mx={'2.5'} bg={'white'} onClick={()=>router.push(`${process.env.API_URL}/file/download/${archivos._id}`)}>
                             <DownloadIcon  w={6} h={6} color="green.500" ></DownloadIcon>
