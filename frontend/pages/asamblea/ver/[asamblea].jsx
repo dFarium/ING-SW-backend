@@ -70,7 +70,6 @@ export async function getServerSideProps(context){
                 }
             }
     } catch (error) {
-        console.log("ERROR",error)
         return{
             redirect:{
                 destination: '/asamblea/ver',
@@ -88,7 +87,8 @@ const asamblea = (data) => {
         asamblea: `${asambleas.asambleaId._id}`,
         user: `${data.usuarioId}`
     })
-    const { isOpen, onOpen, onClose } = useDisclosure()
+    const { isOpen: isOpenAsamblea, onOpen: onOpenAsamblea, onClose: onCloseAsamblea } = useDisclosure()
+    const { isOpen: isOpenArchivo, onOpen: onOpenArchivo, onClose: onCloseArchivo } = useDisclosure()
 // ------------------------------------------------------------------------------------------------------------------------------------------------------------
     //moi
     const [comentarios, setComentarios] = useState([])
@@ -229,6 +229,14 @@ const asamblea = (data) => {
         }
     }
 
+    const showEliminar = ()=>{
+        if(data.rol==='admin'){
+            return(
+                <Td>Eliminar</Td>
+            )
+        }
+    }
+
     const eliminarArchivos = async (id_archivo, id_asamblea) =>{
         if (data.rol==='admin'){
             try {
@@ -274,16 +282,50 @@ const asamblea = (data) => {
             const [ano,mes,dia] =fecha.split('-')
             const [hora, min] =horas.split(':')
             const time = dia + '-' + mes + '-'  + ano + ' ' + hora +':' + min
-            return(
-                <Tr key={archivos._id}>
-                    <Td ><Link color='blue.500' href={`${process.env.API_URL}/file/download/${archivos._id}`}>{archivos.name}</Link></Td>
-                    <Td >{time}</Td>
-                    <Td ><Button bg={'transparent'}  onClick={()=>eliminarArchivos(archivos._id, asambleas.asambleaId._id)}>
+
+            if(data.rol === 'admin'){
+                return(
+                    <Tr key={archivos._id}>
+                        <Td ><Link color='blue.500' href={`${process.env.API_URL}/file/download/${archivos._id}`}>{archivos.name}</Link></Td>
+                        <Td >{time}</Td>
+                        <Td ><Button bg={'transparent'}  onClick={onOpenArchivo}>
                         <DeleteIcon  w={6} h={6} color="red.400"></DeleteIcon>
-                    </Button></Td>
-                </Tr>
-            )
+                        </Button>
+                        <Modal isOpen={isOpenArchivo} onClose={onCloseArchivo}>
+                            <ModalOverlay/>
+                                <ModalContent>
+                                    <ModalHeader>Eliminar?</ModalHeader>
+                                    <ModalCloseButton/>
+                                    <ModalBody>¿Esta seguro de eliminar esta archivo?</ModalBody>
+                                    <ModalFooter justifyContent={"space-between"}>
+                                        <Button colorScheme={"red"} onClick={() =>{onCloseArchivo(); eliminarArchivos(archivos._id, asambleas.asambleaId._id);}}>Eliminar</Button>
+                                        <Button colorScheme={"teal"} onClick={onCloseArchivo}>Cancelar</Button>
+                                    </ModalFooter>
+                                </ModalContent>
+                        </Modal>
+                        </Td>
+                    </Tr>
+                )
+            }else{
+                return(
+                    <Tr key={archivos._id}>
+                        <Td ><Link color='blue.500' href={`${process.env.API_URL}/file/download/${archivos._id}`}>{archivos.name}</Link></Td>
+                        <Td >{time}</Td>
+                    </Tr>
+                )
+            }
         })
+    }
+
+    const uploadFileButton = ()=>{
+        if(data.rol==='admin'){
+            return(
+                <Button my={'5'} colorScheme={"teal"} float={"right"} onClick={()=>subirArchivos(asambleas.asambleaId._id)} >
+                    Subir Archivo
+                    <Icon mx={'1.5'} w={5} h={5} as={BiUpload}/>
+                </Button>
+            )
+        }
     }
 //----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -347,6 +389,16 @@ const asamblea = (data) => {
         }
     }
 
+    const botonEliminar = () =>{
+        let boton
+        if(data.rol === "admin"){
+            boton = <Button leftIcon={<DeleteIcon />} w={"full"} colorScheme={"red"} onClick={onOpenAsamblea}>Eliminar Asamblea</Button>
+        }else{
+            boton = <div></div>
+        }
+        return boton
+    }
+
 
 //----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -355,24 +407,22 @@ const asamblea = (data) => {
             <Arriba token={data.existe}/>
             <Container maxW="container.xl" >
                 <Heading my={15} textAlign={"center"}> {asambleas.asambleaId.name}</Heading>
-
-
                 <Button leftIcon={<ArrowBackIcon />}  float={"left"} colorScheme={"teal"} onClick={() => router.push("/asamblea/ver")}>Volver</Button>
                     <HStack w={"full"} py={10}>
                         <Button  leftIcon={<EditIcon />} w={"full"} colorScheme={"green"} onClick={() => router.push(`/asamblea/editar/${asambleas.asambleaId._id}`)}>
                             Editar</Button>
                         <Button leftIcon={<ViewIcon />} w={"full"} colorScheme={"teal"} onClick={() => router.push(`/asistencia/ver/${asambleas.asambleaId._id}`)}>Ver Asistencias Asamblea</Button>
-                        <Button leftIcon={<DeleteIcon />} w={"full"} colorScheme={"red"} onClick={onOpen}>Eliminar Asamblea</Button>
-
-                        <Modal isOpen={isOpen} onClose={onClose}>
+                        {/* <Button leftIcon={<DeleteIcon />} w={"full"} colorScheme={"red"} onClick={onOpenAsamblea}>Eliminar Asamblea</Button> */}
+                        {botonEliminar()}
+                        <Modal isOpen={isOpenAsamblea} onClose={onCloseAsamblea}>
                             <ModalOverlay/>
                                 <ModalContent>
                                     <ModalHeader>Eliminar?</ModalHeader>
                                     <ModalCloseButton/>
                                     <ModalBody>¿Esta seguro de eliminar esta asamblea?</ModalBody>
                                     <ModalFooter justifyContent={"space-between"}>
-                                        <Button colorScheme={"red"} onClick={() => {onClose(); desvincularArchivos();} }>Eliminar</Button>
-                                        <Button colorScheme={"teal"} onClick={onClose}>Cancelar</Button>
+                                        <Button colorScheme={"red"} onClick={() => {onCloseAsamblea(); desvincularArchivos();} }>Eliminar</Button>
+                                        <Button colorScheme={"teal"} onClick={onCloseAsamblea}>Cancelar</Button>
                                     </ModalFooter>
                                 </ModalContent>
                         </Modal>
@@ -399,22 +449,19 @@ const asamblea = (data) => {
                                 </AccordionButton>
                             </h2>
                             <AccordionPanel pb={'4'}>
-                                <Table size='sm' variant='striped' colorScheme='blackAlpha'>
+                                <Table  variant='striped' colorScheme='blackAlpha'>
                                     <Thead>
                                         <Tr>
                                             <Td>Archivos</Td>
                                             <Td>Fecha</Td>
-                                            <Td>Eliminar</Td>
+                                            {showEliminar()}
                                         </Tr>
                                     </Thead>
                                     <Tbody>
                                         {showAsambleaArchivos()}
                                     </Tbody>
                                 </Table>
-                                <Button my={'5'} colorScheme={"teal"} float={"right"} onClick={()=>subirArchivos(asambleas.asambleaId._id)} >
-                                    Subir Archivo
-                                    <Icon mx={'1.5'} w={5} h={5} as={BiUpload}/>
-                                </Button>
+                                {uploadFileButton()}
                             </AccordionPanel>
                         </AccordionItem>
                         {/* Acordeon 2  */}

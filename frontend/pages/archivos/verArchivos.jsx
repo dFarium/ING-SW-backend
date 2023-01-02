@@ -94,6 +94,15 @@ const archivos= (data) => {
         }
     }
 
+    const showEliminar = ()=>{
+        if(data.rol==='admin'){
+            return(
+                <Td>Eliminar</Td>
+            )
+        }
+    }
+
+
     useEffect(()=>{
         getArchivos()
     }, [])
@@ -104,39 +113,42 @@ const archivos= (data) => {
             const [ano,mes,dia] =fecha.split('-')
             const [hora, min] =horas.split(':')
             const time = dia + '-' + mes + '-'  + ano + '   ' + hora+':' + min
-            return(
-                <Tr key={archivos._id}>
-                    <Td>{archivos.name}</Td>
-                    <Td>
-                        <Link color='blue.400' href={`/asamblea/ver/${archivos.asamblea._id}`}>{archivos.asamblea.name}</Link>
-                    </Td>
-                    <Td>{time}</Td>
-                    <Td>
-                        <Button mx={'2.5'} bg={'white'} onClick={()=>router.push(`${process.env.API_URL}/file/download/${archivos._id}`)}>
-                            <DownloadIcon  w={6} h={6} color="green.500" ></DownloadIcon>
-                        </Button>
-
-                        <Modal isOpen={isOpen} onClose={onClose}>
-                            <ModalOverlay/>
-                                <ModalContent>
-                                    <ModalHeader>Eliminar?</ModalHeader>
-                                    <ModalCloseButton/>
-                                    <ModalBody>¿Esta seguro de eliminar este archivo</ModalBody>
-                                    <ModalFooter justifyContent={"space-between"}>
-                                        <Button colorScheme={"red"} onClick={() =>{onClose(); eliminarArchivos(archivos._id, archivos.asamblea._id);}}>Eliminar</Button>
-                                        <Button colorScheme={"teal"} onClick={onClose}>Cancelar</Button>
-                                    </ModalFooter>
-                                </ModalContent>
-                </Modal>
-
-                    </Td>
-                    <Td>
-                        <Button mx={'2.5'}  bg={'white'} onClick={onOpen}>
-                            <DeleteIcon  w={6} h={6} color="red.400"></DeleteIcon>
-                        </Button>
-                    </Td>
-                </Tr>
-            )
+            if(data.rol==='admin'){
+                return(
+                    <Tr key={archivos._id}>
+                        <Td>{archivos.name}</Td>
+                        <Td><Link color='blue.400' href={`/asamblea/ver/${archivos.asamblea._id}`}>{archivos.asamblea.name}</Link></Td>
+                        <Td>{time}</Td>
+                        <Td><Button mx={'2.5'} bg={'white'} onClick={()=>router.push(`${process.env.API_URL}/file/download/${archivos._id}`)}><DownloadIcon  w={6} h={6} color="green.500" ></DownloadIcon></Button></Td>
+                        <Td>
+                            <Modal isOpen={isOpen} onClose={onClose}>
+                                <ModalOverlay/>
+                                    <ModalContent>
+                                        <ModalHeader>Eliminar?</ModalHeader>
+                                        <ModalCloseButton/>
+                                        <ModalBody>¿Esta seguro de eliminar este archivo</ModalBody>
+                                        <ModalFooter justifyContent={"space-between"}>
+                                            <Button colorScheme={"red"} onClick={() =>{onClose(); eliminarArchivos(archivos._id, archivos.asamblea._id);}}>Eliminar</Button>
+                                            <Button colorScheme={"teal"} onClick={onClose}>Cancelar</Button>
+                                        </ModalFooter>
+                                    </ModalContent>
+                            </Modal>
+                            <Button mx={'2.5'}  bg={'white'} onClick={onOpen}>
+                                <DeleteIcon  w={6} h={6} color="red.400"></DeleteIcon>
+                            </Button>
+                        </Td>
+                    </Tr>
+                )
+            }else{
+                return(
+                    <Tr key={archivos._id}>
+                        <Td>{archivos.name}</Td>
+                        <Td><Link color='blue.400' href={`/asamblea/ver/${archivos.asamblea._id}`}>{archivos.asamblea.name}</Link></Td>
+                        <Td>{time}</Td>
+                        <Td><Button mx={'2.5'} bg={'white'} onClick={()=>router.push(`${process.env.API_URL}/file/download/${archivos._id}`)}><DownloadIcon  w={6} h={6} color="green.500" ></DownloadIcon></Button></Td>
+                    </Tr>
+                )
+            }
         })
     }
 
@@ -153,7 +165,7 @@ const archivos= (data) => {
                         <Td>Asamblea</Td>
                         <Td>Fecha</Td>
                         <Td>Descargar</Td>
-                        <Td>Eliminar</Td>
+                        {showEliminar()}
                     </Tr>
                 </Thead>
                 <Tbody>
