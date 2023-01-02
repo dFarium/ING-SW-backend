@@ -8,6 +8,7 @@ import Swal from 'sweetalert2'
 import {checkToken} from '../../../data/usuario'
 const jwt = require('jwt-simple')
 import Arriba from '../../../components/Arriba'
+import { ArrowBackIcon, DeleteIcon, EditIcon } from '../../../node_modules/@chakra-ui/icons'
 
 export async function getServerSideProps(context){
     try {
@@ -115,7 +116,7 @@ const comentario = (props) => {
             <Arriba token={props.existe}/>
             <Container maxW="1500px">
                 <Heading textAlign={"center"} my={10} >Detalles del comentario</Heading>
-                <Button my={5} float='left' colorScheme="teal" size="md" type="submit" onClick={() => router.push(`/asamblea/ver/${comentarioID.asamblea._id}`)}>Volver</Button>
+                <Button leftIcon={<ArrowBackIcon />} my={5} float='left' colorScheme="teal" size="md" type="submit" onClick={() => router.push(`/asamblea/ver/${comentarioID.asamblea._id}`)}>Volver</Button>
                 <Table>
                     <Thead>
                         <Tr>
@@ -139,8 +140,8 @@ const comentario = (props) => {
                     </Thead>
                 </Table>
                 <Center>
-                    <Button colorScheme="red" mx={6} size="md" type="submit" my={5} onClick={borrarComentario}>Eliminar</Button>
-                    <Button colorScheme= "green" size="md" type="submit" my={5} onClick={() => router.push(`/comentarios/actualizarComentario/${comentarioID._id}`)}>Editar</Button>
+                    <Button leftIcon={<DeleteIcon/>} colorScheme="red" mx={6} size="md" type="submit" my={5} onClick={borrarComentario}>Eliminar</Button>
+                    <Button leftIcon={<EditIcon/>} colorScheme= "green" size="md" type="submit" my={5} onClick={() => router.push(`/comentarios/actualizarComentario/${comentarioID._id}`)}>Editar</Button>
                 </Center>
                 {/* <Center>
                     <RadioGroup my={5}>
