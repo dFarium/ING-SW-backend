@@ -410,7 +410,7 @@ const asamblea = (data) => {
                             <h2>
                                 {/* Colores boton */}
                                 <AccordionButton bg='gray.200' _expanded={{  bg: 'orange.400', color: 'white' }}>
-                                    <Box as="span" flex='1' textAlign='left'>
+                                    <Box as="span" flex='1'>
                                         Comentarios
                                     </Box>
                                     <AccordionIcon />
