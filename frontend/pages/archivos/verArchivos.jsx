@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Button, Container, HStack, Table, Thead, Tbody, Tfoot, Tr, Th, Td, Heading,Box, AccordionIcon, Link, chakra } from '@chakra-ui/react'
+import { Button, Container, HStack, Table, Thead, Tbody, Tfoot, Tr, Th, Td, Heading,Box, AccordionIcon,useDisclosure, Link, Modal,ModalBody,ModalFooter,ModalCloseButton,ModalContent,ModalOverlay,ModalHeader } from '@chakra-ui/react'
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import Arriba from '../../components/Arriba'
@@ -44,6 +44,7 @@ const archivos= (data) => {
 
     const [archivos, setArchivos] = useState([])
     const router = useRouter()
+    const { isOpen, onOpen, onClose } = useDisclosure()
 
     const getArchivos = async () => {
         try {
@@ -114,9 +115,23 @@ const archivos= (data) => {
                         <Button mx={'2.5'} bg={'white'} onClick={()=>router.push(`${process.env.API_URL}/file/download/${archivos._id}`)}>
                             <DownloadIcon  w={6} h={6} color="green.500" ></DownloadIcon>
                         </Button>
+
+                        <Modal isOpen={isOpen} onClose={onClose}>
+                            <ModalOverlay/>
+                                <ModalContent>
+                                    <ModalHeader>Eliminar?</ModalHeader>
+                                    <ModalCloseButton/>
+                                    <ModalBody>¿Esta seguro de eliminar este archivo</ModalBody>
+                                    <ModalFooter justifyContent={"space-between"}>
+                                        <Button colorScheme={"red"} onClick={() =>{onClose(); eliminarArchivos(archivos._id, archivos.asamblea._id);}}>Eliminar</Button>
+                                        <Button colorScheme={"teal"} onClick={onClose}>Cancelar</Button>
+                                    </ModalFooter>
+                                </ModalContent>
+                </Modal>
+
                     </Td>
                     <Td>
-                        <Button mx={'2.5'}  bg={'white'} onClick={()=>eliminarArchivos(archivos._id, archivos.asamblea._id)}>
+                        <Button mx={'2.5'}  bg={'white'} onClick={onOpen}>
                             <DeleteIcon  w={6} h={6} color="red.400"></DeleteIcon>
                         </Button>
                     </Td>
@@ -144,6 +159,7 @@ const archivos= (data) => {
                 <Tbody>
                     {showArchivos()}
                 </Tbody>
+
             </Table>
             </Container>
         </Box>
