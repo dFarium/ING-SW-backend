@@ -13,7 +13,7 @@ export async function getServerSideProps(context){
         const res = await checkToken(context.req.headers.cookie)
         const decode = jwt.decode(context.req.cookies.token,process.env.SECRET_KEY)
         if (res.status === 200){
-                const response = await axios.get(`${process.env.API_URL}/comentario/search/${context.params.actualizarComentario}`)
+            const response = await axios.get(`${process.env.API_URL}/comentario/search/${context.params.actualizarComentario}`)
                 return{
                     props:{
                         comentarioID: response.data,
@@ -44,30 +44,19 @@ export async function getServerSideProps(context){
 const actualizarComentario = (props) => {
     const router = useRouter()
     const [comentario] = useState(props)
-    console.log(props)
     const [values, setValues] = useState({
-            apartado: `${comentario.comentarioID.apartado}`,
-            user: `${comentario.comentarioID.user._id}`,
-            asamblea: `${comentario.comentarioID.asamblea._id}`,
+            // apartado: `${comentario.comentarioID.apartado}`,
+            // user: `${comentario.comentarioID.user}`,
+            // asamblea: `${comentario.comentarioID.asamblea}`,
             rolUsuario: `${props.rol}`
-
     })
-
+    // console.log("User --> "+ comentario.comentarioID.apartado)
     const onSubmit = async (e) => {
         e.preventDefault()
         if (!values.apartado) {
             Swal.fire({
                 title: 'Error',
                 text: 'Escribe un comentario',
-                icon: 'error',
-                confirmButtonText: 'Ok'
-            })
-            return
-        }
-        if (!values.rolUsuario) {
-            Swal.fire({
-                title: 'Error',
-                text: 'Selecciona un rol',
                 icon: 'error',
                 confirmButtonText: 'Ok'
             })
@@ -87,7 +76,7 @@ const actualizarComentario = (props) => {
             })
         } catch (error) {
 
-            if(error.status === 401){
+            if(error.response.status === 401){
                 Swal.fire({
                     title: 'Error',
                     text: 'No está autorizado para modificar el comentario',
@@ -109,7 +98,6 @@ const actualizarComentario = (props) => {
                     confirmButtonText: 'Ok'
                 })
             }
-
         }
     }
 
