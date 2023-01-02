@@ -83,7 +83,6 @@ const asamblea = (data) => {
     const router = useRouter()
     const [asambleas] = useState(data)
     const[values, setValues] = useState({
-        rolUsuario: 'admin',
         asamblea: `${asambleas.asambleaId._id}`,
         user: `${data.usuarioId}`
     })
@@ -509,10 +508,6 @@ const asamblea = (data) => {
                                                     <Container>
                                                         <FormControl>
                                                             <Textarea placeholder="Ingresa un comentario" type={"text"} onChange={onChange} name="apartado"/>
-                                                        </FormControl>
-                                                        <FormControl my={2}>
-                                                            <FormLabel>ID usuario</FormLabel>
-                                                            <Input isReadOnly defaultValue={`${data.usuarioId}`} placeholder="Ingresa tu ID de usuario" type={"text"} onChange={onChange} name="user"/>
                                                         </FormControl>
                                                         <Center>
                                                             <Button colorScheme="messenger" size="md" type="submit" my={5} onClick={onSubmit}>Enviar</Button>
