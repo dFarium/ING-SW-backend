@@ -14,7 +14,7 @@ export async function getServerSideProps(context){
         const res = await checkToken(context.req.headers.cookie)
         const jwt = jwt.decode(context.req.cookies.token,process.env.SECRET_KEY)
         if (res.status === 200){
-                const response = await axios.get(`${process.env.API_URL}/comentario/search/${context.params.actualizar}`)
+                const response = await axios.get(`${process.env.API_URL}/comentario/search/${context.params.actualizarComentario}`)
                 return{
                     props:{
                         comentarioID: response.data,
@@ -42,7 +42,7 @@ export async function getServerSideProps(context){
     }
 }
 
-const actualizar = (props) => {
+const actualizarComentario = (props) => {
     const router = useRouter()
     const [comentario] = useState(props)
     console.log(props)
@@ -129,7 +129,8 @@ const actualizar = (props) => {
             <Stack>
                 <FormControl>
                     <FormLabel>Comentario Anterior:</FormLabel>
-                    <Text> {comentarioID.apartado} </Text>
+                    <Text> {comentario.comentarioID.apartado} </Text> 
+                    {/* cambio linea 132  */}
                     <FormLabel my={5}>Modifica aquí:</FormLabel>
                     <Textarea placeholder="Escribe aquí" type={"text"} onChange={onChange} name={"apartado"}/>
                 </FormControl>
@@ -154,4 +155,4 @@ const actualizar = (props) => {
     )
 }
 
-export default actualizar
+export default actualizarComentario
