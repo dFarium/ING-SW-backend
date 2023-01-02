@@ -88,7 +88,8 @@ const asamblea = (data) => {
         asamblea: `${asambleas.asambleaId._id}`,
         user: `${data.usuarioId}`
     })
-    const { isOpen, onOpen, onClose } = useDisclosure()
+    const { isOpen: isOpenAsamblea, onOpen: onOpenAsamblea, onClose: onCloseAsamblea } = useDisclosure()
+    const { isOpen: isOpenArchivo, onOpen: onOpenArchivo, onClose: onCloseArchivo } = useDisclosure()
 // ------------------------------------------------------------------------------------------------------------------------------------------------------------
     //moi
     const [comentarios, setComentarios] = useState([])
@@ -278,9 +279,23 @@ const asamblea = (data) => {
                 <Tr key={archivos._id}>
                     <Td ><Link color='blue.500' href={`${process.env.API_URL}/file/download/${archivos._id}`}>{archivos.name}</Link></Td>
                     <Td >{time}</Td>
-                    <Td ><Button bg={'transparent'}  onClick={()=>eliminarArchivos(archivos._id, asambleas.asambleaId._id)}>
+                    <Td ><Button bg={'transparent'}  onClick={onOpenArchivo}>
                         <DeleteIcon  w={6} h={6} color="red.400"></DeleteIcon>
                     </Button></Td>
+
+                    <Modal isOpen={isOpenArchivo} onClose={onCloseArchivo}>
+                            <ModalOverlay/>
+                                <ModalContent>
+                                    <ModalHeader>Eliminar?</ModalHeader>
+                                    <ModalCloseButton/>
+                                    <ModalBody>¿Esta seguro de eliminar esta archivo?</ModalBody>
+                                    <ModalFooter justifyContent={"space-between"}>
+                                        <Button colorScheme={"red"} onClick={() =>{onCloseArchivo(); eliminarArchivos(archivos._id, asambleas.asambleaId._id);}}>Eliminar</Button>
+                                        <Button colorScheme={"teal"} onClick={onCloseArchivo}>Cancelar</Button>
+                                    </ModalFooter>
+                                </ModalContent>
+                </Modal>
+                    
                 </Tr>
             )
         })
@@ -362,17 +377,17 @@ const asamblea = (data) => {
                         <Button  leftIcon={<EditIcon />} w={"full"} colorScheme={"green"} onClick={() => router.push(`/asamblea/editar/${asambleas.asambleaId._id}`)}>
                             Editar</Button>
                         <Button leftIcon={<ViewIcon />} w={"full"} colorScheme={"teal"} onClick={() => router.push(`/asistencia/ver/${asambleas.asambleaId._id}`)}>Ver Asistencias Asamblea</Button>
-                        <Button leftIcon={<DeleteIcon />} w={"full"} colorScheme={"red"} onClick={onOpen}>Eliminar Asamblea</Button>
+                        <Button leftIcon={<DeleteIcon />} w={"full"} colorScheme={"red"} onClick={onOpenAsamblea}>Eliminar Asamblea</Button>
 
-                        <Modal isOpen={isOpen} onClose={onClose}>
+                        <Modal isOpen={isOpenAsamblea} onClose={onCloseAsamblea}>
                             <ModalOverlay/>
                                 <ModalContent>
                                     <ModalHeader>Eliminar?</ModalHeader>
                                     <ModalCloseButton/>
                                     <ModalBody>¿Esta seguro de eliminar esta asamblea?</ModalBody>
                                     <ModalFooter justifyContent={"space-between"}>
-                                        <Button colorScheme={"red"} onClick={() => {onClose(); desvincularArchivos();} }>Eliminar</Button>
-                                        <Button colorScheme={"teal"} onClick={onClose}>Cancelar</Button>
+                                        <Button colorScheme={"red"} onClick={() => {onCloseAsamblea(); desvincularArchivos();} }>Eliminar</Button>
+                                        <Button colorScheme={"teal"} onClick={onCloseAsamblea}>Cancelar</Button>
                                     </ModalFooter>
                                 </ModalContent>
                         </Modal>
