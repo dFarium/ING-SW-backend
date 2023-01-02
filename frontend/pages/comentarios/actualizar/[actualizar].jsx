@@ -1,12 +1,13 @@
 import React, {useState} from "react"
+
 import { Textarea, RadioGroup, Radio, Button, Container, Input, Stack, Text, HStack, Heading, FormControl, FormLabel, Center, Box} from '@chakra-ui/react'
 
 import axios from "axios"
+const jwt = require("jwt-simple")
 import Swal from 'sweetalert2'
 import { useRouter } from 'next/router'
 import Arriba from "../../../components/Arriba"
 import {checkToken} from '../../../data/usuario'
-const jwt = require("jwt-simple")
 
 export async function getServerSideProps(context){
     try {
