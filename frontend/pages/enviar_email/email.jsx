@@ -121,7 +121,7 @@ const onChange = (e) => {
               <Textarea placeholder='Escriba su correo' onChange={onChange} name={"texto"}/>
           </FormControl>
       </Stack>
-      <Button leftIcon={<Icon as={GrMail}/>} colorScheme="teal" size="md" type="submit" my={5} onClick={onSubmit}>Enviar correo</Button>
+      <Button leftIcon={<Icon as={GrMail}/>} colorScheme="green" size="md" type="submit" my={5} onClick={onSubmit}>Enviar correo</Button>
     </Container>
     </Box>
   )

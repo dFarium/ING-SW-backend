@@ -52,11 +52,15 @@ const asamblea = (data) => {
 
     const showAsambleas = () =>{
         return asambleas.map(asamblea =>{
+            const [fecha, horas] = asamblea.fecha.split('T')
+            const [ano,mes,dia] =fecha.split('-')
+            const [hora, min] =horas.split(':')
+            const time = dia + '-' + mes + '-'  + ano + ' ' + hora +':' + min
             return(
                 <Tr key={asamblea._id}>
                     <Td>{asamblea.name}</Td>
                     <Td>{asamblea.tipo}</Td>
-                    <Td>{asamblea.fecha}</Td>
+                    <Td>{time}</Td>
                     <Td>
                         <Button onClick={()=>router.push(`/asamblea/ver/${asamblea._id}`)}>Ver mas</Button>
                     </Td>
@@ -65,7 +69,6 @@ const asamblea = (data) => {
         })
     }
 
-    
     return (
         <Box>
             <Arriba token={data.existe}/>
