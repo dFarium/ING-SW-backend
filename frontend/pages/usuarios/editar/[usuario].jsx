@@ -121,8 +121,8 @@ const usuario = (data) => {
                         <FormLabel >Rol del usuario</FormLabel>
                             <RadioGroup >
                                 <HStack spacing='24px'>
-                                    <Radio value='user' onChange={onChange} name={"role"}>user</Radio>
-                                    <Radio value='admin' onChange={onChange} name={"role"}>admin</Radio>
+                                    <Radio value='user' onChange={onChange} name={"role"}>Usuario</Radio>
+                                    <Radio value='admin' onChange={onChange} name={"role"}>Administrador</Radio>
                                 </HStack>
                             </RadioGroup>
                     </FormControl>
