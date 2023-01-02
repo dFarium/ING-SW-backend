@@ -6,7 +6,7 @@ import Arriba from '../../components/Arriba'
 import Swal from 'sweetalert2'
 import {checkToken} from '../../data/usuario'
 const jwt = require('jwt-simple')
-import { DownloadIcon, DeleteIcon} from '../../node_modules/@chakra-ui/icons'
+import { DownloadIcon, DeleteIcon, ArrowBackIcon} from '../../node_modules/@chakra-ui/icons'
 
 
 //funcion para obtener la cookie y ver que rol tiene el usuario
@@ -123,7 +123,7 @@ const archivos= (data) => {
             <Arriba token={data.existe}/>
             <Container maxW="container.xl">
             <Heading textAlign={"center"} my={16}>Historial de Actas</Heading>
-            <Button colorScheme={"teal"} my={15} mx={15} float={'left'} onClick={()=>router.push('/')} >Volver</Button>
+            <Button leftIcon={<ArrowBackIcon />}  colorScheme={"teal"} my={15} mx={15} float={'left'} onClick={()=>router.push('/')} >Volver</Button>
             <Table my={15} variant="simple">
                 <Thead>
                     <Tr>

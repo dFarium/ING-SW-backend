@@ -4,6 +4,9 @@ import Cookies from 'js-cookie'
 import { useRouter } from 'next/router'
 import {logout} from '../data/usuario'
 import Menu from './Menu'
+import { Icon } from '@chakra-ui/react'
+import { BiLogOut, BiLogIn } from 'react-icons/bi'
+
 
 
 
@@ -21,10 +24,10 @@ const Arriba = ({token}) => {
         let texto
         if(token){
             console.log('hola')
-            texto= <Button colorScheme={"blackAlpha"} onClick={onSubmit}>LOGOUT</Button>
+            texto= <Button leftIcon={<Icon as={BiLogOut}/>} colorScheme={"blackAlpha"} onClick={onSubmit}>CERRAR SESION</Button>
         }else{
             console.log('xao')
-            texto=<Link href="/loguearse/login">INICIAR SESION</Link>
+            texto = <Button leftIcon={<Icon as={BiLogIn}/>} colorScheme={"blackAlpha"} onClick={() => router.push('/loguearse/login')}>INICIAR SESION</Button>
         }
         return texto
     }
