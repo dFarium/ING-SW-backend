@@ -98,13 +98,24 @@ const asistencia = (data) => {
         }
     }
 
+    const botonModificar= () =>{
+        let boton
+        if(data.rol === "admin"){
+            boton = <Button colorScheme={"teal"} float={"right"} onClick={() => router.push(`/asistencia/editar/${asistencia.asambleaId[0].asamblea._id}`)}>Modificar Asistencia</Button>
+        }else{
+            boton = <div></div>
+        }
+        return boton
+    }
+
     return (
         <Box>
             <Arriba token={data.existe}/>
             <Container maxW="container.xl">
                 <Heading textAlign={"center"} my={15}>Asistencia de {asistencia.asambleaId[0].asamblea.name}</Heading>
                 <Button colorScheme={"teal"} float={"left"} onClick={() => router.push(`/asamblea/ver/${asistencia.asambleaId[0].asamblea._id}`)}>Volver</Button>
-                <Button colorScheme={"teal"} float={"right"} onClick={() => router.push(`/asistencia/editar/${asistencia.asambleaId[0].asamblea._id}`)}>Modificar Asistencia</Button>
+                {botonModificar()}
+                {/* <Button colorScheme={"teal"} float={"right"} onClick={() => router.push(`/asistencia/editar/${asistencia.asambleaId[0].asamblea._id}`)}>Modificar Asistencia</Button> */}
                 <Table variant="simple" my={15}>
                     <Thead>
                         <Tr>

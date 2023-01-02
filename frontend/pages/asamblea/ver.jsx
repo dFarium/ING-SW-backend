@@ -6,14 +6,17 @@ import Arriba from '../../components/Arriba'
 import Swal from 'sweetalert2'
 import {checkToken} from '../../data/usuario'
 import {ArrowBackIcon, AddIcon} from '../../node_modules/@chakra-ui/icons'
+const jwt = require('jwt-simple')
 
 export const getServerSideProps = async (context) => {
     try {
         const response = await checkToken(context.req.headers.cookie)
+        const decode = jwt.decode(context.req.cookies.token,process.env.SECRET_KEY)
         if (response.status === 200){
             return{
                 props:{
-                    existe: response.config.headers.cookie
+                    existe: response.config.headers.cookie,
+                    rol: decode.rol
                 }
             }
         }
@@ -69,12 +72,24 @@ const asamblea = (data) => {
         })
     }
 
+    const botonCrear= () =>{
+        let boton
+        if(data.rol === "admin"){
+            boton = <Button leftIcon={<AddIcon />}  colorScheme={"teal"} float={"right"} onClick={()=>router.push('/asamblea/crear')} >Crear Asamblea</Button>
+        }else{
+            boton = <div></div>
+        }
+        return boton
+    }
+
+
     return (
         <Box>
             <Arriba token={data.existe}/>
             <Container maxW="container.xl">
                 <Heading textAlign={"center"} my={15}>Asambleas</Heading>
-                <Button leftIcon={<AddIcon />}  colorScheme={"teal"} float={"right"} onClick={()=>router.push('/asamblea/crear')} >Crear Asamblea</Button>
+                {botonCrear()}
+                {/* <Button leftIcon={<AddIcon />}  colorScheme={"teal"} float={"right"} onClick={()=>router.push('/asamblea/crear')} >Crear Asamblea</Button> */}
                 <Button leftIcon={<ArrowBackIcon />}  colorScheme={"teal"} float={"left"} onClick={()=>router.push('/')} >Volver</Button>
                 <Table variant="simple" my={15}>
                     <Thead>

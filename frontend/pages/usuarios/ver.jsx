@@ -10,13 +10,15 @@ const jwt = require('jwt-simple')
 export const getServerSideProps = async (context) => {
     try {
         const response = await getUsuario(context.req.headers.cookie)
+        const decode = jwt.decode(context.req.cookies.token,process.env.SECRET_KEY)
         const res = await checkToken(context.req.headers.cookie)
         // console.log(context.cookies.token)
         if (response.status === 200){
             return {
                 props: {
                     user: response.data,
-                    existe: res.config.headers.cookie
+                    existe: res.config.headers.cookie,
+                    rol: decode.rol
                 }
             }
         }
@@ -57,12 +59,24 @@ const usuario = (data) => {
             )
         })
     }
+
+    const botonCrear= () =>{
+        let boton
+        if(data.rol === "admin"){
+            boton = <Button leftIcon={<AddIcon />}  colorScheme={"teal"} float={"right"} onClick={()=>router.push('/usuarios/crear_usuario')} >Ingresar Usuario</Button>
+        }else{
+            boton = <div></div>
+        }
+        return boton
+    }
+    
     return (
         <Box>
             <Arriba token={data.existe}/>
             <Container maxW="container.xl">
             <Heading textAlign={"center"} my={15}>Usuario</Heading>
-            <Button leftIcon={<AddIcon />}  colorScheme={"teal"} float={"right"} onClick={()=>router.push('/usuarios/crear_usuario')} >Ingresar Usuario</Button>
+            {botonCrear()}
+            {/* <Button leftIcon={<AddIcon />}  colorScheme={"teal"} float={"right"} onClick={()=>router.push('/usuarios/crear_usuario')} >Ingresar Usuario</Button> */}
             <Button leftIcon={<ArrowBackIcon />}  colorScheme={"teal"} float={"left"} onClick={()=>router.push('/')} >Volver</Button>
             <Table variant="simple" my={15}>
                 <Thead>
