@@ -6,6 +6,7 @@ import Arriba from '../../components/Arriba'
 import Swal from 'sweetalert2'
 import {checkToken} from '../../data/usuario'
 const jwt = require('jwt-simple')
+import { DownloadIcon, DeleteIcon} from '../../node_modules/@chakra-ui/icons'
 
 
 //funcion para obtener la cookie y ver que rol tiene el usuario
@@ -103,9 +104,15 @@ const archivos= (data) => {
                     </Td>
                     <Td>{archivos.fecha}</Td>
                     <Td>
-                        <Button onClick={()=>router.push(`${process.env.API_URL}/file/download/${archivos._id}`)}>Download</Button>
+                        <Button mx={'2.5'} bg={'white'} onClick={()=>router.push(`${process.env.API_URL}/file/download/${archivos._id}`)}>
+                            <DownloadIcon  w={6} h={6} color="green.500" ></DownloadIcon>
+                        </Button>
                     </Td>
-                    <Td><Button onClick={()=>eliminarArchivos(archivos._id, archivos.asamblea._id)}>Eliminar</Button></Td>
+                    <Td>
+                        <Button mx={'2.5'}  bg={'white'} onClick={()=>eliminarArchivos(archivos._id, archivos.asamblea._id)}>
+                            <DeleteIcon  w={6} h={6} color="red.400"></DeleteIcon>
+                        </Button>
+                    </Td>
                 </Tr>
             )
         })
@@ -123,7 +130,7 @@ const archivos= (data) => {
                         <Td>Archivo</Td>
                         <Td>Asamblea</Td>
                         <Td>Fecha</Td>
-                        <Td>Descarga</Td>
+                        <Td>Descargar</Td>
                         <Td>Eliminar</Td>
                     </Tr>
                 </Thead>

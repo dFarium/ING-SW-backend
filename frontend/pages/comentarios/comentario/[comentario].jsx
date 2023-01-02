@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import axios from 'axios'
-import { Tr, Table, Button, Container, HStack, Input, FormControl, RadioGroup, Radio, Text, Heading, Td, Thead, Center,Box} from '@chakra-ui/react'
+
+import { FormLabel, Tr, Table, Button, Container, HStack, Input, FormControl, RadioGroup, Radio, Text, Heading, SimpleGrid, Td, Thead, Center, Box} from '@chakra-ui/react'
+
 import Swal from 'sweetalert2'
 import {checkToken} from '../../../data/usuario'
 const jwt = require('jwt-simple')
@@ -52,8 +54,6 @@ export async function getServerSideProps(context){
 const comentario = (props) => {
     const router = useRouter()
     const {comentarioID} = props
-    const [errorMessage, setErrorMessage] = useState('')
-    const [successMessage, setSuccessMessage] = useState('')
     const [values, setValues] = useState({})
 
     const onChange = async (e) =>{
@@ -73,16 +73,32 @@ const comentario = (props) => {
                 confirmButtonText: 'Ok'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    router.push('/comentarios')
+                    router.push('/asamblea/ver')
                 }
             })
             } catch (error) {
-                Swal.fire({
-                    title: 'Error',
-                    text: 'Ha ocurrido un error',
-                    icon: 'error',
-                    confirmButtonText: 'Ok'
-                })
+                if(error.response.status === 401){
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'No está autorizado para eliminar el comentario',
+                        icon: 'error',
+                        confirmButtonText: 'Ok'
+                    })
+                }else if(error.response.status === 404){
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'No se encontró el comentario',
+                        icon: 'error',
+                        confirmButtonText: 'Ok'
+                    })
+                }else if(error.response.status === 400){
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'No se pudo eliminar',
+                        icon: 'error',
+                        confirmButtonText: 'Ok'
+                    })
+                }
             }
         }
     return (
@@ -117,7 +133,7 @@ const comentario = (props) => {
                     <Button colorScheme= "green" size="md" type="submit" my={5} onClick={() => router.push(`/comentarios/actualizarComentario/${comentarioID._id}`)}>Editar</Button>
                 </Center>
                 <Center>
-                    <RadioGroup>
+                    <RadioGroup my={5}>
                         <HStack spacing='24px'>
                             <Radio value='user' onChange={onChange} name={"rolUsuario"}>user</Radio>
                             <Radio value='admin' onChange={onChange} name={"rolUsuario"}>admin</Radio>
@@ -125,22 +141,16 @@ const comentario = (props) => {
                     </RadioGroup>
                 </Center>
                 <Center>
+                    {values.rolUsuario === 'user' && (
+                        <FormControl my={2} onChange={onChange} isRequired="true">
+                            <Center> <FormLabel>Ingresa tú ID</FormLabel> </Center>
+                            <Center> <Input maxW="300px" id="user" name="user" placeholder="Ingresa tú id" onChange={onChange} /> </Center>
+                        </FormControl>
+                    )}
                 </Center>
                 <Center>
-                    <FormControl>
-                        <Center>
-                            {/* <FormLabel my={4} htmlFor="name">Usuario: </FormLabel> */}
-                            <Input my={5}maxW="300px" id="user" name="user" placeholder="Ingresa tú id" onChange={onChange} />
-                        </Center>
-                        
-                    </FormControl>
+                    <Button my={5} coloScheme="facebook" size="md" type="submit" onClick={() => router.push(`/asamblea/ver/`)}>Volver</Button>
                 </Center>
-                <Center>
-                    <Button coloScheme="facebook" size="md" type="submit" my={5} onClick={() => router.push(`/comentarios`)}>Comentarios</Button>
-                </Center>
-                        
-                        {errorMessage && <Text color="red">{errorMessage}</Text>}
-                        {successMessage && <Text color="green">{successMessage}</Text>}
             </Container>
             </Box>
     )
