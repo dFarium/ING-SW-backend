@@ -59,7 +59,7 @@ const logearse = ({data}) => {
             return Swal.fire({
                 icon: "error",
                 title:"Error",
-                text: `A ocurrido un error con el token${error}`
+                text: 'A ocurrido un error con el token'
             })
         }
         prueba = Cookie.get("token")
