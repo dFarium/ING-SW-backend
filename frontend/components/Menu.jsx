@@ -23,6 +23,7 @@ import { HiUserGroup } from 'react-icons/hi'
 import { FaUserAlt } from 'react-icons/fa'
 import { AiFillFile, AiFillHome } from 'react-icons/ai'
 
+
 const Menu = () => {
 
     const router = useRouter()
@@ -45,12 +46,13 @@ const Menu = () => {
                         <Button w={"full"} onClick={()=>router.push(ruta)}>
                             <Icon mx={'1.5'} color={'teal.500'} w={5} h={5} as={nombreIcon}/>
                             {nombre}
-                            </Button>
+                        </Button>
                     </AccordionPanel>
                 </AccordionItem>
             </Accordion>
         )
     }
+
     return (
         <>
         <Button ref={btnRef} variant='outline' colorScheme='white' onClick={onOpen}>
