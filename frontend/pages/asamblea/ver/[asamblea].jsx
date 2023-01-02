@@ -117,7 +117,7 @@ const asamblea = (data) => {
                 <Td maxW="500">{comentario.apartado}</Td>
                 <Td maxW="500">{time}</Td>
                 <Td maxW="500">{comentario.user && comentario.user.name}</Td>
-                <Td><Button colorScheme="twitter" variant='link' onClick={() => router.push(`/comentarios/comentario/${comentario._id}`)}>detalle</Button></Td>
+                <Td><Button colorScheme="twitter" variant='link' onClick={() => router.push(`/comentarios/comentario/${comentario._id}`)}>Detalles</Button></Td>
                 </Tr>
             )
         })
@@ -449,7 +449,7 @@ const asamblea = (data) => {
                                                 {/* Colores boton */}
                                                 <AccordionButton bg='gray.200' _expanded={{  bg: 'orange.200', color: 'white' }}>
                                                     <Box as="span" flex='1' textAlign='center'>
-                                                        Crear comentario
+                                                        Publicar comentario
                                                     </Box>
                                                     <AccordionIcon />
                                                 </AccordionButton>
