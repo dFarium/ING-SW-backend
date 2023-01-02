@@ -1,10 +1,7 @@
 import React from 'react'
-import { Box, Heading, Button, Image, Link, Flex, cookieStorageManager} from '@chakra-ui/react'
+import { Box, Button, Link, Flex} from '@chakra-ui/react'
 import Cookies from 'js-cookie'
-// import axios from 'axios'
 import { useRouter } from 'next/router'
-import {logout} from '../data/usuario'
-
 
 
 const Arriba = ({token}) => {
