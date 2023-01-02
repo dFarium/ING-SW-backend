@@ -2,22 +2,26 @@ import { useState, useEffect } from 'react'
 import { Container, Table, Thead, Tbody, Tr, Td, Heading, Button, Box } from '@chakra-ui/react'
 import axios from 'axios'
 import { useRouter } from 'next/router'
-import { getUsuario } from '../../data/usuario'
+import { getUsuario, checkToken } from '../../data/usuario'
 import Arriba from '../../components/Arriba'
 import { ArrowBackIcon, AddIcon} from '../../node_modules/@chakra-ui/icons'
+const jwt = require('jwt-simple')
 
 export const getServerSideProps = async (context) => {
     try {
         const response = await getUsuario(context.req.headers.cookie)
+        const res = await checkToken(context.req.headers.cookie)
+        // console.log(context.cookies.token)
         if (response.status === 200){
             return {
                 props: {
-                    data: response.data,
-                    existe: response.config.headers.cookie
+                    user: response.data,
+                    existe: res.config.headers.cookie
                 }
             }
         }
     } catch (error) {
+        console.log("Error: ",error)
         return {
             redirect: {
                 destination: '/',
@@ -27,7 +31,7 @@ export const getServerSideProps = async (context) => {
     }
 }
 
-const usuario = ({data}) => {
+const usuario = (data) => {
     const router = useRouter()
     const [usuario] = useState(data)
 
@@ -39,9 +43,8 @@ const usuario = ({data}) => {
     // useEffect(()=>{
     //     getUsuario()
     // }, [])
-
     const showUsuario = () =>{
-        return usuario.map(usuario =>{
+        return usuario.user.map(usuario =>{
             return(
                 <Tr key={usuario._id}>
                     <Td>{usuario.name}</Td>
