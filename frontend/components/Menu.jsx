@@ -46,7 +46,7 @@ const Menu = () => {
                         <Button w={"full"} onClick={()=>router.push(ruta)}>
                             <Icon mx={'1.5'} color={'teal.500'} w={5} h={5} as={nombreIcon}/>
                             {nombre}
-                            </Button>
+                        </Button>
                     </AccordionPanel>
                 </AccordionItem>
             </Accordion>
