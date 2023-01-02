@@ -21,10 +21,10 @@ const Arriba = ({token}) => {
         let texto
         if(token){
             console.log('hola')
-            texto= <Button colorScheme={"blackAlpha"} onClick={onSubmit}>LOGOUT</Button>
+            texto= <Button colorScheme={"blackAlpha"} onClick={onSubmit}>CERRAR SESION</Button>
         }else{
             console.log('xao')
-            texto=<Link href="/loguearse/login">INICIAR SESION</Link>
+            texto = <Button colorScheme={"blackAlpha"} onClick={() => router.push(`/loguearse/login`)}>INICIAR SESION</Button>
         }
         return texto
     }

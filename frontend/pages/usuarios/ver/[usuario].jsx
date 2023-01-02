@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import axios from 'axios'
-import { Container, Heading, Tbody,Stack,HStack,Button,RadioGroup,Radio,Box } from '@chakra-ui/react'
+import { Container, Heading, Tbody,Stack,HStack,Button,RadioGroup,Radio,Box,useDisclosure,Modal,ModalBody,ModalFooter,ModalCloseButton,ModalContent,ModalOverlay,ModalHeader } from '@chakra-ui/react'
 import ShowInfo from '../../../components/ShowInfo'
 import Swal from 'sweetalert2'
 import {checkToken} from '../../../data/usuario'
@@ -44,6 +44,7 @@ const usuario = (data) => {
     const router = useRouter()
     const [usuarios] = useState(data)
     const[values, setValues] = useState({rolUsuario: 'admin'})
+    const { isOpen, onOpen, onClose } = useDisclosure()
 
     const onChange = async (e) =>{
         setValues({
@@ -88,13 +89,27 @@ const usuario = (data) => {
     return (
         <Box>
             <Arriba token={data.existe}/>
-            <Container maxW="container.xl" centerContent>
-                <Heading my={10}> {usuarios.usuarioId.name}</Heading>
+            <Container maxW="container.xl" textAlign={"center"}>
+                <Heading my={15}> {usuarios.usuarioId.name}</Heading>
+                <Button float={("left")} colorScheme={"teal"} onClick={() => router.push("/usuarios/ver")}>Volver</Button>
                 <HStack w={"full"} py={10}>
-                    <Button w={"full"} colorScheme={"teal"} onClick={() => router.push(`/usuarios/editar/${usuarios.usuarioId._id}`)}>Editar</Button>
-                    <Button w={"full"} colorScheme={"teal"} onClick={() => eliminarUsuario()}>Eliminar</Button>
-                    <Button w={"full"} colorScheme={"teal"} onClick={() => router.push("/usuarios/ver")}>Volver</Button>
+                    <Button w={"full"} colorScheme={"green"} onClick={() => router.push(`/usuarios/editar/${usuarios.usuarioId._id}`)}>Editar</Button>
+                    <Button w={"full"} colorScheme={"red"} onClick={onOpen}>Eliminar usuario</Button>
                 </HStack>
+
+                <Modal isOpen={isOpen} onClose={onClose}>
+                            <ModalOverlay/>
+                                <ModalContent>
+                                    <ModalHeader>Eliminar?</ModalHeader>
+                                    <ModalCloseButton/>
+                                    <ModalBody>¿Esta seguro de eliminar esta asamblea?</ModalBody>
+                                    <ModalFooter justifyContent={"space-between"}>
+                                        <Button colorScheme={"red"} onClick={() =>{onClose(); eliminarUsuario();}}>Eliminar</Button>
+                                        <Button colorScheme={"teal"} onClick={onClose}>Cancelar</Button>
+                                    </ModalFooter>
+                                </ModalContent>
+                        </Modal>
+
                 <Stack w={"full"}>
                     <ShowInfo tag="Nombre" data={usuarios.usuarioId.name} />
                     <ShowInfo tag="Correo" data={usuarios.usuarioId.email} />
