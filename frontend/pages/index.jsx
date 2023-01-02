@@ -3,15 +3,18 @@ import React from 'react'
 import { useRouter } from 'next/router'
 import Arriba from '../components/Arriba'
 import {checkToken} from '../data/usuario'
+const jwt = require('jwt-simple')
 // let token
 
 export const getServerSideProps = async (context) => {
     try {
         const response = await checkToken(context.req.headers.cookie)
+        const decode = jwt.decode(context.req.cookies.token,process.env.SECRET_KEY)
         if (response.status === 200){
             return{
                 props: {
-                    existe: response.config.headers.cookie
+                    existe: response.config.headers.cookie,
+                    rol:decode.rol
                 }
             }
         }

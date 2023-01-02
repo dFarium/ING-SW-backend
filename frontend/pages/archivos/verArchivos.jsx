@@ -83,6 +83,13 @@ const archivos= (data) => {
                     confirmButtonText: 'Ok'
                 })
             }
+        }else{
+            Swal.fire({
+                title: 'Error',
+                text: 'No tienes los permisos para eliminar archivos',
+                icon: 'error',
+                confirmButtonText: 'Ok'
+            })
         }
     }
 

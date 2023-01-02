@@ -23,6 +23,7 @@ import axios from 'axios'
 import Arriba from '../../../components/Arriba'
 import {checkToken} from '../../../data/usuario'
 const jwt = require("jwt-simple")
+import Swal from 'sweetalert2'
 
 export async function getServerSideProps(context){
     try {
@@ -79,7 +80,6 @@ const asistencia = (data) => {
 
 
     function modificarAsisteCheckbox (asistencia){
-        if(data.rol==='admin'){
             let checkbox;
             if(asistencia.asistencia === "Presente"){
                 checkbox = <Switch colorScheme="teal" isReadOnly defaultChecked ></Switch>;
@@ -87,14 +87,6 @@ const asistencia = (data) => {
                 checkbox = <Switch colorScheme="teal" isReadOnly></Switch>;
             }
             return checkbox;
-        }else{
-            wal.fire({
-                title: 'Error',
-                text: `No tiene los permisos para modificar asistencia`,
-                icon: 'error',
-                confirmButtonText: 'Ok'
-            })
-        }
     }
 
     return (
