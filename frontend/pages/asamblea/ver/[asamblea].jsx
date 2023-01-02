@@ -389,6 +389,16 @@ const asamblea = (data) => {
         }
     }
 
+    const botonEliminar = () =>{
+        let boton
+        if(data.rol === "admin"){
+            boton = <Button leftIcon={<DeleteIcon />} w={"full"} colorScheme={"red"} onClick={onOpenAsamblea}>Eliminar Asamblea</Button>
+        }else{
+            boton = <div></div>
+        }
+        return boton
+    }
+
 
 //----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -397,15 +407,13 @@ const asamblea = (data) => {
             <Arriba token={data.existe}/>
             <Container maxW="container.xl" >
                 <Heading my={15} textAlign={"center"}> {asambleas.asambleaId.name}</Heading>
-
-
                 <Button leftIcon={<ArrowBackIcon />}  float={"left"} colorScheme={"teal"} onClick={() => router.push("/asamblea/ver")}>Volver</Button>
                     <HStack w={"full"} py={10}>
                         <Button  leftIcon={<EditIcon />} w={"full"} colorScheme={"green"} onClick={() => router.push(`/asamblea/editar/${asambleas.asambleaId._id}`)}>
                             Editar</Button>
                         <Button leftIcon={<ViewIcon />} w={"full"} colorScheme={"teal"} onClick={() => router.push(`/asistencia/ver/${asambleas.asambleaId._id}`)}>Ver Asistencias Asamblea</Button>
-                        <Button leftIcon={<DeleteIcon />} w={"full"} colorScheme={"red"} onClick={onOpenAsamblea}>Eliminar Asamblea</Button>
-
+                        {/* <Button leftIcon={<DeleteIcon />} w={"full"} colorScheme={"red"} onClick={onOpenAsamblea}>Eliminar Asamblea</Button> */}
+                        {botonEliminar()}
                         <Modal isOpen={isOpenAsamblea} onClose={onCloseAsamblea}>
                             <ModalOverlay/>
                                 <ModalContent>
