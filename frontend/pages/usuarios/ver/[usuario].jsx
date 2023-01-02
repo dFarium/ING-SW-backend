@@ -96,7 +96,7 @@ const usuario = (data) => {
                 <HStack w={"full"} py={10}>
 
                     <Button leftIcon={<EditIcon />} w={"full"} colorScheme={"green"} onClick={() => router.push(`/usuarios/editar/${usuarios.usuarioId._id}`)}>Editar</Button>
-                    <Button leftIcon={<DeleteIcon />} w={"full"} colorScheme={"red"} onClick={() => eliminarUsuario()}>Eliminar</Button>
+                    <Button leftIcon={<DeleteIcon />} w={"full"} colorScheme={"red"} onClick={onOpen}>Eliminar</Button>
 
                 </HStack>
 
@@ -111,7 +111,7 @@ const usuario = (data) => {
                                         <Button colorScheme={"teal"} onClick={onClose}>Cancelar</Button>
                                     </ModalFooter>
                                 </ModalContent>
-                        </Modal>
+                </Modal>
 
                 <Stack w={"full"}>
                     <ShowInfo tag="Nombre" data={usuarios.usuarioId.name} />
