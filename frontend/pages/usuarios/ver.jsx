@@ -4,6 +4,7 @@ import axios from 'axios'
 import { useRouter } from 'next/router'
 import { getUsuario } from '../../data/usuario'
 import Arriba from '../../components/Arriba'
+import { ArrowBackIcon, AddIcon} from '../../node_modules/@chakra-ui/icons'
 
 export const getServerSideProps = async (context) => {
     try {
@@ -58,8 +59,8 @@ const usuario = ({data}) => {
             <Arriba token={data.existe}/>
             <Container maxW="container.xl">
             <Heading textAlign={"center"} my={15}>Usuario</Heading>
-            <Button colorScheme={"teal"} float={"right"} onClick={()=>router.push('/usuarios/crear_usuario')} >Ingresar Usuario</Button>
-            <Button colorScheme={"teal"} float={"left"} onClick={()=>router.push('/')} >Volver</Button>
+            <Button leftIcon={<AddIcon />}  colorScheme={"teal"} float={"right"} onClick={()=>router.push('/usuarios/crear_usuario')} >Ingresar Usuario</Button>
+            <Button leftIcon={<ArrowBackIcon />}  colorScheme={"teal"} float={"left"} onClick={()=>router.push('/')} >Volver</Button>
             <Table variant="simple" my={15}>
                 <Thead>
                     <Tr>

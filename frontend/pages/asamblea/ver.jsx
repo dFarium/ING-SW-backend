@@ -5,6 +5,7 @@ import { useRouter } from 'next/router'
 import Arriba from '../../components/Arriba'
 import Swal from 'sweetalert2'
 import {checkToken} from '../../data/usuario'
+import {ArrowBackIcon, AddIcon} from '../../node_modules/@chakra-ui/icons'
 
 export const getServerSideProps = async (context) => {
     try {
@@ -70,8 +71,8 @@ const asamblea = (data) => {
             <Arriba token={data.existe}/>
             <Container maxW="container.xl">
                 <Heading textAlign={"center"} my={15}>Asambleas</Heading>
-                <Button colorScheme={"teal"} float={"right"} onClick={()=>router.push('/asamblea/crear')} >Crear Asamblea</Button>
-                <Button colorScheme={"teal"} float={"left"} onClick={()=>router.push('/')} >Volver</Button>
+                <Button leftIcon={<AddIcon />}  colorScheme={"teal"} float={"right"} onClick={()=>router.push('/asamblea/crear')} >Crear Asamblea</Button>
+                <Button leftIcon={<ArrowBackIcon />}  colorScheme={"teal"} float={"left"} onClick={()=>router.push('/')} >Volver</Button>
                 <Table variant="simple" my={15}>
                     <Thead>
                         <Tr>
