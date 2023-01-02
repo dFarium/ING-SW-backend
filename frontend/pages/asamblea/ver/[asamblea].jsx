@@ -30,7 +30,11 @@ import { Container,
     ModalFooter,
     ModalBody,
     ModalCloseButton,
-    useDisclosure
+    useDisclosure,
+    FormControl,
+    Textarea,
+    Input,
+    Center
 } from '@chakra-ui/react'
 import {checkToken} from '../../../data/usuario'
 const jwt = require("jwt-simple")
