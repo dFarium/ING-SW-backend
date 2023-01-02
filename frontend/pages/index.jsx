@@ -43,7 +43,7 @@ export const index = (data) => {
             <Arriba token={data.existe}/>
         <Box >
             <Container maxW="container.xl">
-                <Heading  textAlign={"center"} size='3xl' my={15}>Bienvenido</Heading>
+                <Heading  textAlign={"center"} size='3xl' my={15}>Junta de Vecinos</Heading>
                 <HStack w={"full"} py={'20'}>
                     {indexButton('Asamblea','/asamblea/ver', HiUserGroup,)}
                     {indexButton('Historial de Actas', '/archivos/verArchivos', AiFillFile)}
