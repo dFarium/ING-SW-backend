@@ -15,7 +15,6 @@ export const getServerSideProps = async (context) => {
             }
         }
     } catch (error) {
-        console.log(error)
         return{
             redirect: {
                 destination: "/",

@@ -20,7 +20,6 @@ export const getServerSideProps = async (context) => {
             }
         }
     } catch (error) {
-        console.log(error)
         return{
             props: {}
         }
@@ -29,7 +28,6 @@ export const getServerSideProps = async (context) => {
 
 const logearse = ({data}) => {
     let prueba
-    console.log(data)
     const [usuario, setUsuario] = useState({correo: ""})
     const router = useRouter()
 
@@ -55,7 +53,6 @@ const logearse = ({data}) => {
                 }
             )}
         } catch (error) {
-            console.log(error)
             return Swal.fire({
                 icon: "error",
                 title:"Error",

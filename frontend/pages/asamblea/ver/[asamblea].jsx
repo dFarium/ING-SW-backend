@@ -70,7 +70,6 @@ export async function getServerSideProps(context){
                 }
             }
     } catch (error) {
-        console.log("ERROR",error)
         return{
             redirect:{
                 destination: '/asamblea/ver',
@@ -230,6 +229,14 @@ const asamblea = (data) => {
         }
     }
 
+    const showEliminar = ()=>{
+        if(data.rol==='admin'){
+            return(
+                <Td>Eliminar</Td>
+            )
+        }
+    }
+
     const eliminarArchivos = async (id_archivo, id_asamblea) =>{
         if (data.rol==='admin'){
             try {
@@ -275,15 +282,16 @@ const asamblea = (data) => {
             const [ano,mes,dia] =fecha.split('-')
             const [hora, min] =horas.split(':')
             const time = dia + '-' + mes + '-'  + ano + ' ' + hora +':' + min
-            return(
-                <Tr key={archivos._id}>
-                    <Td ><Link color='blue.500' href={`${process.env.API_URL}/file/download/${archivos._id}`}>{archivos.name}</Link></Td>
-                    <Td >{time}</Td>
-                    <Td ><Button bg={'transparent'}  onClick={onOpenArchivo}>
-                        <DeleteIcon  w={6} h={6} color="red.400"></DeleteIcon>
-                    </Button></Td>
 
-                    <Modal isOpen={isOpenArchivo} onClose={onCloseArchivo}>
+            if(data.rol === 'admin'){
+                return(
+                    <Tr key={archivos._id}>
+                        <Td ><Link color='blue.500' href={`${process.env.API_URL}/file/download/${archivos._id}`}>{archivos.name}</Link></Td>
+                        <Td >{time}</Td>
+                        <Td ><Button bg={'transparent'}  onClick={onOpenArchivo}>
+                        <DeleteIcon  w={6} h={6} color="red.400"></DeleteIcon>
+                        </Button>
+                        <Modal isOpen={isOpenArchivo} onClose={onCloseArchivo}>
                             <ModalOverlay/>
                                 <ModalContent>
                                     <ModalHeader>Eliminar?</ModalHeader>
@@ -294,10 +302,19 @@ const asamblea = (data) => {
                                         <Button colorScheme={"teal"} onClick={onCloseArchivo}>Cancelar</Button>
                                     </ModalFooter>
                                 </ModalContent>
-                </Modal>
-                    
-                </Tr>
-            )
+                        </Modal>
+                        </Td>
+                        
+                    </Tr>
+                )
+            }else{
+                return(
+                    <Tr key={archivos._id}>
+                        <Td ><Link color='blue.500' href={`${process.env.API_URL}/file/download/${archivos._id}`}>{archivos.name}</Link></Td>
+                        <Td >{time}</Td>
+                    </Tr>
+                )
+            }
         })
     }
 //----------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -414,12 +431,12 @@ const asamblea = (data) => {
                                 </AccordionButton>
                             </h2>
                             <AccordionPanel pb={'4'}>
-                                <Table size='sm' variant='striped' colorScheme='blackAlpha'>
+                                <Table  variant='striped' colorScheme='blackAlpha'>
                                     <Thead>
                                         <Tr>
                                             <Td>Archivos</Td>
                                             <Td>Fecha</Td>
-                                            <Td>Eliminar</Td>
+                                            {showEliminar()}
                                         </Tr>
                                     </Thead>
                                     <Tbody>
