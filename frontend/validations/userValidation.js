@@ -7,9 +7,7 @@ const userValidation = yup.object({
     email: yup.string()
     .required('El correo es requerido')
     .email('Ingrese un correo valido'),
-    role: yup.string()
-    .required('El rol es requerido')
-    .matches(/^[aA-zZ\s]+$/,'El rol debe tener caracteres validos'),
+    role: yup.mixed().required('El rol es requerido'),
     rolUsuario: yup.mixed().required('El rol es requerido')
 })
 

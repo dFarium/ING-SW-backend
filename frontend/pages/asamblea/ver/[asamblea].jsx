@@ -30,7 +30,12 @@ import { Container,
     ModalFooter,
     ModalBody,
     ModalCloseButton,
-    useDisclosure
+    useDisclosure,
+    FormControl,
+    Textarea,
+    Input,
+    Center,
+    FormLabel
 } from '@chakra-ui/react'
 import {checkToken} from '../../../data/usuario'
 const jwt = require("jwt-simple")
@@ -50,7 +55,8 @@ export async function getServerSideProps(context){
                     props:{
                         asambleaId: response.data,
                         existe: res.config.headers.cookie,
-                        rol:decode.rol
+                        rol:decode.rol,
+                        usuarioId: decode.sub
                     }
                 }
             }else{
@@ -78,7 +84,8 @@ const asamblea = (data) => {
     const [asambleas] = useState(data)
     const[values, setValues] = useState({
         rolUsuario: 'admin',
-        asamblea: `${asambleas.asambleaId._id}`
+        asamblea: `${asambleas.asambleaId._id}`,
+        user: `${data.usuarioId}`
     })
     const { isOpen, onOpen, onClose } = useDisclosure()
 // ------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -450,7 +457,8 @@ const asamblea = (data) => {
                                                             <Textarea placeholder="Ingresa un comentario" type={"text"} onChange={onChange} name="apartado"/>
                                                         </FormControl>
                                                         <FormControl my={2}>
-                                                            <Input placeholder="Ingresa tu ID de usuario" type={"text"} onChange={onChange} name="user"/>
+                                                            <FormLabel>ID usuario</FormLabel>
+                                                            <Input isReadOnly defaultValue={`${data.usuarioId}`} placeholder="Ingresa tu ID de usuario" type={"text"} onChange={onChange} name="user"/>
                                                         </FormControl>
                                                         <Center>
                                                             <Button colorScheme="messenger" size="md" type="submit" my={5} onClick={onSubmit}>Enviar</Button>

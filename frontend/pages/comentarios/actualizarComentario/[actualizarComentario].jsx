@@ -1,5 +1,4 @@
 import React, {useState} from "react"
-
 import { Textarea, RadioGroup, Radio, Button, Container, Input, Stack, Text, HStack, Heading, FormControl, FormLabel, Center, Box} from '@chakra-ui/react'
 
 import axios from "axios"
@@ -12,12 +11,15 @@ const jwt = require("jwt-simple")
 export async function getServerSideProps(context){
     try {
         const res = await checkToken(context.req.headers.cookie)
-            if (res.status === 200){
+        const jwt = jwt.decode(context.req.cookies.token,process.env.SECRET_KEY)
+        if (res.status === 200){
                 const response = await axios.get(`${process.env.API_URL}/comentario/search/${context.params.actualizarComentario}`)
                 return{
                     props:{
                         comentarioID: response.data,
                         existe: res.config.headers.cookie,
+                        rol: decode.rol,
+                        usuarioId: decode.sub,
                     }
                 }
             }else{
@@ -41,12 +43,13 @@ export async function getServerSideProps(context){
 
 const actualizarComentario = (props) => {
     const router = useRouter()
-    const {comentarioID} = props
+    const [comentario] = useState(props)
+    console.log(props)
     const [values, setValues] = useState({
-            apartado: `${comentarioID.apartado}`,
-            user: `${comentarioID.user._id}`,
-            asamblea: `${comentarioID.asamblea._id}`,
-            rolUsuario: 'admin'
+            apartado: `${comentario.comentarioID.apartado}`,
+            user: `${comentario.comentarioID.user._id}`,
+            asamblea: `${comentario.comentarioID.asamblea._id}`,
+            rolUsuario: `${props.rol}`
 
     })
 
@@ -137,7 +140,7 @@ const actualizarComentario = (props) => {
                 </HStack>
 
             </RadioGroup>
-            
+            */}
                 {values.rolUsuario === 'user' && (
                         <FormControl my={2} onChange={onChange} isRequired="true">
                             <FormLabel my={4} htmlFor="name">Usuario</FormLabel>
