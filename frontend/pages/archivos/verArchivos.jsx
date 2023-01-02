@@ -122,7 +122,7 @@ const archivos= (data) => {
         <Box>
             <Arriba token={data.existe}/>
             <Container maxW="container.xl">
-            <Heading textAlign={"center"} my={16}>Historial de Actas</Heading>
+            <Heading textAlign={"center"} my={15}>Historial de Actas</Heading>
             <Button leftIcon={<ArrowBackIcon />}  colorScheme={"teal"} my={15} mx={15} float={'left'} onClick={()=>router.push('/')} >Volver</Button>
             <Table my={15} variant="simple">
                 <Thead>
