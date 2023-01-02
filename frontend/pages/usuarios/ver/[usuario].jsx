@@ -118,12 +118,12 @@ const usuario = (data) => {
                     <ShowInfo tag="Correo" data={usuarios.usuarioId.email} />
                     <ShowInfo tag="Rol" data={usuarios.usuarioId.role}/>
                 </Stack>
-                <RadioGroup >
+                {/* <RadioGroup >
                     <HStack spacing='24px'>
                     <Radio value='user' onChange={onChange} name={"rolUsuario"}>user</Radio>
                     <Radio value='admin' onChange={onChange} name={"rolUsuario"}>admin</Radio>
                     </HStack>
-                </RadioGroup>
+                </RadioGroup> */}
             </Container>
         </Box>
     )
