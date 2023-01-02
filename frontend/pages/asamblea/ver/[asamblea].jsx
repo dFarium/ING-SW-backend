@@ -76,7 +76,10 @@ export async function getServerSideProps(context){
 const asamblea = (data) => {
     const router = useRouter()
     const [asambleas] = useState(data)
-    const[values, setValues] = useState({rolUsuario: 'admin'})
+    const[values, setValues] = useState({
+        rolUsuario: 'admin',
+        asamblea: `${asambleas.asambleaId._id}`
+    })
     const { isOpen, onOpen, onClose } = useDisclosure()
 // ------------------------------------------------------------------------------------------------------------------------------------------------------------
     //moi
@@ -107,7 +110,34 @@ const asamblea = (data) => {
             )
         })
     }
-// ------------------------------------------------------------------------------------------------------------------------------------------------------------
+    //moi
+    const onSubmit = async (e) => {
+        e.preventDefault()
+        try {
+            await axios.post(`${process.env.API_URL}/comentario`, values)
+            //setSuccessMessage(response.data.message)
+            Swal.fire({
+                title: 'Comentario creado',
+                text: 'Comentario creado correctamente',
+                icon: 'success',
+                confirmButtonText: 'Ok'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.reload()
+                }
+            })
+        } catch (error) {
+            Swal.fire({
+                title: 'Error',
+                text: 'Ha ocurrido un error',
+                icon: 'error',
+                confirmButtonText: 'Ok'
+            })
+        }
+    }
+
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
     const onChange = async (e) =>{
         setValues({
             ...values,
@@ -343,7 +373,7 @@ const asamblea = (data) => {
                     <ShowInfo tag="Nombre" data={asambleas.asambleaId.name} />
                     <ShowInfo tag="Tipo" data={asambleas.asambleaId.tipo} />
                     <Accordion allowMultiple w={"full"}>
-                        <AccordionItem my={'15'}>
+                        <AccordionItem my={'5'}>
                             <h2>
                                 <AccordionButton bg='gray.200'  _expanded={{  bg: 'teal.400', color: 'white' }}>
                                     <Box as="span" flex='1' textAlign='center'>
@@ -376,7 +406,7 @@ const asamblea = (data) => {
                             <h2>
                                 {/* Colores boton */}
                                 <AccordionButton bg='gray.200' _expanded={{  bg: 'orange.400', color: 'white' }}>
-                                    <Box as="span" flex='1' textAlign='center'>
+                                    <Box as="span" flex='1' textAlign='left'>
                                         Comentarios
                                     </Box>
                                     <AccordionIcon />
@@ -384,19 +414,45 @@ const asamblea = (data) => {
                             </h2>
                             <AccordionPanel pb={'5'}>
                                     <Container maxW='1250px'>
-                                        <Table variant="simple" >
-                                        <Thead>
-                                            <Tr>
-                                            <Th>Comentario</Th>
-                                            <Th>Fecha</Th>
-                                            <Th>Usuario</Th>
-                                            </Tr>
-                                        </Thead>
-                                        <Tbody wy={10}>
-                                            {showComentarios()}
-                                        </Tbody>
+                                        <Table variant="simple">
+                                            <Thead>
+                                                <Tr>
+                                                    <Th>Comentario</Th>
+                                                    <Th>Fecha</Th>
+                                                    <Th>Usuario</Th>
+                                                </Tr>
+                                            </Thead>
+                                            <Tbody wy={10}>
+                                                {showComentarios()}
+                                            </Tbody>
                                         </Table>
                                     </Container>
+                                    <Accordion allowMultiple w={"full"}>
+                                            <AccordionItem my={'5'}>
+                                            <h2>
+                                                {/* Colores boton */}
+                                                <AccordionButton bg='gray.200' _expanded={{  bg: 'orange.200', color: 'white' }}>
+                                                    <Box as="span" flex='1' textAlign='center'>
+                                                        Crear comentario
+                                                    </Box>
+                                                    <AccordionIcon />
+                                                </AccordionButton>
+                                            </h2>
+                                                <AccordionPanel pb={'5'}>
+                                                    <Container>
+                                                        <FormControl>
+                                                            <Textarea placeholder="Ingresa un comentario" type={"text"} onChange={onChange} name="apartado"/>
+                                                        </FormControl>
+                                                        <FormControl my={2}>
+                                                            <Input placeholder="Ingresa tu ID de usuario" type={"text"} onChange={onChange} name="user"/>
+                                                        </FormControl>
+                                                        <Center>
+                                                            <Button colorScheme="messenger" size="md" type="submit" my={5} onClick={onSubmit}>Enviar</Button>
+                                                        </Center>
+                                                    </Container>
+                                                </AccordionPanel>
+                                            </AccordionItem>
+                                    </Accordion>
                             </AccordionPanel>
                         </AccordionItem>
                     </Accordion>
