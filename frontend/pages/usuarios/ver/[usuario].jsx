@@ -7,6 +7,7 @@ import Swal from 'sweetalert2'
 import {checkToken} from '../../../data/usuario'
 const jwt = require("jwt-simple")
 import Arriba from '../../../components/Arriba'
+import { ArrowBackIcon, DeleteIcon, EditIcon  } from '../../../node_modules/@chakra-ui/icons'
 
 export async function getServerSideProps(context){
     try {
@@ -91,10 +92,12 @@ const usuario = (data) => {
             <Arriba token={data.existe}/>
             <Container maxW="container.xl" textAlign={"center"}>
                 <Heading my={15}> {usuarios.usuarioId.name}</Heading>
-                <Button float={("left")} colorScheme={"teal"} onClick={() => router.push("/usuarios/ver")}>Volver</Button>
+                <Button leftIcon={<ArrowBackIcon />} float={("left")} colorScheme={"teal"} onClick={() => router.push("/usuarios/ver")}>Volver</Button>
                 <HStack w={"full"} py={10}>
-                    <Button w={"full"} colorScheme={"green"} onClick={() => router.push(`/usuarios/editar/${usuarios.usuarioId._id}`)}>Editar</Button>
-                    <Button w={"full"} colorScheme={"red"} onClick={onOpen}>Eliminar usuario</Button>
+
+                    <Button leftIcon={<EditIcon />} w={"full"} colorScheme={"green"} onClick={() => router.push(`/usuarios/editar/${usuarios.usuarioId._id}`)}>Editar</Button>
+                    <Button leftIcon={<DeleteIcon />} w={"full"} colorScheme={"red"} onClick={() => eliminarUsuario()}>Eliminar</Button>
+
                 </HStack>
 
                 <Modal isOpen={isOpen} onClose={onClose}>

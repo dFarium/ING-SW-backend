@@ -38,7 +38,7 @@ import ShowInfo from '../../../components/ShowInfo'
 import Swal from 'sweetalert2'
 import Arriba from '../../../components/Arriba'
 import { BiUpload } from 'react-icons/bi'
-import { DeleteIcon } from '../../../node_modules/@chakra-ui/icons'
+import { DeleteIcon, EditIcon, ViewIcon, ArrowBackIcon } from '../../../node_modules/@chakra-ui/icons'
 
 export async function getServerSideProps(context){
     try {
@@ -76,7 +76,10 @@ export async function getServerSideProps(context){
 const asamblea = (data) => {
     const router = useRouter()
     const [asambleas] = useState(data)
-    const[values, setValues] = useState({rolUsuario: 'admin'})
+    const[values, setValues] = useState({
+        rolUsuario: 'admin',
+        asamblea: `${asambleas.asambleaId._id}`
+    })
     const { isOpen, onOpen, onClose } = useDisclosure()
 // ------------------------------------------------------------------------------------------------------------------------------------------------------------
     //moi
@@ -107,7 +110,34 @@ const asamblea = (data) => {
             )
         })
     }
-// ------------------------------------------------------------------------------------------------------------------------------------------------------------
+    //moi
+    const onSubmit = async (e) => {
+        e.preventDefault()
+        try {
+            await axios.post(`${process.env.API_URL}/comentario`, values)
+            //setSuccessMessage(response.data.message)
+            Swal.fire({
+                title: 'Comentario creado',
+                text: 'Comentario creado correctamente',
+                icon: 'success',
+                confirmButtonText: 'Ok'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.reload()
+                }
+            })
+        } catch (error) {
+            Swal.fire({
+                title: 'Error',
+                text: 'Ha ocurrido un error',
+                icon: 'error',
+                confirmButtonText: 'Ok'
+            })
+        }
+    }
+
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
     const onChange = async (e) =>{
         setValues({
             ...values,
@@ -123,7 +153,7 @@ const asamblea = (data) => {
                 if (response.status === 200){
                     Swal.fire({
                         title: 'Asamblea eliminada',
-                        text: 'La asamblea se ha eliminado con exito',
+                        text: 'La asamblea y sus archivos asociados se han eliminado con exito',
                         icon: 'success',
                         confirmButtonText: 'Ok'
                     }).then((result)=>{
@@ -155,14 +185,7 @@ const asamblea = (data) => {
         try {
             const response = await axios.delete(`${process.env.API_URL}/file/deleteAll/${asambleas.asambleaId._id}`)
             if (response.status === 200){
-                Swal.fire({
-                    title: 'Archivos Asociados eliminados',
-                    text: 'Los archivos adjuntos de la asamblea han sido borrados',
-                    icon: 'success',
-                    confirmButtonText: 'Ok'
-                }).then(()=>{
-                    eliminarAsamblea()
-                })
+                eliminarAsamblea()
             }
             }catch (error) {
             Swal.fire({
@@ -318,11 +341,12 @@ const asamblea = (data) => {
                 <Heading my={15} textAlign={"center"}> {asambleas.asambleaId.name}</Heading>
 
 
-                <Button float={"left"} colorScheme={"teal"} onClick={() => router.push("/asamblea/ver")}>Volver</Button>
+                <Button leftIcon={<ArrowBackIcon />}  float={"left"} colorScheme={"teal"} onClick={() => router.push("/asamblea/ver")}>Volver</Button>
                     <HStack w={"full"} py={10}>
-                        <Button w={"full"} colorScheme={"green"} onClick={() => router.push(`/asamblea/editar/${asambleas.asambleaId._id}`)}>Editar</Button>
-                        <Button w={"full"} colorScheme={"teal"} onClick={() => router.push(`/asistencia/ver/${asambleas.asambleaId._id}`)}>Ver asistencias asamblea</Button>
-                        <Button w={"full"} colorScheme={"red"} onClick={onOpen}>Eliminar asamblea</Button>
+                        <Button  leftIcon={<EditIcon />} w={"full"} colorScheme={"green"} onClick={() => router.push(`/asamblea/editar/${asambleas.asambleaId._id}`)}>
+                            Editar</Button>
+                        <Button leftIcon={<ViewIcon />} w={"full"} colorScheme={"teal"} onClick={() => router.push(`/asistencia/ver/${asambleas.asambleaId._id}`)}>Ver Asistencias Asamblea</Button>
+                        <Button leftIcon={<DeleteIcon />} w={"full"} colorScheme={"red"} onClick={onOpen}>Eliminar Asamblea</Button>
 
                         <Modal isOpen={isOpen} onClose={onClose}>
                             <ModalOverlay/>
@@ -349,7 +373,7 @@ const asamblea = (data) => {
                     <ShowInfo tag="Nombre" data={asambleas.asambleaId.name} />
                     <ShowInfo tag="Tipo" data={asambleas.asambleaId.tipo} />
                     <Accordion allowMultiple w={"full"}>
-                        <AccordionItem my={'15'}>
+                        <AccordionItem my={'5'}>
                             <h2>
                                 <AccordionButton bg='gray.200'  _expanded={{  bg: 'teal.400', color: 'white' }}>
                                     <Box as="span" flex='1' textAlign='center'>
@@ -382,7 +406,7 @@ const asamblea = (data) => {
                             <h2>
                                 {/* Colores boton */}
                                 <AccordionButton bg='gray.200' _expanded={{  bg: 'orange.400', color: 'white' }}>
-                                    <Box as="span" flex='1' textAlign='center'>
+                                    <Box as="span" flex='1' textAlign='left'>
                                         Comentarios
                                     </Box>
                                     <AccordionIcon />
@@ -390,19 +414,45 @@ const asamblea = (data) => {
                             </h2>
                             <AccordionPanel pb={'5'}>
                                     <Container maxW='1250px'>
-                                        <Table variant="simple" >
-                                        <Thead>
-                                            <Tr>
-                                            <Th>Comentario</Th>
-                                            <Th>Fecha</Th>
-                                            <Th>Usuario</Th>
-                                            </Tr>
-                                        </Thead>
-                                        <Tbody wy={10}>
-                                            {showComentarios()}
-                                        </Tbody>
+                                        <Table variant="simple">
+                                            <Thead>
+                                                <Tr>
+                                                    <Th>Comentario</Th>
+                                                    <Th>Fecha</Th>
+                                                    <Th>Usuario</Th>
+                                                </Tr>
+                                            </Thead>
+                                            <Tbody wy={10}>
+                                                {showComentarios()}
+                                            </Tbody>
                                         </Table>
                                     </Container>
+                                    <Accordion allowMultiple w={"full"}>
+                                            <AccordionItem my={'5'}>
+                                            <h2>
+                                                {/* Colores boton */}
+                                                <AccordionButton bg='gray.200' _expanded={{  bg: 'orange.200', color: 'white' }}>
+                                                    <Box as="span" flex='1' textAlign='center'>
+                                                        Crear comentario
+                                                    </Box>
+                                                    <AccordionIcon />
+                                                </AccordionButton>
+                                            </h2>
+                                                <AccordionPanel pb={'5'}>
+                                                    <Container>
+                                                        <FormControl>
+                                                            <Textarea placeholder="Ingresa un comentario" type={"text"} onChange={onChange} name="apartado"/>
+                                                        </FormControl>
+                                                        <FormControl my={2}>
+                                                            <Input placeholder="Ingresa tu ID de usuario" type={"text"} onChange={onChange} name="user"/>
+                                                        </FormControl>
+                                                        <Center>
+                                                            <Button colorScheme="messenger" size="md" type="submit" my={5} onClick={onSubmit}>Enviar</Button>
+                                                        </Center>
+                                                    </Container>
+                                                </AccordionPanel>
+                                            </AccordionItem>
+                                    </Accordion>
                             </AccordionPanel>
                         </AccordionItem>
                     </Accordion>

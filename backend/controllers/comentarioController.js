@@ -92,7 +92,7 @@ const obtenerComentario = (req, res) => {
 
 const viewAsambleaComentario = (req, res)=>{
 
-    Asamblea.findById(req.params.id, (error, asamblea) => {
+    Asamblea.findById(req.params.id).exec((error, asamblea) => {
         if (error) {
             return res.status(400).send({ message: "Error al obtener el comentario" })
         }
@@ -100,14 +100,14 @@ const viewAsambleaComentario = (req, res)=>{
             return res.status(404).send({ message: "El comentario no existe" })
         }
 
-        Comentario.find({asamblea: req.params.id},(error,comment)=>{
+        Comentario.find({asamblea: req.params.id}).populate({path: 'user'}).exec((error,comment)=>{
             if(error){
                 return res.status(400).send({ message: 'Error al obtener el comentario'})
             }
             if(comment.length === 0){
                 return res.status(404).send({ message: "El comentario no existe"})
             }else{
-                return res.status(201).send(comment)
+                return res.status(201).send(comment.sort((a,b)=> b.fecha - a.fecha))
             }
         })
     })
