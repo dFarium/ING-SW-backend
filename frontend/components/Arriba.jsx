@@ -26,10 +26,12 @@ const Arriba = ({token}) => {
         let texto
         if(token){
             console.log('hola')
+
             texto= <Button leftIcon={<Icon as={BiLogOut}/>} colorScheme={"blackAlpha"} onClick={onSubmit}>CERRAR SESION</Button>
         }else{
             console.log('xao')
             texto = <Button leftIcon={<Icon as={BiLogIn}/>} colorScheme={"blackAlpha"} onClick={() => router.push('/loguearse/login')}>INICIAR SESION</Button>
+
         }
         return texto
     }
