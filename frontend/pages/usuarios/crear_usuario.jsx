@@ -1,4 +1,4 @@
-import { Button, Container, Stack,HStack ,Heading,Radio,RadioGroup,Box} from '@chakra-ui/react'
+import { Button, Container, Stack,HStack ,Heading,Radio,RadioGroup,Box, FormLabel} from '@chakra-ui/react'
 import Swal from 'sweetalert2'
 import { useRouter } from 'next/router'
 import { crearUsuario, checkToken } from '../../data/usuario'
@@ -49,7 +49,7 @@ export const getServerSideProps = async (context) => {
 
 
 const usuario = (data) => {
- 
+
     const router = useRouter()
     return(
     <Box>
@@ -62,7 +62,7 @@ const usuario = (data) => {
             name: "",
             email:"",
             role:"",
-            rolUsuario:""
+            rolUsuario:"admin"
         }}
         validationSchema={userValidation}
         onSubmit = {async (values) => {
@@ -101,14 +101,20 @@ const usuario = (data) => {
                         {touched.name && errors.name && <FormikError error ={errors.name}/> }
                         <FormInput onChange={handleChange} placeholder="Ingrese Correo" label="Correo" type={"text"} name={"email"} onBlur={handleBlur} value={values.email}/>
                         {touched.email && errors.email && <FormikError error ={errors.email}/> }
-                        <FormInput onChange={handleChange} placeholder="Rol para usuario" label="Rol" type={"text"} name={"role"} onBlur={handleBlur} value={values.role}/>
-                        {touched.role && errors.role && <FormikError error ={errors.role}/>}
                         <RadioGroup >
+                            <FormLabel>Rol del usuario</FormLabel>
+                            <HStack spacing='24px'>
+                                <Radio value='user' onChange={handleChange} name={"role"}>Usuario</Radio>
+                                <Radio value='admin' onChange={handleChange} name={"role"}>Administrador</Radio>
+                            </HStack>
+                        </RadioGroup>
+                        {touched.role && errors.role && <FormikError error ={errors.role}/>}
+                        {/* <RadioGroup >
                             <HStack spacing='24px'>
                                 <Radio value='user' onChange={handleChange} name={"rolUsuario"}>user</Radio>
                                 <Radio value='admin' onChange={handleChange} name={"rolUsuario"}>admin</Radio>
                             </HStack>
-                        </RadioGroup>
+                        </RadioGroup> */}
                         {touched.rolUsuario && errors.rolUsuario && <FormikError error ={errors.rolUsuario}/>}
                     </Stack>
                     <Button colorScheme="teal" size="md" type="submit" my={5} onClick={handleSubmit}>Ingresar usuario</Button>
