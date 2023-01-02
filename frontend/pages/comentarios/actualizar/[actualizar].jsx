@@ -6,7 +6,7 @@ import { useRouter } from 'next/router'
 
 export async function getServerSideProps(context) {
     try {
-        const response = await axios.get(`${process.env.API_URL}/comentario/search/${context.params.actualizar}`)
+        const response = await axios.get(`${process.env.API_URL}/comentario/search/${context.params.actualizarComentario}`)
         return {
             props: {
                 comentarioID: response.data

@@ -1,21 +1,51 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import axios from 'axios'
-import { FormLabel, Tr, Table, Button, Container, HStack, Input, FormControl, RadioGroup, Radio, Text, Heading, SimpleGrid, Td, Thead, Center} from '@chakra-ui/react'
-import Swal from 'sweetalert2'
 
-export async function getServerSideProps(context) {
+import { FormLabel, Tr, Table, Button, Container, HStack, Input, FormControl, RadioGroup, Radio, Text, Heading, SimpleGrid, Td, Thead, Center, Box} from '@chakra-ui/react'
+
+import Swal from 'sweetalert2'
+import {checkToken} from '../../../data/usuario'
+const jwt = require('jwt-simple')
+import Arriba from '../../../components/Arriba'
+
+export async function getServerSideProps(context){
     try {
-        const response = await axios.get(`${process.env.API_URL}/comentario/search/${context.params.comentario}`)
-        return {
-            props: {
-                comentarioID: response.data
+        const res = await checkToken(context.req.headers.cookie)
+        const decode = jwt.decode(context.req.cookies.token,process.env.SECRET_KEY)
+        if(decode.rol==='admin'){
+        if (res.status === 200){
+                const response = await axios.get(`${process.env.API_URL}/comentario/search/${context.params.comentario}`)
+                return{
+                    props:{
+                        comentarioID: response.data,
+                        existe: res.config.headers.cookie
+                    }
+                }
+            }else{
+                console.log("No hay token")
+                return{
+                    redirect: {
+                        destination: "/",
+                        permanent: false
+                    }
+                }
+            }
+        }else{
+            console.log("No eres admin")
+            return{
+                redirect: {
+                    destination: "/",
+                    permanent: false
+                }
             }
         }
-    } catch (error) {
-        return {
-            props: {
-                data: "null"
+        } catch (error) {
+        console.log("ERROR",error)
+        return{
+            redirect: {
+                destination: "/",
+                permanent: false
             }
         }
     }
@@ -72,6 +102,8 @@ const comentario = (props) => {
             }
         }
     return (
+        <Box>
+            <Arriba token={props.existe}/>
             <Container maxW="1500px">
                 <Heading textAlign={"center"} my={10} >Detalles del comentario</Heading>
                 <Table>
@@ -120,6 +152,7 @@ const comentario = (props) => {
                     <Button my={5} coloScheme="facebook" size="md" type="submit" onClick={() => router.push(`/asamblea/ver/`)}>Volver</Button>
                 </Center>
             </Container>
+            </Box>
     )
 }
 
