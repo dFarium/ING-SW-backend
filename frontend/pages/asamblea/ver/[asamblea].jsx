@@ -304,7 +304,6 @@ const asamblea = (data) => {
                                 </ModalContent>
                         </Modal>
                         </Td>
-                        
                     </Tr>
                 )
             }else{

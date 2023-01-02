@@ -23,6 +23,7 @@ import { HiUserGroup } from 'react-icons/hi'
 import { FaUserAlt } from 'react-icons/fa'
 import { AiFillFile, AiFillHome } from 'react-icons/ai'
 
+
 const Menu = () => {
 
     const router = useRouter()
@@ -51,6 +52,7 @@ const Menu = () => {
             </Accordion>
         )
     }
+
     return (
         <>
         <Button ref={btnRef} variant='outline' colorScheme='white' onClick={onOpen}>
