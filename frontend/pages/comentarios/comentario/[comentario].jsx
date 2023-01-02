@@ -98,7 +98,7 @@ const comentario = (props) => {
                 </Table>
                 <Center>
                     <Button colorScheme="red" mx={6} size="md" type="submit" my={5} onClick={borrarComentario}>Eliminar</Button>
-                    <Button colorScheme= "green" size="md" type="submit" my={5} onClick={() => router.push(`/comentarios/actualizarComentario/${comentarioID._id}`)}>Editar</Button>
+                    <Button colorScheme= "green" size="md" type="submit" my={5} onClick={() => router.push(`/comentarios/actualizar/${comentarioID._id}`)}>Editar</Button>
                 </Center>
                 <Center>
                     <RadioGroup my={5}>

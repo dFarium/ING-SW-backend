@@ -6,7 +6,7 @@ import { useRouter } from 'next/router'
 
 export async function getServerSideProps(context) {
     try {
-        const response = await axios.get(`${process.env.API_URL}/comentario/search/${context.params.actualizarComentario}`)
+        const response = await axios.get(`${process.env.API_URL}/comentario/search/${context.params.actualizar}`)
         return {
             props: {
                 comentarioID: response.data
@@ -21,7 +21,7 @@ export async function getServerSideProps(context) {
     }
 }
 
-const actualizarComentario = (props) => {
+const actualizar = (props) => {
     const router = useRouter()
     const {comentarioID} = props
     const [values, setValues] = useState({
@@ -124,4 +124,4 @@ const actualizarComentario = (props) => {
     )
 }
 
-export default actualizarComentario
+export default actualizar
