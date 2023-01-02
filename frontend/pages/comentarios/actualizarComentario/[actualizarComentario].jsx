@@ -7,6 +7,7 @@ import { useRouter } from 'next/router'
 import Arriba from "../../../components/Arriba"
 import {checkToken} from '../../../data/usuario'
 const jwt = require("jwt-simple")
+import { ArrowBackIcon, ChatIcon } from '../../../node_modules/@chakra-ui/icons'
 
 export async function getServerSideProps(context){
     try {
@@ -125,7 +126,6 @@ const actualizarComentario = (props) => {
                 <Center> <Radio value='user' onChange={onChange} name={"rolUsuario"}>user</Radio> </Center>
                     <Radio value='admin' onChange={onChange} name={"rolUsuario"}>admin</Radio>
                 </HStack>
-
             </RadioGroup>
             */}
                 {values.rolUsuario === 'user' && (
@@ -135,8 +135,9 @@ const actualizarComentario = (props) => {
                         </FormControl>
                 )}
 
-                <Button colorScheme="facebook" size="md" type="submit" my={5} onClick={onSubmit}>Enviar</Button>
-                <Button my={5} mx={5} onClick={() => router.push(`/asamblea/ver`)}>Volver</Button>
+                <Button  float={"right"} leftIcon={<ChatIcon/>} colorScheme="green" size="md" type="submit" my={5} onClick={onSubmit}>Enviar</Button>
+                {console.log(`/comentarios/comentario/${comentario.comentarioID._id}`)}
+                <Button  float={"left"} leftIcon={<ArrowBackIcon />}  colorScheme={"teal"} my={5} onClick={() => router.push(`/comentarios/comentario/${comentario.comentarioID._id}`)}>Volver</Button>
         </Container>
         </Box>
     )
