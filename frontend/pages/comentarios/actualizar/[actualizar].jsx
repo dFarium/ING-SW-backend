@@ -1,19 +1,39 @@
 import React, {useState} from "react"
-import { Textarea, RadioGroup, Radio, Button, Container, Input, Stack, Text, HStack, Heading, FormControl, FormLabel, Center} from '@chakra-ui/react'
+import { Textarea, RadioGroup, Radio, Button, Container, Input, Stack, Text, HStack, Heading, FormControl, FormLabel, Center, Box} from '@chakra-ui/react'
+
 import axios from "axios"
 import Swal from 'sweetalert2'
 import { useRouter } from 'next/router'
+import Arriba from "../../../components/Arriba"
+import {checkToken} from '../../../data/usuario'
+const jwt = require("jwt-simple")
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps(context){
     try {
-        const response = await axios.get(`${process.env.API_URL}/comentario/search/${context.params.actualizarComentario}`)
-        return {
-            props: {
-                comentarioID: response.data
+        const res = await checkToken(context.req.headers.cookie)
+        const jwt = jwt.decode(context.req.cookies.token,process.env.SECRET_KEY)
+        if (res.status === 200){
+                const response = await axios.get(`${process.env.API_URL}/comentario/search/${context.params.actualizar}`)
+                return{
+                    props:{
+                        comentarioID: response.data,
+                        existe: res.config.headers.cookie,
+                        rol: decode.rol,
+                        usuarioId: decode.sub,
+                    }
+                }
+            }else{
+                console.log("No hay token")
+                return{
+                    redirect: {
+                        destination: "/",
+                        permanent: false
+                    }
+                }
             }
-        }
     } catch (error) {
-        return {
+        console.log("ERROR",error)
+        return{
             props: {
                 data: "null"
             }
@@ -23,10 +43,14 @@ export async function getServerSideProps(context) {
 
 const actualizar = (props) => {
     const router = useRouter()
-    const {comentarioID} = props
+    const [comentario] = useState(props)
+    console.log(props)
     const [values, setValues] = useState({
-            apartado: `${comentarioID.apartado}`,
-            asamblea: `${comentarioID.asamblea._id}`
+            apartado: `${comentario.comentarioID.apartado}`,
+            user: `${comentario.comentarioID.user._id}`,
+            asamblea: `${comentario.comentarioID.asamblea._id}`,
+            rolUsuario: `${props.rol}`
+
     })
 
     const onSubmit = async (e) => {
@@ -62,6 +86,7 @@ const actualizar = (props) => {
                 }
             })
         } catch (error) {
+
             if(error.response.status === 401){
                 Swal.fire({
                     title: 'Error',
@@ -84,6 +109,7 @@ const actualizar = (props) => {
                     confirmButtonText: 'Ok'
                 })
             }
+
         }
     }
 
@@ -95,6 +121,8 @@ const actualizar = (props) => {
     }
 
     return (
+        <Box>
+            <Arriba token={props.existe}/>
         <Container maxW="container.md">
             <Heading textAlign={"center"} my={10}>Modificación de comentario</Heading>
             <Stack>
@@ -111,16 +139,17 @@ const actualizar = (props) => {
                     <Radio value='admin' onChange={onChange} name={"rolUsuario"}>admin</Radio>
                 </HStack>
             </RadioGroup>
-            
                 {values.rolUsuario === 'user' && (
                         <FormControl my={2} onChange={onChange} isRequired="true">
                             <FormLabel my={4} htmlFor="name">Usuario</FormLabel>
                             <Input id="user" name="user" placeholder="Ingrese tú id usuario" onChange={onChange} />
                         </FormControl>
                 )}
+
                 <Button colorScheme="facebook" size="md" type="submit" my={5} onClick={onSubmit}>Enviar</Button>
                 <Button my={5} mx={5} onClick={() => router.push(`/asamblea/ver`)}>Volver</Button>
         </Container>
+        </Box>
     )
 }
 
