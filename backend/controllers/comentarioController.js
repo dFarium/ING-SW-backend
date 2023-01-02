@@ -92,7 +92,7 @@ const obtenerComentario = (req, res) => {
 
 const viewAsambleaComentario = (req, res)=>{
 
-    Asamblea.findById(req.params.id).exec((error, asamblea) => {
+    Asamblea.findById(req.params.id).populate({path: 'user'}).exec((error, asamblea) => {
         if (error) {
             return res.status(400).send({ message: "Error al obtener el comentario" })
         }
