@@ -1,19 +1,37 @@
 import React, {useState} from "react"
-import { Textarea, RadioGroup, Radio, Button, Container, Input, Stack, Text, HStack, Heading, FormControl, FormLabel, Center} from '@chakra-ui/react'
+
+import { Textarea, RadioGroup, Radio, Button, Container, Input, Stack, Text, HStack, Heading, FormControl, FormLabel, Center, Box} from '@chakra-ui/react'
+
 import axios from "axios"
 import Swal from 'sweetalert2'
 import { useRouter } from 'next/router'
+import Arriba from "../../../components/Arriba"
+import {checkToken} from '../../../data/usuario'
+const jwt = require("jwt-simple")
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps(context){
     try {
-        const response = await axios.get(`${process.env.API_URL}/comentario/search/${context.params.actualizarComentario}`)
-        return {
-            props: {
-                comentarioID: response.data
+        const res = await checkToken(context.req.headers.cookie)
+            if (res.status === 200){
+                const response = await axios.get(`${process.env.API_URL}/comentario/search/${context.params.actualizarComentario}`)
+                return{
+                    props:{
+                        comentarioID: response.data,
+                        existe: res.config.headers.cookie,
+                    }
+                }
+            }else{
+                console.log("No hay token")
+                return{
+                    redirect: {
+                        destination: "/",
+                        permanent: false
+                    }
+                }
             }
-        }
     } catch (error) {
-        return {
+        console.log("ERROR",error)
+        return{
             props: {
                 data: "null"
             }
@@ -26,7 +44,10 @@ const actualizarComentario = (props) => {
     const {comentarioID} = props
     const [values, setValues] = useState({
             apartado: `${comentarioID.apartado}`,
-            asamblea: `${comentarioID.asamblea._id}`
+            user: `${comentarioID.user._id}`,
+            asamblea: `${comentarioID.asamblea._id}`,
+            rolUsuario: 'admin'
+
     })
 
     const onSubmit = async (e) => {
@@ -62,6 +83,7 @@ const actualizarComentario = (props) => {
                 }
             })
         } catch (error) {
+
             if(error.response.status === 401){
                 Swal.fire({
                     title: 'Error',
@@ -84,6 +106,7 @@ const actualizarComentario = (props) => {
                     confirmButtonText: 'Ok'
                 })
             }
+
         }
     }
 
@@ -95,6 +118,8 @@ const actualizarComentario = (props) => {
     }
 
     return (
+        <Box>
+            <Arriba token={props.existe}/>
         <Container maxW="container.md">
             <Heading textAlign={"center"} my={10}>Modificación de comentario</Heading>
             <Stack>
@@ -105,11 +130,12 @@ const actualizarComentario = (props) => {
                     <Textarea placeholder="Escribe aquí" type={"text"} onChange={onChange} name={"apartado"}/>
                 </FormControl>
             </Stack>
-            <RadioGroup my={5}>
+            {/* <RadioGroup my={5}>
                 <HStack spacing='24px'>
                 <Center> <Radio value='user' onChange={onChange} name={"rolUsuario"}>user</Radio> </Center>
                     <Radio value='admin' onChange={onChange} name={"rolUsuario"}>admin</Radio>
                 </HStack>
+
             </RadioGroup>
             
                 {values.rolUsuario === 'user' && (
@@ -118,9 +144,11 @@ const actualizarComentario = (props) => {
                             <Input id="user" name="user" placeholder="Ingrese tú id usuario" onChange={onChange} />
                         </FormControl>
                 )}
+
                 <Button colorScheme="facebook" size="md" type="submit" my={5} onClick={onSubmit}>Enviar</Button>
                 <Button my={5} mx={5} onClick={() => router.push(`/asamblea/ver`)}>Volver</Button>
         </Container>
+        </Box>
     )
 }
 
