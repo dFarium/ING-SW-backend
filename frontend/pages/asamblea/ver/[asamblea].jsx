@@ -108,12 +108,16 @@ const asamblea = (data) => {
     //moi
     const showComentarios = () => {
         return comentarios.map(comentario => {
+            const [fecha, horas] = comentario.fecha.split('T')
+            const [ano,mes,dia] =fecha.split('-')
+            const [hora, min] =horas.split(':')
+            const time = dia + '-' + mes + '-'  + ano + ' ' + hora +':' + min
             return (
                 <Tr key={comentario._id}>
                 <Td maxW="500">{comentario.apartado}</Td>
-                <Td maxW="500">{comentario.fecha}</Td>
+                <Td maxW="500">{time}</Td>
                 <Td maxW="500">{comentario.user && comentario.user.name}</Td>
-                <Td><Button colorScheme="twitter" variant='link' onClick={() => router.push(`/comentarios/comentario/${comentario._id}`)}>detalle</Button></Td>
+                <Td><Button colorScheme="twitter" variant='link' onClick={() => router.push(`/comentarios/comentario/${comentario._id}`)}>Detalles</Button></Td>
                 </Tr>
             )
         })
@@ -266,10 +270,14 @@ const asamblea = (data) => {
 
     const showAsambleaArchivos = () =>{
         return archivos.map(archivos =>{
+            const [fecha, horas] = archivos.fecha.split('T')
+            const [ano,mes,dia] =fecha.split('-')
+            const [hora, min] =horas.split(':')
+            const time = dia + '-' + mes + '-'  + ano + ' ' + hora +':' + min
             return(
                 <Tr key={archivos._id}>
                     <Td ><Link color='blue.500' href={`${process.env.API_URL}/file/download/${archivos._id}`}>{archivos.name}</Link></Td>
-                    <Td >{archivos.fecha}</Td>
+                    <Td >{time}</Td>
                     <Td ><Button bg={'transparent'}  onClick={()=>eliminarArchivos(archivos._id, asambleas.asambleaId._id)}>
                         <DeleteIcon  w={6} h={6} color="red.400"></DeleteIcon>
                     </Button></Td>
@@ -414,7 +422,7 @@ const asamblea = (data) => {
                             <h2>
                                 {/* Colores boton */}
                                 <AccordionButton bg='gray.200' _expanded={{  bg: 'orange.400', color: 'white' }}>
-                                    <Box as="span" flex='1' textAlign='left'>
+                                    <Box as="span" flex='1'>
                                         Comentarios
                                     </Box>
                                     <AccordionIcon />
@@ -441,7 +449,7 @@ const asamblea = (data) => {
                                                 {/* Colores boton */}
                                                 <AccordionButton bg='gray.200' _expanded={{  bg: 'orange.200', color: 'white' }}>
                                                     <Box as="span" flex='1' textAlign='center'>
-                                                        Crear comentario
+                                                        Publicar comentario
                                                     </Box>
                                                     <AccordionIcon />
                                                 </AccordionButton>
